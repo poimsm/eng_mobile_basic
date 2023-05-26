@@ -1,3 +1,4 @@
+import 'package:eng_mobile_app/config.dart';
 import 'package:eng_mobile_app/utils/helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
@@ -54,7 +55,12 @@ class _AudioProgressbarState extends State<AudioProgressbar> {
   }
 
   void setAudio() async {
-    duration = (await player.setAsset(widget.path))!;
+    try {
+      duration = (Config.MOCK ? await player.setAsset(widget.path) : await player.setUrl(widget.path))!;
+    } catch (e) {
+      print('DO NOTHING 🚀🚀🚀🚀');
+    }
+    
   }
 
   Future delayed() async {

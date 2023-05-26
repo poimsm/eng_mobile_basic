@@ -218,17 +218,13 @@ class HomeNotifier extends StateNotifier<HomeState> {
       return false;
     }
 
-    final examples = questions[0].examples;
-    final ex =
-        examples.firstWhereOrNull((x) => x.wordId == questions[0].words[0].id);
-
     state = state.copyWith(
         questionRoundCounter: state.questionRoundCounter + 1,
         questions: questions,
         question: questions[0],
         word: questions[0].words[0],
-        example: ex,
-        showExample: ex != null,
+        example: questions[0].example,
+        showExample: true,
         bubbleChallengeSentence: questions[0].words[0].word,
         isLoading: false);
 
@@ -273,10 +269,13 @@ class HomeNotifier extends StateNotifier<HomeState> {
       return null;
     }
 
-    final index = state.currentIndex;
-    final examples = state.questions[index + 1].examples;
-    final ex = examples.firstWhereOrNull(
-        (x) => x.wordId == state.questions[index + 1].words[0].id);
+    state = state.copyWith(
+      showExample: false,
+    );
+
+    await sleep(200);
+
+    final index = state.currentIndex;    
 
     state = state.copyWith(
       showChallenge: false,
@@ -288,8 +287,8 @@ class HomeNotifier extends StateNotifier<HomeState> {
       word: state.questions[index + 1].words[0],
       currentIndex: index + 1,
       wordIndex: 0,
-      example: ex,
-      showExample: ex != null,
+      example: state.questions[index + 1].example,
+      showExample: true,
     );
 
     await sleep(1000);
@@ -569,7 +568,7 @@ class HomeNotifier extends StateNotifier<HomeState> {
 
   void onNextWord(bool advance) async {
     state = state.copyWith(showMeaningBtn: false);
-    await sleep(300);
+    await sleep(200);
 
     final idx = state.wordIndex + (advance ? 1 : -1);
 

@@ -8,10 +8,11 @@ part 'question.g.dart';
 @freezed
 class Question with _$Question {
   const factory Question({
+    required int id,
     required String question,
     @JsonKey(name: 'voice_url') required String voiceUrl,
     @JsonKey(name: 'image_url') required String imageUrl,
-    @Default([]) List<QuestionExample> examples,
+    required QuestionExample example,
     required Style style,
     required List<Word> words,
   }) = _Question;
@@ -25,10 +26,9 @@ class Word with _$Word {
   const factory Word({
     required int id,
     required String word,
-    @JsonKey(name: 'has_info') required bool hasInfo,
-    @Default('') String translation,
-    String? image,
-    String? definition,
+    required String translation,
+    required String definition,
+    required Miniature miniature,
     @Default([]) List<WordExample> examples,
     @Default([]) List<Explanation> explanations,
     StoryLine? story,
@@ -47,6 +47,17 @@ class StoryLine with _$StoryLine {
 
   factory StoryLine.fromJson(Map<String, Object?> json) =>
       _$StoryLineFromJson(json);
+}
+
+@freezed
+class Miniature with _$Miniature {
+  const factory Miniature({
+    @JsonKey(name: 'image_url') required String imageUrl,
+    required int height,
+  }) = _Miniature;
+
+  factory Miniature.fromJson(Map<String, Object?> json) =>
+      _$MiniatureFromJson(json);
 }
 
 @freezed
@@ -76,7 +87,7 @@ class WordExample with _$WordExample {
   const factory WordExample({
     required String value,
     required String translation,
-    @JsonKey(name: 'voice_url') String? voiceUrl,
+    @JsonKey(name: 'voice_url') required String voiceUrl,
   }) = _WordExample;
 
   factory WordExample.fromJson(Map<String, Object?> json) =>
@@ -86,9 +97,9 @@ class WordExample with _$WordExample {
 @freezed
 class QuestionExample with _$QuestionExample {
   const factory QuestionExample({
-    @JsonKey(name: 'word_id') required int wordId,
     @JsonKey(name: 'voice_url') required String voiceUrl,
-    @Default([]) List<QuestionExampleElem> example,
+    @Default([]) List<QuestionExampleWord> words,
+    @Default([]) List<Subtitle> subtitles,
   }) = _QuestionExample;
 
   factory QuestionExample.fromJson(Map<String, Object?> json) =>
@@ -96,14 +107,14 @@ class QuestionExample with _$QuestionExample {
 }
 
 @freezed
-class QuestionExampleElem with _$QuestionExampleElem {
-  const factory QuestionExampleElem({
-    required int start,
-    required String value,
-  }) = _QuestionExampleElem;
+class QuestionExampleWord with _$QuestionExampleWord {
+  const factory QuestionExampleWord({
+    required int id,
+    required List<String> forms,
+  }) = _QuestionExampleWord;
 
-  factory QuestionExampleElem.fromJson(Map<String, Object?> json) =>
-      _$QuestionExampleElemFromJson(json);
+  factory QuestionExampleWord.fromJson(Map<String, Object?> json) =>
+      _$QuestionExampleWordFromJson(json);
 }
 
 @freezed
@@ -111,12 +122,6 @@ class Style with _$Style {
   const factory Style({
     @JsonKey(name: 'background_screen') required String backgroundScreen,
     @JsonKey(name: 'background_challenge') required String backgroundChallenge,
-    @JsonKey(name: 'use_gradient') required bool useGradient,
-    @JsonKey(name: 'bottom_gradient_color') String? bottomGradientColor,
-    @JsonKey(name: 'top_gradient_color') String? topGradientColor,
-    @JsonKey(name: 'question_position') required double questionPosition,
-    @JsonKey(name: 'image_position') required double imagePosition,
-    @JsonKey(name: 'question_font_size') required double questionFontSize,
     @JsonKey(name: 'question_opacity') required double questionOpacity,
   }) = _Style;
 

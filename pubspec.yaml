@@ -50,7 +50,7 @@ dependencies:
   card_swiper: ^2.0.4
   sqflite: ^2.2.0+3
   uuid: ^3.0.7
-  collection: ^1.17.1
+  collection: ^1.17.0
 
 dev_dependencies:
   flutter_test:
@@ -82,7 +82,8 @@ flutter:
     - assets/dev/all/
     - assets/dev/dic_icons/
     - assets/dev/meaning_ex/
-    - assets/dev/scenarios/
+    - assets/dev/stories/
+    - assets/dev/minis/
 
   # To add assets to your application, add an assets section, like this:
   # assets:

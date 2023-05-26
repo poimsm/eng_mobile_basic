@@ -171,6 +171,9 @@ class Network {
       return Response(ok: false);
     }
 
+    // var replyText= json.encode(reply);
+    log(reply);
+
     final data = reply != '' ? jsonDecode(reply) : '';
 
     printDebug('RESPONSE <<<-- | $statusCode | $path | $data');

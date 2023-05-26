@@ -42,14 +42,16 @@ class _StoryWidgetState extends State<StoryWidget> {
                         parentSize = 50;
                         setState(() {});
                       },
-                      child: Image.asset(
+                      child: Image.network(
                         widget.story.image,
                         width: 220,
                         height: 220,
                       ),
                     ),
+                    SizedBox(height: 10,),
                     Text(
                       subtitle,
+                      textAlign: TextAlign.center,
                       style: TextStyle(fontSize: 15.5, color: Colors.black54),
                     ),
                   ],
@@ -71,7 +73,7 @@ class _StoryWidgetState extends State<StoryWidget> {
               child: Opacity(
                 opacity: showStoryText ? 0 : 1,
                 child: AudioProgressbar(
-                    path: 'assets/scenarios/scenario_0002.mp3',
+                    path: widget.story.voiceUrl,
                     onPlayInit: () async {
                       try {
                         showStoryText = true;
@@ -81,7 +83,7 @@ class _StoryWidgetState extends State<StoryWidget> {
                         showStoryText = false;
                         showStory = true;
                         sizeBox = 330;
-                        parentSize = 330;
+                        parentSize = 320;
                         setState(() {});
                       } catch (_) {
                         // Ignored
@@ -92,7 +94,7 @@ class _StoryWidgetState extends State<StoryWidget> {
                       for (var i = 0; i < subs.length; i++) {
                         int start = subs[i].start;
                         int end = i + 1 < subs.length ? subs[i+1].start : 999999;
-                        if (start <= position.inSeconds && end <= position.inSeconds && playedIndex != i) {
+                        if (start <= position.inSeconds && end > position.inSeconds && playedIndex != i) {
                           subtitle = subs[i].value;
                           playedIndex++;
                           setState(() {});

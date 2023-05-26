@@ -20,12 +20,13 @@ Question _$QuestionFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Question {
+  int get id => throw _privateConstructorUsedError;
   String get question => throw _privateConstructorUsedError;
   @JsonKey(name: 'voice_url')
   String get voiceUrl => throw _privateConstructorUsedError;
   @JsonKey(name: 'image_url')
   String get imageUrl => throw _privateConstructorUsedError;
-  List<QuestionExample> get examples => throw _privateConstructorUsedError;
+  QuestionExample get example => throw _privateConstructorUsedError;
   Style get style => throw _privateConstructorUsedError;
   List<Word> get words => throw _privateConstructorUsedError;
 
@@ -41,13 +42,15 @@ abstract class $QuestionCopyWith<$Res> {
       _$QuestionCopyWithImpl<$Res, Question>;
   @useResult
   $Res call(
-      {String question,
+      {int id,
+      String question,
       @JsonKey(name: 'voice_url') String voiceUrl,
       @JsonKey(name: 'image_url') String imageUrl,
-      List<QuestionExample> examples,
+      QuestionExample example,
       Style style,
       List<Word> words});
 
+  $QuestionExampleCopyWith<$Res> get example;
   $StyleCopyWith<$Res> get style;
 }
 
@@ -64,14 +67,19 @@ class _$QuestionCopyWithImpl<$Res, $Val extends Question>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = null,
     Object? question = null,
     Object? voiceUrl = null,
     Object? imageUrl = null,
-    Object? examples = null,
+    Object? example = null,
     Object? style = null,
     Object? words = null,
   }) {
     return _then(_value.copyWith(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
       question: null == question
           ? _value.question
           : question // ignore: cast_nullable_to_non_nullable
@@ -84,10 +92,10 @@ class _$QuestionCopyWithImpl<$Res, $Val extends Question>
           ? _value.imageUrl
           : imageUrl // ignore: cast_nullable_to_non_nullable
               as String,
-      examples: null == examples
-          ? _value.examples
-          : examples // ignore: cast_nullable_to_non_nullable
-              as List<QuestionExample>,
+      example: null == example
+          ? _value.example
+          : example // ignore: cast_nullable_to_non_nullable
+              as QuestionExample,
       style: null == style
           ? _value.style
           : style // ignore: cast_nullable_to_non_nullable
@@ -97,6 +105,14 @@ class _$QuestionCopyWithImpl<$Res, $Val extends Question>
           : words // ignore: cast_nullable_to_non_nullable
               as List<Word>,
     ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $QuestionExampleCopyWith<$Res> get example {
+    return $QuestionExampleCopyWith<$Res>(_value.example, (value) {
+      return _then(_value.copyWith(example: value) as $Val);
+    });
   }
 
   @override
@@ -116,13 +132,16 @@ abstract class _$$_QuestionCopyWith<$Res> implements $QuestionCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {String question,
+      {int id,
+      String question,
       @JsonKey(name: 'voice_url') String voiceUrl,
       @JsonKey(name: 'image_url') String imageUrl,
-      List<QuestionExample> examples,
+      QuestionExample example,
       Style style,
       List<Word> words});
 
+  @override
+  $QuestionExampleCopyWith<$Res> get example;
   @override
   $StyleCopyWith<$Res> get style;
 }
@@ -138,14 +157,19 @@ class __$$_QuestionCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = null,
     Object? question = null,
     Object? voiceUrl = null,
     Object? imageUrl = null,
-    Object? examples = null,
+    Object? example = null,
     Object? style = null,
     Object? words = null,
   }) {
     return _then(_$_Question(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
       question: null == question
           ? _value.question
           : question // ignore: cast_nullable_to_non_nullable
@@ -158,10 +182,10 @@ class __$$_QuestionCopyWithImpl<$Res>
           ? _value.imageUrl
           : imageUrl // ignore: cast_nullable_to_non_nullable
               as String,
-      examples: null == examples
-          ? _value._examples
-          : examples // ignore: cast_nullable_to_non_nullable
-              as List<QuestionExample>,
+      example: null == example
+          ? _value.example
+          : example // ignore: cast_nullable_to_non_nullable
+              as QuestionExample,
       style: null == style
           ? _value.style
           : style // ignore: cast_nullable_to_non_nullable
@@ -178,18 +202,20 @@ class __$$_QuestionCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_Question implements _Question {
   const _$_Question(
-      {required this.question,
+      {required this.id,
+      required this.question,
       @JsonKey(name: 'voice_url') required this.voiceUrl,
       @JsonKey(name: 'image_url') required this.imageUrl,
-      final List<QuestionExample> examples = const [],
+      required this.example,
       required this.style,
       required final List<Word> words})
-      : _examples = examples,
-        _words = words;
+      : _words = words;
 
   factory _$_Question.fromJson(Map<String, dynamic> json) =>
       _$$_QuestionFromJson(json);
 
+  @override
+  final int id;
   @override
   final String question;
   @override
@@ -198,14 +224,8 @@ class _$_Question implements _Question {
   @override
   @JsonKey(name: 'image_url')
   final String imageUrl;
-  final List<QuestionExample> _examples;
   @override
-  @JsonKey()
-  List<QuestionExample> get examples {
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_examples);
-  }
-
+  final QuestionExample example;
   @override
   final Style style;
   final List<Word> _words;
@@ -217,7 +237,7 @@ class _$_Question implements _Question {
 
   @override
   String toString() {
-    return 'Question(question: $question, voiceUrl: $voiceUrl, imageUrl: $imageUrl, examples: $examples, style: $style, words: $words)';
+    return 'Question(id: $id, question: $question, voiceUrl: $voiceUrl, imageUrl: $imageUrl, example: $example, style: $style, words: $words)';
   }
 
   @override
@@ -225,27 +245,22 @@ class _$_Question implements _Question {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_Question &&
+            (identical(other.id, id) || other.id == id) &&
             (identical(other.question, question) ||
                 other.question == question) &&
             (identical(other.voiceUrl, voiceUrl) ||
                 other.voiceUrl == voiceUrl) &&
             (identical(other.imageUrl, imageUrl) ||
                 other.imageUrl == imageUrl) &&
-            const DeepCollectionEquality().equals(other._examples, _examples) &&
+            (identical(other.example, example) || other.example == example) &&
             (identical(other.style, style) || other.style == style) &&
             const DeepCollectionEquality().equals(other._words, _words));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      question,
-      voiceUrl,
-      imageUrl,
-      const DeepCollectionEquality().hash(_examples),
-      style,
-      const DeepCollectionEquality().hash(_words));
+  int get hashCode => Object.hash(runtimeType, id, question, voiceUrl, imageUrl,
+      example, style, const DeepCollectionEquality().hash(_words));
 
   @JsonKey(ignore: true)
   @override
@@ -263,15 +278,18 @@ class _$_Question implements _Question {
 
 abstract class _Question implements Question {
   const factory _Question(
-      {required final String question,
+      {required final int id,
+      required final String question,
       @JsonKey(name: 'voice_url') required final String voiceUrl,
       @JsonKey(name: 'image_url') required final String imageUrl,
-      final List<QuestionExample> examples,
+      required final QuestionExample example,
       required final Style style,
       required final List<Word> words}) = _$_Question;
 
   factory _Question.fromJson(Map<String, dynamic> json) = _$_Question.fromJson;
 
+  @override
+  int get id;
   @override
   String get question;
   @override
@@ -281,7 +299,7 @@ abstract class _Question implements Question {
   @JsonKey(name: 'image_url')
   String get imageUrl;
   @override
-  List<QuestionExample> get examples;
+  QuestionExample get example;
   @override
   Style get style;
   @override
@@ -300,11 +318,9 @@ Word _$WordFromJson(Map<String, dynamic> json) {
 mixin _$Word {
   int get id => throw _privateConstructorUsedError;
   String get word => throw _privateConstructorUsedError;
-  @JsonKey(name: 'has_info')
-  bool get hasInfo => throw _privateConstructorUsedError;
   String get translation => throw _privateConstructorUsedError;
-  String? get image => throw _privateConstructorUsedError;
-  String? get definition => throw _privateConstructorUsedError;
+  String get definition => throw _privateConstructorUsedError;
+  Miniature get miniature => throw _privateConstructorUsedError;
   List<WordExample> get examples => throw _privateConstructorUsedError;
   List<Explanation> get explanations => throw _privateConstructorUsedError;
   StoryLine? get story => throw _privateConstructorUsedError;
@@ -322,14 +338,14 @@ abstract class $WordCopyWith<$Res> {
   $Res call(
       {int id,
       String word,
-      @JsonKey(name: 'has_info') bool hasInfo,
       String translation,
-      String? image,
-      String? definition,
+      String definition,
+      Miniature miniature,
       List<WordExample> examples,
       List<Explanation> explanations,
       StoryLine? story});
 
+  $MiniatureCopyWith<$Res> get miniature;
   $StoryLineCopyWith<$Res>? get story;
 }
 
@@ -348,10 +364,9 @@ class _$WordCopyWithImpl<$Res, $Val extends Word>
   $Res call({
     Object? id = null,
     Object? word = null,
-    Object? hasInfo = null,
     Object? translation = null,
-    Object? image = freezed,
-    Object? definition = freezed,
+    Object? definition = null,
+    Object? miniature = null,
     Object? examples = null,
     Object? explanations = null,
     Object? story = freezed,
@@ -365,22 +380,18 @@ class _$WordCopyWithImpl<$Res, $Val extends Word>
           ? _value.word
           : word // ignore: cast_nullable_to_non_nullable
               as String,
-      hasInfo: null == hasInfo
-          ? _value.hasInfo
-          : hasInfo // ignore: cast_nullable_to_non_nullable
-              as bool,
       translation: null == translation
           ? _value.translation
           : translation // ignore: cast_nullable_to_non_nullable
               as String,
-      image: freezed == image
-          ? _value.image
-          : image // ignore: cast_nullable_to_non_nullable
-              as String?,
-      definition: freezed == definition
+      definition: null == definition
           ? _value.definition
           : definition // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
+      miniature: null == miniature
+          ? _value.miniature
+          : miniature // ignore: cast_nullable_to_non_nullable
+              as Miniature,
       examples: null == examples
           ? _value.examples
           : examples // ignore: cast_nullable_to_non_nullable
@@ -394,6 +405,14 @@ class _$WordCopyWithImpl<$Res, $Val extends Word>
           : story // ignore: cast_nullable_to_non_nullable
               as StoryLine?,
     ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $MiniatureCopyWith<$Res> get miniature {
+    return $MiniatureCopyWith<$Res>(_value.miniature, (value) {
+      return _then(_value.copyWith(miniature: value) as $Val);
+    });
   }
 
   @override
@@ -418,14 +437,15 @@ abstract class _$$_WordCopyWith<$Res> implements $WordCopyWith<$Res> {
   $Res call(
       {int id,
       String word,
-      @JsonKey(name: 'has_info') bool hasInfo,
       String translation,
-      String? image,
-      String? definition,
+      String definition,
+      Miniature miniature,
       List<WordExample> examples,
       List<Explanation> explanations,
       StoryLine? story});
 
+  @override
+  $MiniatureCopyWith<$Res> get miniature;
   @override
   $StoryLineCopyWith<$Res>? get story;
 }
@@ -441,10 +461,9 @@ class __$$_WordCopyWithImpl<$Res> extends _$WordCopyWithImpl<$Res, _$_Word>
   $Res call({
     Object? id = null,
     Object? word = null,
-    Object? hasInfo = null,
     Object? translation = null,
-    Object? image = freezed,
-    Object? definition = freezed,
+    Object? definition = null,
+    Object? miniature = null,
     Object? examples = null,
     Object? explanations = null,
     Object? story = freezed,
@@ -458,22 +477,18 @@ class __$$_WordCopyWithImpl<$Res> extends _$WordCopyWithImpl<$Res, _$_Word>
           ? _value.word
           : word // ignore: cast_nullable_to_non_nullable
               as String,
-      hasInfo: null == hasInfo
-          ? _value.hasInfo
-          : hasInfo // ignore: cast_nullable_to_non_nullable
-              as bool,
       translation: null == translation
           ? _value.translation
           : translation // ignore: cast_nullable_to_non_nullable
               as String,
-      image: freezed == image
-          ? _value.image
-          : image // ignore: cast_nullable_to_non_nullable
-              as String?,
-      definition: freezed == definition
+      definition: null == definition
           ? _value.definition
           : definition // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
+      miniature: null == miniature
+          ? _value.miniature
+          : miniature // ignore: cast_nullable_to_non_nullable
+              as Miniature,
       examples: null == examples
           ? _value._examples
           : examples // ignore: cast_nullable_to_non_nullable
@@ -496,10 +511,9 @@ class _$_Word implements _Word {
   const _$_Word(
       {required this.id,
       required this.word,
-      @JsonKey(name: 'has_info') required this.hasInfo,
-      this.translation = '',
-      this.image,
-      this.definition,
+      required this.translation,
+      required this.definition,
+      required this.miniature,
       final List<WordExample> examples = const [],
       final List<Explanation> explanations = const [],
       this.story})
@@ -513,15 +527,11 @@ class _$_Word implements _Word {
   @override
   final String word;
   @override
-  @JsonKey(name: 'has_info')
-  final bool hasInfo;
-  @override
-  @JsonKey()
   final String translation;
   @override
-  final String? image;
+  final String definition;
   @override
-  final String? definition;
+  final Miniature miniature;
   final List<WordExample> _examples;
   @override
   @JsonKey()
@@ -543,7 +553,7 @@ class _$_Word implements _Word {
 
   @override
   String toString() {
-    return 'Word(id: $id, word: $word, hasInfo: $hasInfo, translation: $translation, image: $image, definition: $definition, examples: $examples, explanations: $explanations, story: $story)';
+    return 'Word(id: $id, word: $word, translation: $translation, definition: $definition, miniature: $miniature, examples: $examples, explanations: $explanations, story: $story)';
   }
 
   @override
@@ -553,12 +563,12 @@ class _$_Word implements _Word {
             other is _$_Word &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.word, word) || other.word == word) &&
-            (identical(other.hasInfo, hasInfo) || other.hasInfo == hasInfo) &&
             (identical(other.translation, translation) ||
                 other.translation == translation) &&
-            (identical(other.image, image) || other.image == image) &&
             (identical(other.definition, definition) ||
                 other.definition == definition) &&
+            (identical(other.miniature, miniature) ||
+                other.miniature == miniature) &&
             const DeepCollectionEquality().equals(other._examples, _examples) &&
             const DeepCollectionEquality()
                 .equals(other._explanations, _explanations) &&
@@ -571,10 +581,9 @@ class _$_Word implements _Word {
       runtimeType,
       id,
       word,
-      hasInfo,
       translation,
-      image,
       definition,
+      miniature,
       const DeepCollectionEquality().hash(_examples),
       const DeepCollectionEquality().hash(_explanations),
       story);
@@ -597,10 +606,9 @@ abstract class _Word implements Word {
   const factory _Word(
       {required final int id,
       required final String word,
-      @JsonKey(name: 'has_info') required final bool hasInfo,
-      final String translation,
-      final String? image,
-      final String? definition,
+      required final String translation,
+      required final String definition,
+      required final Miniature miniature,
       final List<WordExample> examples,
       final List<Explanation> explanations,
       final StoryLine? story}) = _$_Word;
@@ -612,14 +620,11 @@ abstract class _Word implements Word {
   @override
   String get word;
   @override
-  @JsonKey(name: 'has_info')
-  bool get hasInfo;
-  @override
   String get translation;
   @override
-  String? get image;
+  String get definition;
   @override
-  String? get definition;
+  Miniature get miniature;
   @override
   List<WordExample> get examples;
   @override
@@ -819,6 +824,164 @@ abstract class _StoryLine implements StoryLine {
   @override
   @JsonKey(ignore: true)
   _$$_StoryLineCopyWith<_$_StoryLine> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+Miniature _$MiniatureFromJson(Map<String, dynamic> json) {
+  return _Miniature.fromJson(json);
+}
+
+/// @nodoc
+mixin _$Miniature {
+  @JsonKey(name: 'image_url')
+  String get imageUrl => throw _privateConstructorUsedError;
+  int get height => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $MiniatureCopyWith<Miniature> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $MiniatureCopyWith<$Res> {
+  factory $MiniatureCopyWith(Miniature value, $Res Function(Miniature) then) =
+      _$MiniatureCopyWithImpl<$Res, Miniature>;
+  @useResult
+  $Res call({@JsonKey(name: 'image_url') String imageUrl, int height});
+}
+
+/// @nodoc
+class _$MiniatureCopyWithImpl<$Res, $Val extends Miniature>
+    implements $MiniatureCopyWith<$Res> {
+  _$MiniatureCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? imageUrl = null,
+    Object? height = null,
+  }) {
+    return _then(_value.copyWith(
+      imageUrl: null == imageUrl
+          ? _value.imageUrl
+          : imageUrl // ignore: cast_nullable_to_non_nullable
+              as String,
+      height: null == height
+          ? _value.height
+          : height // ignore: cast_nullable_to_non_nullable
+              as int,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$_MiniatureCopyWith<$Res> implements $MiniatureCopyWith<$Res> {
+  factory _$$_MiniatureCopyWith(
+          _$_Miniature value, $Res Function(_$_Miniature) then) =
+      __$$_MiniatureCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({@JsonKey(name: 'image_url') String imageUrl, int height});
+}
+
+/// @nodoc
+class __$$_MiniatureCopyWithImpl<$Res>
+    extends _$MiniatureCopyWithImpl<$Res, _$_Miniature>
+    implements _$$_MiniatureCopyWith<$Res> {
+  __$$_MiniatureCopyWithImpl(
+      _$_Miniature _value, $Res Function(_$_Miniature) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? imageUrl = null,
+    Object? height = null,
+  }) {
+    return _then(_$_Miniature(
+      imageUrl: null == imageUrl
+          ? _value.imageUrl
+          : imageUrl // ignore: cast_nullable_to_non_nullable
+              as String,
+      height: null == height
+          ? _value.height
+          : height // ignore: cast_nullable_to_non_nullable
+              as int,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$_Miniature implements _Miniature {
+  const _$_Miniature(
+      {@JsonKey(name: 'image_url') required this.imageUrl,
+      required this.height});
+
+  factory _$_Miniature.fromJson(Map<String, dynamic> json) =>
+      _$$_MiniatureFromJson(json);
+
+  @override
+  @JsonKey(name: 'image_url')
+  final String imageUrl;
+  @override
+  final int height;
+
+  @override
+  String toString() {
+    return 'Miniature(imageUrl: $imageUrl, height: $height)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_Miniature &&
+            (identical(other.imageUrl, imageUrl) ||
+                other.imageUrl == imageUrl) &&
+            (identical(other.height, height) || other.height == height));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(runtimeType, imageUrl, height);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$_MiniatureCopyWith<_$_Miniature> get copyWith =>
+      __$$_MiniatureCopyWithImpl<_$_Miniature>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$_MiniatureToJson(
+      this,
+    );
+  }
+}
+
+abstract class _Miniature implements Miniature {
+  const factory _Miniature(
+      {@JsonKey(name: 'image_url') required final String imageUrl,
+      required final int height}) = _$_Miniature;
+
+  factory _Miniature.fromJson(Map<String, dynamic> json) =
+      _$_Miniature.fromJson;
+
+  @override
+  @JsonKey(name: 'image_url')
+  String get imageUrl;
+  @override
+  int get height;
+  @override
+  @JsonKey(ignore: true)
+  _$$_MiniatureCopyWith<_$_Miniature> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -1134,7 +1297,7 @@ mixin _$WordExample {
   String get value => throw _privateConstructorUsedError;
   String get translation => throw _privateConstructorUsedError;
   @JsonKey(name: 'voice_url')
-  String? get voiceUrl => throw _privateConstructorUsedError;
+  String get voiceUrl => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -1151,7 +1314,7 @@ abstract class $WordExampleCopyWith<$Res> {
   $Res call(
       {String value,
       String translation,
-      @JsonKey(name: 'voice_url') String? voiceUrl});
+      @JsonKey(name: 'voice_url') String voiceUrl});
 }
 
 /// @nodoc
@@ -1169,7 +1332,7 @@ class _$WordExampleCopyWithImpl<$Res, $Val extends WordExample>
   $Res call({
     Object? value = null,
     Object? translation = null,
-    Object? voiceUrl = freezed,
+    Object? voiceUrl = null,
   }) {
     return _then(_value.copyWith(
       value: null == value
@@ -1180,10 +1343,10 @@ class _$WordExampleCopyWithImpl<$Res, $Val extends WordExample>
           ? _value.translation
           : translation // ignore: cast_nullable_to_non_nullable
               as String,
-      voiceUrl: freezed == voiceUrl
+      voiceUrl: null == voiceUrl
           ? _value.voiceUrl
           : voiceUrl // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
     ) as $Val);
   }
 }
@@ -1199,7 +1362,7 @@ abstract class _$$_WordExampleCopyWith<$Res>
   $Res call(
       {String value,
       String translation,
-      @JsonKey(name: 'voice_url') String? voiceUrl});
+      @JsonKey(name: 'voice_url') String voiceUrl});
 }
 
 /// @nodoc
@@ -1215,7 +1378,7 @@ class __$$_WordExampleCopyWithImpl<$Res>
   $Res call({
     Object? value = null,
     Object? translation = null,
-    Object? voiceUrl = freezed,
+    Object? voiceUrl = null,
   }) {
     return _then(_$_WordExample(
       value: null == value
@@ -1226,10 +1389,10 @@ class __$$_WordExampleCopyWithImpl<$Res>
           ? _value.translation
           : translation // ignore: cast_nullable_to_non_nullable
               as String,
-      voiceUrl: freezed == voiceUrl
+      voiceUrl: null == voiceUrl
           ? _value.voiceUrl
           : voiceUrl // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
     ));
   }
 }
@@ -1240,7 +1403,7 @@ class _$_WordExample implements _WordExample {
   const _$_WordExample(
       {required this.value,
       required this.translation,
-      @JsonKey(name: 'voice_url') this.voiceUrl});
+      @JsonKey(name: 'voice_url') required this.voiceUrl});
 
   factory _$_WordExample.fromJson(Map<String, dynamic> json) =>
       _$$_WordExampleFromJson(json);
@@ -1251,7 +1414,7 @@ class _$_WordExample implements _WordExample {
   final String translation;
   @override
   @JsonKey(name: 'voice_url')
-  final String? voiceUrl;
+  final String voiceUrl;
 
   @override
   String toString() {
@@ -1290,9 +1453,10 @@ class _$_WordExample implements _WordExample {
 
 abstract class _WordExample implements WordExample {
   const factory _WordExample(
-      {required final String value,
-      required final String translation,
-      @JsonKey(name: 'voice_url') final String? voiceUrl}) = _$_WordExample;
+          {required final String value,
+          required final String translation,
+          @JsonKey(name: 'voice_url') required final String voiceUrl}) =
+      _$_WordExample;
 
   factory _WordExample.fromJson(Map<String, dynamic> json) =
       _$_WordExample.fromJson;
@@ -1303,7 +1467,7 @@ abstract class _WordExample implements WordExample {
   String get translation;
   @override
   @JsonKey(name: 'voice_url')
-  String? get voiceUrl;
+  String get voiceUrl;
   @override
   @JsonKey(ignore: true)
   _$$_WordExampleCopyWith<_$_WordExample> get copyWith =>
@@ -1316,11 +1480,10 @@ QuestionExample _$QuestionExampleFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$QuestionExample {
-  @JsonKey(name: 'word_id')
-  int get wordId => throw _privateConstructorUsedError;
   @JsonKey(name: 'voice_url')
   String get voiceUrl => throw _privateConstructorUsedError;
-  List<QuestionExampleElem> get example => throw _privateConstructorUsedError;
+  List<QuestionExampleWord> get words => throw _privateConstructorUsedError;
+  List<Subtitle> get subtitles => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -1335,9 +1498,9 @@ abstract class $QuestionExampleCopyWith<$Res> {
       _$QuestionExampleCopyWithImpl<$Res, QuestionExample>;
   @useResult
   $Res call(
-      {@JsonKey(name: 'word_id') int wordId,
-      @JsonKey(name: 'voice_url') String voiceUrl,
-      List<QuestionExampleElem> example});
+      {@JsonKey(name: 'voice_url') String voiceUrl,
+      List<QuestionExampleWord> words,
+      List<Subtitle> subtitles});
 }
 
 /// @nodoc
@@ -1353,23 +1516,23 @@ class _$QuestionExampleCopyWithImpl<$Res, $Val extends QuestionExample>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? wordId = null,
     Object? voiceUrl = null,
-    Object? example = null,
+    Object? words = null,
+    Object? subtitles = null,
   }) {
     return _then(_value.copyWith(
-      wordId: null == wordId
-          ? _value.wordId
-          : wordId // ignore: cast_nullable_to_non_nullable
-              as int,
       voiceUrl: null == voiceUrl
           ? _value.voiceUrl
           : voiceUrl // ignore: cast_nullable_to_non_nullable
               as String,
-      example: null == example
-          ? _value.example
-          : example // ignore: cast_nullable_to_non_nullable
-              as List<QuestionExampleElem>,
+      words: null == words
+          ? _value.words
+          : words // ignore: cast_nullable_to_non_nullable
+              as List<QuestionExampleWord>,
+      subtitles: null == subtitles
+          ? _value.subtitles
+          : subtitles // ignore: cast_nullable_to_non_nullable
+              as List<Subtitle>,
     ) as $Val);
   }
 }
@@ -1383,9 +1546,9 @@ abstract class _$$_QuestionExampleCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {@JsonKey(name: 'word_id') int wordId,
-      @JsonKey(name: 'voice_url') String voiceUrl,
-      List<QuestionExampleElem> example});
+      {@JsonKey(name: 'voice_url') String voiceUrl,
+      List<QuestionExampleWord> words,
+      List<Subtitle> subtitles});
 }
 
 /// @nodoc
@@ -1399,23 +1562,23 @@ class __$$_QuestionExampleCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? wordId = null,
     Object? voiceUrl = null,
-    Object? example = null,
+    Object? words = null,
+    Object? subtitles = null,
   }) {
     return _then(_$_QuestionExample(
-      wordId: null == wordId
-          ? _value.wordId
-          : wordId // ignore: cast_nullable_to_non_nullable
-              as int,
       voiceUrl: null == voiceUrl
           ? _value.voiceUrl
           : voiceUrl // ignore: cast_nullable_to_non_nullable
               as String,
-      example: null == example
-          ? _value._example
-          : example // ignore: cast_nullable_to_non_nullable
-              as List<QuestionExampleElem>,
+      words: null == words
+          ? _value._words
+          : words // ignore: cast_nullable_to_non_nullable
+              as List<QuestionExampleWord>,
+      subtitles: null == subtitles
+          ? _value._subtitles
+          : subtitles // ignore: cast_nullable_to_non_nullable
+              as List<Subtitle>,
     ));
   }
 }
@@ -1424,31 +1587,37 @@ class __$$_QuestionExampleCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_QuestionExample implements _QuestionExample {
   const _$_QuestionExample(
-      {@JsonKey(name: 'word_id') required this.wordId,
-      @JsonKey(name: 'voice_url') required this.voiceUrl,
-      final List<QuestionExampleElem> example = const []})
-      : _example = example;
+      {@JsonKey(name: 'voice_url') required this.voiceUrl,
+      final List<QuestionExampleWord> words = const [],
+      final List<Subtitle> subtitles = const []})
+      : _words = words,
+        _subtitles = subtitles;
 
   factory _$_QuestionExample.fromJson(Map<String, dynamic> json) =>
       _$$_QuestionExampleFromJson(json);
 
   @override
-  @JsonKey(name: 'word_id')
-  final int wordId;
-  @override
   @JsonKey(name: 'voice_url')
   final String voiceUrl;
-  final List<QuestionExampleElem> _example;
+  final List<QuestionExampleWord> _words;
   @override
   @JsonKey()
-  List<QuestionExampleElem> get example {
+  List<QuestionExampleWord> get words {
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_example);
+    return EqualUnmodifiableListView(_words);
+  }
+
+  final List<Subtitle> _subtitles;
+  @override
+  @JsonKey()
+  List<Subtitle> get subtitles {
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_subtitles);
   }
 
   @override
   String toString() {
-    return 'QuestionExample(wordId: $wordId, voiceUrl: $voiceUrl, example: $example)';
+    return 'QuestionExample(voiceUrl: $voiceUrl, words: $words, subtitles: $subtitles)';
   }
 
   @override
@@ -1456,16 +1625,20 @@ class _$_QuestionExample implements _QuestionExample {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_QuestionExample &&
-            (identical(other.wordId, wordId) || other.wordId == wordId) &&
             (identical(other.voiceUrl, voiceUrl) ||
                 other.voiceUrl == voiceUrl) &&
-            const DeepCollectionEquality().equals(other._example, _example));
+            const DeepCollectionEquality().equals(other._words, _words) &&
+            const DeepCollectionEquality()
+                .equals(other._subtitles, _subtitles));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, wordId, voiceUrl,
-      const DeepCollectionEquality().hash(_example));
+  int get hashCode => Object.hash(
+      runtimeType,
+      voiceUrl,
+      const DeepCollectionEquality().hash(_words),
+      const DeepCollectionEquality().hash(_subtitles));
 
   @JsonKey(ignore: true)
   @override
@@ -1483,55 +1656,54 @@ class _$_QuestionExample implements _QuestionExample {
 
 abstract class _QuestionExample implements QuestionExample {
   const factory _QuestionExample(
-      {@JsonKey(name: 'word_id') required final int wordId,
-      @JsonKey(name: 'voice_url') required final String voiceUrl,
-      final List<QuestionExampleElem> example}) = _$_QuestionExample;
+      {@JsonKey(name: 'voice_url') required final String voiceUrl,
+      final List<QuestionExampleWord> words,
+      final List<Subtitle> subtitles}) = _$_QuestionExample;
 
   factory _QuestionExample.fromJson(Map<String, dynamic> json) =
       _$_QuestionExample.fromJson;
 
   @override
-  @JsonKey(name: 'word_id')
-  int get wordId;
-  @override
   @JsonKey(name: 'voice_url')
   String get voiceUrl;
   @override
-  List<QuestionExampleElem> get example;
+  List<QuestionExampleWord> get words;
+  @override
+  List<Subtitle> get subtitles;
   @override
   @JsonKey(ignore: true)
   _$$_QuestionExampleCopyWith<_$_QuestionExample> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
-QuestionExampleElem _$QuestionExampleElemFromJson(Map<String, dynamic> json) {
-  return _QuestionExampleElem.fromJson(json);
+QuestionExampleWord _$QuestionExampleWordFromJson(Map<String, dynamic> json) {
+  return _QuestionExampleWord.fromJson(json);
 }
 
 /// @nodoc
-mixin _$QuestionExampleElem {
-  int get start => throw _privateConstructorUsedError;
-  String get value => throw _privateConstructorUsedError;
+mixin _$QuestionExampleWord {
+  int get id => throw _privateConstructorUsedError;
+  List<String> get forms => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $QuestionExampleElemCopyWith<QuestionExampleElem> get copyWith =>
+  $QuestionExampleWordCopyWith<QuestionExampleWord> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $QuestionExampleElemCopyWith<$Res> {
-  factory $QuestionExampleElemCopyWith(
-          QuestionExampleElem value, $Res Function(QuestionExampleElem) then) =
-      _$QuestionExampleElemCopyWithImpl<$Res, QuestionExampleElem>;
+abstract class $QuestionExampleWordCopyWith<$Res> {
+  factory $QuestionExampleWordCopyWith(
+          QuestionExampleWord value, $Res Function(QuestionExampleWord) then) =
+      _$QuestionExampleWordCopyWithImpl<$Res, QuestionExampleWord>;
   @useResult
-  $Res call({int start, String value});
+  $Res call({int id, List<String> forms});
 }
 
 /// @nodoc
-class _$QuestionExampleElemCopyWithImpl<$Res, $Val extends QuestionExampleElem>
-    implements $QuestionExampleElemCopyWith<$Res> {
-  _$QuestionExampleElemCopyWithImpl(this._value, this._then);
+class _$QuestionExampleWordCopyWithImpl<$Res, $Val extends QuestionExampleWord>
+    implements $QuestionExampleWordCopyWith<$Res> {
+  _$QuestionExampleWordCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -1541,121 +1713,128 @@ class _$QuestionExampleElemCopyWithImpl<$Res, $Val extends QuestionExampleElem>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? start = null,
-    Object? value = null,
+    Object? id = null,
+    Object? forms = null,
   }) {
     return _then(_value.copyWith(
-      start: null == start
-          ? _value.start
-          : start // ignore: cast_nullable_to_non_nullable
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
               as int,
-      value: null == value
-          ? _value.value
-          : value // ignore: cast_nullable_to_non_nullable
-              as String,
+      forms: null == forms
+          ? _value.forms
+          : forms // ignore: cast_nullable_to_non_nullable
+              as List<String>,
     ) as $Val);
   }
 }
 
 /// @nodoc
-abstract class _$$_QuestionExampleElemCopyWith<$Res>
-    implements $QuestionExampleElemCopyWith<$Res> {
-  factory _$$_QuestionExampleElemCopyWith(_$_QuestionExampleElem value,
-          $Res Function(_$_QuestionExampleElem) then) =
-      __$$_QuestionExampleElemCopyWithImpl<$Res>;
+abstract class _$$_QuestionExampleWordCopyWith<$Res>
+    implements $QuestionExampleWordCopyWith<$Res> {
+  factory _$$_QuestionExampleWordCopyWith(_$_QuestionExampleWord value,
+          $Res Function(_$_QuestionExampleWord) then) =
+      __$$_QuestionExampleWordCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int start, String value});
+  $Res call({int id, List<String> forms});
 }
 
 /// @nodoc
-class __$$_QuestionExampleElemCopyWithImpl<$Res>
-    extends _$QuestionExampleElemCopyWithImpl<$Res, _$_QuestionExampleElem>
-    implements _$$_QuestionExampleElemCopyWith<$Res> {
-  __$$_QuestionExampleElemCopyWithImpl(_$_QuestionExampleElem _value,
-      $Res Function(_$_QuestionExampleElem) _then)
+class __$$_QuestionExampleWordCopyWithImpl<$Res>
+    extends _$QuestionExampleWordCopyWithImpl<$Res, _$_QuestionExampleWord>
+    implements _$$_QuestionExampleWordCopyWith<$Res> {
+  __$$_QuestionExampleWordCopyWithImpl(_$_QuestionExampleWord _value,
+      $Res Function(_$_QuestionExampleWord) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? start = null,
-    Object? value = null,
+    Object? id = null,
+    Object? forms = null,
   }) {
-    return _then(_$_QuestionExampleElem(
-      start: null == start
-          ? _value.start
-          : start // ignore: cast_nullable_to_non_nullable
+    return _then(_$_QuestionExampleWord(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
               as int,
-      value: null == value
-          ? _value.value
-          : value // ignore: cast_nullable_to_non_nullable
-              as String,
+      forms: null == forms
+          ? _value._forms
+          : forms // ignore: cast_nullable_to_non_nullable
+              as List<String>,
     ));
   }
 }
 
 /// @nodoc
 @JsonSerializable()
-class _$_QuestionExampleElem implements _QuestionExampleElem {
-  const _$_QuestionExampleElem({required this.start, required this.value});
+class _$_QuestionExampleWord implements _QuestionExampleWord {
+  const _$_QuestionExampleWord(
+      {required this.id, required final List<String> forms})
+      : _forms = forms;
 
-  factory _$_QuestionExampleElem.fromJson(Map<String, dynamic> json) =>
-      _$$_QuestionExampleElemFromJson(json);
+  factory _$_QuestionExampleWord.fromJson(Map<String, dynamic> json) =>
+      _$$_QuestionExampleWordFromJson(json);
 
   @override
-  final int start;
+  final int id;
+  final List<String> _forms;
   @override
-  final String value;
+  List<String> get forms {
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_forms);
+  }
 
   @override
   String toString() {
-    return 'QuestionExampleElem(start: $start, value: $value)';
+    return 'QuestionExampleWord(id: $id, forms: $forms)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_QuestionExampleElem &&
-            (identical(other.start, start) || other.start == start) &&
-            (identical(other.value, value) || other.value == value));
+            other is _$_QuestionExampleWord &&
+            (identical(other.id, id) || other.id == id) &&
+            const DeepCollectionEquality().equals(other._forms, _forms));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, start, value);
+  int get hashCode =>
+      Object.hash(runtimeType, id, const DeepCollectionEquality().hash(_forms));
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_QuestionExampleElemCopyWith<_$_QuestionExampleElem> get copyWith =>
-      __$$_QuestionExampleElemCopyWithImpl<_$_QuestionExampleElem>(
+  _$$_QuestionExampleWordCopyWith<_$_QuestionExampleWord> get copyWith =>
+      __$$_QuestionExampleWordCopyWithImpl<_$_QuestionExampleWord>(
           this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_QuestionExampleElemToJson(
+    return _$$_QuestionExampleWordToJson(
       this,
     );
   }
 }
 
-abstract class _QuestionExampleElem implements QuestionExampleElem {
-  const factory _QuestionExampleElem(
-      {required final int start,
-      required final String value}) = _$_QuestionExampleElem;
+abstract class _QuestionExampleWord implements QuestionExampleWord {
+  const factory _QuestionExampleWord(
+      {required final int id,
+      required final List<String> forms}) = _$_QuestionExampleWord;
 
-  factory _QuestionExampleElem.fromJson(Map<String, dynamic> json) =
-      _$_QuestionExampleElem.fromJson;
+  factory _QuestionExampleWord.fromJson(Map<String, dynamic> json) =
+      _$_QuestionExampleWord.fromJson;
 
   @override
-  int get start;
+  int get id;
   @override
-  String get value;
+  List<String> get forms;
   @override
   @JsonKey(ignore: true)
-  _$$_QuestionExampleElemCopyWith<_$_QuestionExampleElem> get copyWith =>
+  _$$_QuestionExampleWordCopyWith<_$_QuestionExampleWord> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -1669,18 +1848,6 @@ mixin _$Style {
   String get backgroundScreen => throw _privateConstructorUsedError;
   @JsonKey(name: 'background_challenge')
   String get backgroundChallenge => throw _privateConstructorUsedError;
-  @JsonKey(name: 'use_gradient')
-  bool get useGradient => throw _privateConstructorUsedError;
-  @JsonKey(name: 'bottom_gradient_color')
-  String? get bottomGradientColor => throw _privateConstructorUsedError;
-  @JsonKey(name: 'top_gradient_color')
-  String? get topGradientColor => throw _privateConstructorUsedError;
-  @JsonKey(name: 'question_position')
-  double get questionPosition => throw _privateConstructorUsedError;
-  @JsonKey(name: 'image_position')
-  double get imagePosition => throw _privateConstructorUsedError;
-  @JsonKey(name: 'question_font_size')
-  double get questionFontSize => throw _privateConstructorUsedError;
   @JsonKey(name: 'question_opacity')
   double get questionOpacity => throw _privateConstructorUsedError;
 
@@ -1697,12 +1864,6 @@ abstract class $StyleCopyWith<$Res> {
   $Res call(
       {@JsonKey(name: 'background_screen') String backgroundScreen,
       @JsonKey(name: 'background_challenge') String backgroundChallenge,
-      @JsonKey(name: 'use_gradient') bool useGradient,
-      @JsonKey(name: 'bottom_gradient_color') String? bottomGradientColor,
-      @JsonKey(name: 'top_gradient_color') String? topGradientColor,
-      @JsonKey(name: 'question_position') double questionPosition,
-      @JsonKey(name: 'image_position') double imagePosition,
-      @JsonKey(name: 'question_font_size') double questionFontSize,
       @JsonKey(name: 'question_opacity') double questionOpacity});
 }
 
@@ -1721,12 +1882,6 @@ class _$StyleCopyWithImpl<$Res, $Val extends Style>
   $Res call({
     Object? backgroundScreen = null,
     Object? backgroundChallenge = null,
-    Object? useGradient = null,
-    Object? bottomGradientColor = freezed,
-    Object? topGradientColor = freezed,
-    Object? questionPosition = null,
-    Object? imagePosition = null,
-    Object? questionFontSize = null,
     Object? questionOpacity = null,
   }) {
     return _then(_value.copyWith(
@@ -1738,30 +1893,6 @@ class _$StyleCopyWithImpl<$Res, $Val extends Style>
           ? _value.backgroundChallenge
           : backgroundChallenge // ignore: cast_nullable_to_non_nullable
               as String,
-      useGradient: null == useGradient
-          ? _value.useGradient
-          : useGradient // ignore: cast_nullable_to_non_nullable
-              as bool,
-      bottomGradientColor: freezed == bottomGradientColor
-          ? _value.bottomGradientColor
-          : bottomGradientColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      topGradientColor: freezed == topGradientColor
-          ? _value.topGradientColor
-          : topGradientColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      questionPosition: null == questionPosition
-          ? _value.questionPosition
-          : questionPosition // ignore: cast_nullable_to_non_nullable
-              as double,
-      imagePosition: null == imagePosition
-          ? _value.imagePosition
-          : imagePosition // ignore: cast_nullable_to_non_nullable
-              as double,
-      questionFontSize: null == questionFontSize
-          ? _value.questionFontSize
-          : questionFontSize // ignore: cast_nullable_to_non_nullable
-              as double,
       questionOpacity: null == questionOpacity
           ? _value.questionOpacity
           : questionOpacity // ignore: cast_nullable_to_non_nullable
@@ -1779,12 +1910,6 @@ abstract class _$$_StyleCopyWith<$Res> implements $StyleCopyWith<$Res> {
   $Res call(
       {@JsonKey(name: 'background_screen') String backgroundScreen,
       @JsonKey(name: 'background_challenge') String backgroundChallenge,
-      @JsonKey(name: 'use_gradient') bool useGradient,
-      @JsonKey(name: 'bottom_gradient_color') String? bottomGradientColor,
-      @JsonKey(name: 'top_gradient_color') String? topGradientColor,
-      @JsonKey(name: 'question_position') double questionPosition,
-      @JsonKey(name: 'image_position') double imagePosition,
-      @JsonKey(name: 'question_font_size') double questionFontSize,
       @JsonKey(name: 'question_opacity') double questionOpacity});
 }
 
@@ -1799,12 +1924,6 @@ class __$$_StyleCopyWithImpl<$Res> extends _$StyleCopyWithImpl<$Res, _$_Style>
   $Res call({
     Object? backgroundScreen = null,
     Object? backgroundChallenge = null,
-    Object? useGradient = null,
-    Object? bottomGradientColor = freezed,
-    Object? topGradientColor = freezed,
-    Object? questionPosition = null,
-    Object? imagePosition = null,
-    Object? questionFontSize = null,
     Object? questionOpacity = null,
   }) {
     return _then(_$_Style(
@@ -1816,30 +1935,6 @@ class __$$_StyleCopyWithImpl<$Res> extends _$StyleCopyWithImpl<$Res, _$_Style>
           ? _value.backgroundChallenge
           : backgroundChallenge // ignore: cast_nullable_to_non_nullable
               as String,
-      useGradient: null == useGradient
-          ? _value.useGradient
-          : useGradient // ignore: cast_nullable_to_non_nullable
-              as bool,
-      bottomGradientColor: freezed == bottomGradientColor
-          ? _value.bottomGradientColor
-          : bottomGradientColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      topGradientColor: freezed == topGradientColor
-          ? _value.topGradientColor
-          : topGradientColor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      questionPosition: null == questionPosition
-          ? _value.questionPosition
-          : questionPosition // ignore: cast_nullable_to_non_nullable
-              as double,
-      imagePosition: null == imagePosition
-          ? _value.imagePosition
-          : imagePosition // ignore: cast_nullable_to_non_nullable
-              as double,
-      questionFontSize: null == questionFontSize
-          ? _value.questionFontSize
-          : questionFontSize // ignore: cast_nullable_to_non_nullable
-              as double,
       questionOpacity: null == questionOpacity
           ? _value.questionOpacity
           : questionOpacity // ignore: cast_nullable_to_non_nullable
@@ -1854,12 +1949,6 @@ class _$_Style implements _Style {
   const _$_Style(
       {@JsonKey(name: 'background_screen') required this.backgroundScreen,
       @JsonKey(name: 'background_challenge') required this.backgroundChallenge,
-      @JsonKey(name: 'use_gradient') required this.useGradient,
-      @JsonKey(name: 'bottom_gradient_color') this.bottomGradientColor,
-      @JsonKey(name: 'top_gradient_color') this.topGradientColor,
-      @JsonKey(name: 'question_position') required this.questionPosition,
-      @JsonKey(name: 'image_position') required this.imagePosition,
-      @JsonKey(name: 'question_font_size') required this.questionFontSize,
       @JsonKey(name: 'question_opacity') required this.questionOpacity});
 
   factory _$_Style.fromJson(Map<String, dynamic> json) =>
@@ -1872,30 +1961,12 @@ class _$_Style implements _Style {
   @JsonKey(name: 'background_challenge')
   final String backgroundChallenge;
   @override
-  @JsonKey(name: 'use_gradient')
-  final bool useGradient;
-  @override
-  @JsonKey(name: 'bottom_gradient_color')
-  final String? bottomGradientColor;
-  @override
-  @JsonKey(name: 'top_gradient_color')
-  final String? topGradientColor;
-  @override
-  @JsonKey(name: 'question_position')
-  final double questionPosition;
-  @override
-  @JsonKey(name: 'image_position')
-  final double imagePosition;
-  @override
-  @JsonKey(name: 'question_font_size')
-  final double questionFontSize;
-  @override
   @JsonKey(name: 'question_opacity')
   final double questionOpacity;
 
   @override
   String toString() {
-    return 'Style(backgroundScreen: $backgroundScreen, backgroundChallenge: $backgroundChallenge, useGradient: $useGradient, bottomGradientColor: $bottomGradientColor, topGradientColor: $topGradientColor, questionPosition: $questionPosition, imagePosition: $imagePosition, questionFontSize: $questionFontSize, questionOpacity: $questionOpacity)';
+    return 'Style(backgroundScreen: $backgroundScreen, backgroundChallenge: $backgroundChallenge, questionOpacity: $questionOpacity)';
   }
 
   @override
@@ -1907,18 +1978,6 @@ class _$_Style implements _Style {
                 other.backgroundScreen == backgroundScreen) &&
             (identical(other.backgroundChallenge, backgroundChallenge) ||
                 other.backgroundChallenge == backgroundChallenge) &&
-            (identical(other.useGradient, useGradient) ||
-                other.useGradient == useGradient) &&
-            (identical(other.bottomGradientColor, bottomGradientColor) ||
-                other.bottomGradientColor == bottomGradientColor) &&
-            (identical(other.topGradientColor, topGradientColor) ||
-                other.topGradientColor == topGradientColor) &&
-            (identical(other.questionPosition, questionPosition) ||
-                other.questionPosition == questionPosition) &&
-            (identical(other.imagePosition, imagePosition) ||
-                other.imagePosition == imagePosition) &&
-            (identical(other.questionFontSize, questionFontSize) ||
-                other.questionFontSize == questionFontSize) &&
             (identical(other.questionOpacity, questionOpacity) ||
                 other.questionOpacity == questionOpacity));
   }
@@ -1926,16 +1985,7 @@ class _$_Style implements _Style {
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
-      runtimeType,
-      backgroundScreen,
-      backgroundChallenge,
-      useGradient,
-      bottomGradientColor,
-      topGradientColor,
-      questionPosition,
-      imagePosition,
-      questionFontSize,
-      questionOpacity);
+      runtimeType, backgroundScreen, backgroundChallenge, questionOpacity);
 
   @JsonKey(ignore: true)
   @override
@@ -1957,18 +2007,6 @@ abstract class _Style implements Style {
           required final String backgroundScreen,
       @JsonKey(name: 'background_challenge')
           required final String backgroundChallenge,
-      @JsonKey(name: 'use_gradient')
-          required final bool useGradient,
-      @JsonKey(name: 'bottom_gradient_color')
-          final String? bottomGradientColor,
-      @JsonKey(name: 'top_gradient_color')
-          final String? topGradientColor,
-      @JsonKey(name: 'question_position')
-          required final double questionPosition,
-      @JsonKey(name: 'image_position')
-          required final double imagePosition,
-      @JsonKey(name: 'question_font_size')
-          required final double questionFontSize,
       @JsonKey(name: 'question_opacity')
           required final double questionOpacity}) = _$_Style;
 
@@ -1980,24 +2018,6 @@ abstract class _Style implements Style {
   @override
   @JsonKey(name: 'background_challenge')
   String get backgroundChallenge;
-  @override
-  @JsonKey(name: 'use_gradient')
-  bool get useGradient;
-  @override
-  @JsonKey(name: 'bottom_gradient_color')
-  String? get bottomGradientColor;
-  @override
-  @JsonKey(name: 'top_gradient_color')
-  String? get topGradientColor;
-  @override
-  @JsonKey(name: 'question_position')
-  double get questionPosition;
-  @override
-  @JsonKey(name: 'image_position')
-  double get imagePosition;
-  @override
-  @JsonKey(name: 'question_font_size')
-  double get questionFontSize;
   @override
   @JsonKey(name: 'question_opacity')
   double get questionOpacity;

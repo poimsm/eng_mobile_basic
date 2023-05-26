@@ -1,5 +1,6 @@
 import 'package:eng_mobile_app/config.dart';
 import 'package:eng_mobile_app/data/models/question.dart';
+import 'package:eng_mobile_app/pages/ai_text_widget.dart';
 import 'package:eng_mobile_app/pages/example_controller.dart';
 import 'package:eng_mobile_app/pages/example_widget.dart';
 import 'package:eng_mobile_app/pages/quiz_screen.dart';
@@ -79,16 +80,14 @@ class HomePageState extends ConsumerState<HomePage> {
           SizedBox(
             height: size.height,
             width: size.width,
-          ),
-
-          if (!homeState.question!.style.useGradient)
-            Positioned(
+          ),          
+          Positioned(
               left: 0,
-              top: size.height * homeState.question!.style.imagePosition,
+              top: size.height * 0.1,
               child: _image(),
             ),
           Positioned(
-            top: size.height * homeState.question!.style.questionPosition,
+            top: size.height * 0.3,
             left: 0,
             child: _question(),
           ),
@@ -99,8 +98,13 @@ class HomePageState extends ConsumerState<HomePage> {
           ),
           Positioned(
             left: 0,
-            bottom: 10,
+            bottom: 5,
             child: _ctrlBtns(),
+          ),
+          Positioned(
+            bottom: size.height * 0.18,
+            right: 15,
+            child: _step(),
           ),
           if(homeState.isRecording) Positioned(
             left: size.width * 0.4,
@@ -116,7 +120,7 @@ class HomePageState extends ConsumerState<HomePage> {
           if (homeState.showExample)
             Positioned(
               left: 10,
-              top: size.height * 0.67,
+              top: size.height * 0.68,
               // child: ProviderListener>(
               //   provider: exampleProvider,
               //   onChange: (context, state) {
@@ -150,35 +154,12 @@ class HomePageState extends ConsumerState<HomePage> {
           //   top: 10,
           //   left: 15,
           //   child: _progress(),
-          // ),
-          Positioned(
-            bottom: size.height * 0.23,
-            right: 15,
-            child: _step(),
-          ),
+          // ),          
           if (homeState.showFail) _overlayFail(),
         ],
       ),
     );
-
-    if (homeState.question!.style.useGradient) {
-      return Container(
-          height: size.height,
-          width: size.width,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.bottomCenter,
-              end: Alignment.topCenter,
-              stops: [0.1, 0.9],
-              colors: [
-                homeState.question!.style.bottomGradientColor!.toColor(),
-                homeState.question!.style.topGradientColor!.toColor()
-              ],
-            ),
-          ),
-          child: contentPage);
-    }
-
+   
     return WillPopScope(
       onWillPop: () async {
         return true;
@@ -340,7 +321,7 @@ class HomePageState extends ConsumerState<HomePage> {
                   SizedBox(
                     width: 200,
                     child: Text(
-                      'Choose a WORD and use it in your answer 👇',
+                      'Try to use this WORD in your answer 👇',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 18,
@@ -350,7 +331,7 @@ class HomePageState extends ConsumerState<HomePage> {
                   SizedBox(
                     width: 15,
                   ),
-                  homeState.word!.hasInfo && homeState.showMeaningBtn
+                   homeState.showMeaningBtn
                       ? InkWell(
                           onTap: () {
                             _presentMeaningSheet(homeState.word!);
@@ -389,7 +370,7 @@ class HomePageState extends ConsumerState<HomePage> {
                     child: Container(
                       padding: EdgeInsets.all(3),
                       child: Opacity(
-                        opacity: homeState.wordIndex == 0 ? 0.3 : 0.9,
+                        opacity: homeState.wordIndex == 0 ? 0.25 : 0.9,
                         child: Image.asset(
                           'assets/arrow_left.png',
                           width: 30,
@@ -420,7 +401,7 @@ class HomePageState extends ConsumerState<HomePage> {
                       child: Opacity(
                         opacity: homeState.wordIndex ==
                                 homeState.question!.words.length - 1
-                            ? 0.3
+                            ? 0.25
                             : 0.9,
                         child: Image.asset(
                           'assets/arrow_right.png',
@@ -515,8 +496,8 @@ class HomePageState extends ConsumerState<HomePage> {
 
   _image() {
     return SizedBox(
-      height: size.height * 0.7,
-      width: size.width,
+      height: size.height * 0.8,
+      // width: size.width,
       child: Center(
         child: Stack(
           children: [
@@ -528,6 +509,7 @@ class HomePageState extends ConsumerState<HomePage> {
                   )
                 : Image.network(
                     homeState.question!.imageUrl,
+                    height: size.height * 0.8,
                     width: size.width,
                     fit: BoxFit.cover,
                   )
@@ -619,7 +601,7 @@ class HomePageState extends ConsumerState<HomePage> {
                 padding: EdgeInsets.all(8),
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Colors.black.withOpacity(0.2),
+                  color: Colors.grey.withOpacity(0.1),
                 ),
                 child: Icon(Icons.add, size: 40, color: Colors.white),
                 // child: Image.asset('assets/user_14.png', width: 45),
@@ -664,7 +646,7 @@ class HomePageState extends ConsumerState<HomePage> {
         padding: EdgeInsets.all(8),
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: Colors.black.withOpacity(0.2),
+          color: Colors.grey.withOpacity(0.1),
         ),
         child: Icon(Icons.chevron_right, color: Colors.white, size: 45),
       ),
@@ -765,9 +747,9 @@ class HomePageState extends ConsumerState<HomePage> {
                                     fontWeight: FontWeight.bold,
                                   )),
                               if (word.translation != '')
-                                Text('(${word.translation})',
+                                Text('${word.translation}',
                                     style: TextStyle(
-                                      fontSize: 16,
+                                      fontSize: 18,
                                       color: Colors.black54,
                                     )),
                             ],
@@ -786,12 +768,12 @@ class HomePageState extends ConsumerState<HomePage> {
                     );
           }
 
-          Widget image(String path) {
+          Widget minitaure(Miniature miniature) {
             return Container(
               padding: EdgeInsets.all(5),
-              child: Image.asset(
-                path,
-                width: 90,
+              child: Image.network(
+                miniature.imageUrl,
+                height: miniature.height.toDouble(),
               ),
             );
           }
@@ -829,7 +811,7 @@ class HomePageState extends ConsumerState<HomePage> {
           Widget examples(List<WordExample> examples) {
             if(examples.isEmpty) return Container();
             return Container(
-              height: 210,
+              height: 250,
               margin: EdgeInsets.symmetric(vertical: 5),
               child: ListView(
                   scrollDirection: Axis.horizontal,
@@ -850,7 +832,7 @@ class HomePageState extends ConsumerState<HomePage> {
                                   Text(
                                     examples[i].value,
                                     style: TextStyle(
-                                        fontSize: 17,
+                                        fontSize: 17.2,
                                         color: Colors.black54,
                                         fontStyle: FontStyle.italic),
                                   ),
@@ -860,32 +842,40 @@ class HomePageState extends ConsumerState<HomePage> {
                                   Text(
                                     examples[i].translation,
                                     style: TextStyle(
-                                        fontSize: 17,
-                                        color: Colors.blue,
+                                        fontSize: 17.2,
+                                        color: Color(0xff51657F),
                                         fontStyle: FontStyle.italic),
-                                  ),                            
+                                  ),
                                 ],
                               ),
-                              Container(
-                                alignment: Alignment.centerRight,
-                                child: InkWell(
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  InkWell(
                                   borderRadius: BorderRadius.circular(50),
                                   onTap: () {
-                                    if (examples[i].voiceUrl != null) {
-                                      ref.read(homeProvider.notifier).playVoice(
-                                          examples[i].voiceUrl!,
-                                          shouldStop: false);
-                                    } else {
-                                      ref
-                                          .read(homeProvider.notifier)
-                                          .speak(examples[i].value, speed: 0.97);
-                                    }
+                                    // ref.read(homeProvider.notifier).playVoice(
+                                    //     examples[i].voiceUrl,
+                                    //     shouldStop: false);                                    
                                   },
                                   child: Container(
                                     padding: EdgeInsets.all(5),
-                                    child: Icon(LineIcons.volumeUp, size: 30)),
+                                    child: Icon(Icons.copy, size: 27, color: Colors.black54,)),
                                 ),
-                              ),
+                                SizedBox(width: 10,),
+                                  InkWell(
+                                  borderRadius: BorderRadius.circular(50),
+                                  onTap: () {
+                                    ref.read(homeProvider.notifier).playVoice(
+                                        examples[i].voiceUrl,
+                                        shouldStop: false);                                    
+                                  },
+                                  child: Container(
+                                    padding: EdgeInsets.all(5),
+                                    child: Icon(LineIcons.volumeUp, size: 32, color: Colors.black54)),
+                                ),
+                                ],
+                              )
                             ],
                           ),
                         ),
@@ -896,6 +886,7 @@ class HomePageState extends ConsumerState<HomePage> {
           }          
 
           Widget explanation(List<Explanation> explanations) {
+            // 'My input'.split('').forEach((ch) => print(ch));
             if(explanations.isEmpty) return Container();
             return Column(
               children: List.generate(explanations.length, (i) {
@@ -933,15 +924,17 @@ class HomePageState extends ConsumerState<HomePage> {
                 ),
                 child: SingleChildScrollView(
                   child: Column(children: [
-                    if(word.image != null) image(word.image!),
+                    minitaure(word.miniature),
                     header(word),
                     if(word.story != null) story(word.story!),
-                    if(word.definition != null) definition(word.definition!),
+                    definition(word.definition),
+                    SizedBox(height: 5,),
                     examples(word.examples),
-                    SizedBox(height: 8,),
-                    explanation(word.explanations),                   
+                    SizedBox(height: 15,),
+                    AITextWidget(word.explanations),
+                    // explanation(word.explanations),                   
                     SizedBox(
-                      height: 50,
+                      height: 20,
                     ),
                   ]),
                 ));

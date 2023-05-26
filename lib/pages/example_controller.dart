@@ -37,9 +37,7 @@ class ExampleNotifier extends StateNotifier<ExampleState> {
   }
 
   void playExample() {
-    print('playExampleeeeeeeeee 🐥🐥🐥🐥🐥🐥');
     state = state.copyWith(isPlaying: true, counter: state.counter++);
-    print(state.isPlaying);
   }
 
   void stopExample() {
@@ -51,7 +49,6 @@ class ExampleNotifier extends StateNotifier<ExampleState> {
   }
 
   void onExampleProgress(int index) {
-    print('onExampleProgress $index ⭕⭕');
     state = state.copyWith(playedIndex: index, counter: 100);
   }
 }

@@ -7,13 +7,12 @@ part of 'question.dart';
 // **************************************************************************
 
 _$_Question _$$_QuestionFromJson(Map<String, dynamic> json) => _$_Question(
+      id: json['id'] as int,
       question: json['question'] as String,
       voiceUrl: json['voice_url'] as String,
       imageUrl: json['image_url'] as String,
-      examples: (json['examples'] as List<dynamic>?)
-              ?.map((e) => QuestionExample.fromJson(e as Map<String, dynamic>))
-              .toList() ??
-          const [],
+      example:
+          QuestionExample.fromJson(json['example'] as Map<String, dynamic>),
       style: Style.fromJson(json['style'] as Map<String, dynamic>),
       words: (json['words'] as List<dynamic>)
           .map((e) => Word.fromJson(e as Map<String, dynamic>))
@@ -22,10 +21,11 @@ _$_Question _$$_QuestionFromJson(Map<String, dynamic> json) => _$_Question(
 
 Map<String, dynamic> _$$_QuestionToJson(_$_Question instance) =>
     <String, dynamic>{
+      'id': instance.id,
       'question': instance.question,
       'voice_url': instance.voiceUrl,
       'image_url': instance.imageUrl,
-      'examples': instance.examples,
+      'example': instance.example,
       'style': instance.style,
       'words': instance.words,
     };
@@ -33,10 +33,9 @@ Map<String, dynamic> _$$_QuestionToJson(_$_Question instance) =>
 _$_Word _$$_WordFromJson(Map<String, dynamic> json) => _$_Word(
       id: json['id'] as int,
       word: json['word'] as String,
-      hasInfo: json['has_info'] as bool,
-      translation: json['translation'] as String? ?? '',
-      image: json['image'] as String?,
-      definition: json['definition'] as String?,
+      translation: json['translation'] as String,
+      definition: json['definition'] as String,
+      miniature: Miniature.fromJson(json['miniature'] as Map<String, dynamic>),
       examples: (json['examples'] as List<dynamic>?)
               ?.map((e) => WordExample.fromJson(e as Map<String, dynamic>))
               .toList() ??
@@ -53,10 +52,9 @@ _$_Word _$$_WordFromJson(Map<String, dynamic> json) => _$_Word(
 Map<String, dynamic> _$$_WordToJson(_$_Word instance) => <String, dynamic>{
       'id': instance.id,
       'word': instance.word,
-      'has_info': instance.hasInfo,
       'translation': instance.translation,
-      'image': instance.image,
       'definition': instance.definition,
+      'miniature': instance.miniature,
       'examples': instance.examples,
       'explanations': instance.explanations,
       'story': instance.story,
@@ -75,6 +73,17 @@ Map<String, dynamic> _$$_StoryLineToJson(_$_StoryLine instance) =>
       'voice_url': instance.voiceUrl,
       'image': instance.image,
       'subtitles': instance.subtitles,
+    };
+
+_$_Miniature _$$_MiniatureFromJson(Map<String, dynamic> json) => _$_Miniature(
+      imageUrl: json['image_url'] as String,
+      height: json['height'] as int,
+    );
+
+Map<String, dynamic> _$$_MiniatureToJson(_$_Miniature instance) =>
+    <String, dynamic>{
+      'image_url': instance.imageUrl,
+      'height': instance.height,
     };
 
 _$_Subtitle _$$_SubtitleFromJson(Map<String, dynamic> json) => _$_Subtitle(
@@ -104,7 +113,7 @@ _$_WordExample _$$_WordExampleFromJson(Map<String, dynamic> json) =>
     _$_WordExample(
       value: json['value'] as String,
       translation: json['translation'] as String,
-      voiceUrl: json['voice_url'] as String?,
+      voiceUrl: json['voice_url'] as String,
     );
 
 Map<String, dynamic> _$$_WordExampleToJson(_$_WordExample instance) =>
@@ -116,56 +125,47 @@ Map<String, dynamic> _$$_WordExampleToJson(_$_WordExample instance) =>
 
 _$_QuestionExample _$$_QuestionExampleFromJson(Map<String, dynamic> json) =>
     _$_QuestionExample(
-      wordId: json['word_id'] as int,
       voiceUrl: json['voice_url'] as String,
-      example: (json['example'] as List<dynamic>?)
+      words: (json['words'] as List<dynamic>?)
               ?.map((e) =>
-                  QuestionExampleElem.fromJson(e as Map<String, dynamic>))
+                  QuestionExampleWord.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const [],
+      subtitles: (json['subtitles'] as List<dynamic>?)
+              ?.map((e) => Subtitle.fromJson(e as Map<String, dynamic>))
               .toList() ??
           const [],
     );
 
 Map<String, dynamic> _$$_QuestionExampleToJson(_$_QuestionExample instance) =>
     <String, dynamic>{
-      'word_id': instance.wordId,
       'voice_url': instance.voiceUrl,
-      'example': instance.example,
+      'words': instance.words,
+      'subtitles': instance.subtitles,
     };
 
-_$_QuestionExampleElem _$$_QuestionExampleElemFromJson(
+_$_QuestionExampleWord _$$_QuestionExampleWordFromJson(
         Map<String, dynamic> json) =>
-    _$_QuestionExampleElem(
-      start: json['start'] as int,
-      value: json['value'] as String,
+    _$_QuestionExampleWord(
+      id: json['id'] as int,
+      forms: (json['forms'] as List<dynamic>).map((e) => e as String).toList(),
     );
 
-Map<String, dynamic> _$$_QuestionExampleElemToJson(
-        _$_QuestionExampleElem instance) =>
+Map<String, dynamic> _$$_QuestionExampleWordToJson(
+        _$_QuestionExampleWord instance) =>
     <String, dynamic>{
-      'start': instance.start,
-      'value': instance.value,
+      'id': instance.id,
+      'forms': instance.forms,
     };
 
 _$_Style _$$_StyleFromJson(Map<String, dynamic> json) => _$_Style(
       backgroundScreen: json['background_screen'] as String,
       backgroundChallenge: json['background_challenge'] as String,
-      useGradient: json['use_gradient'] as bool,
-      bottomGradientColor: json['bottom_gradient_color'] as String?,
-      topGradientColor: json['top_gradient_color'] as String?,
-      questionPosition: (json['question_position'] as num).toDouble(),
-      imagePosition: (json['image_position'] as num).toDouble(),
-      questionFontSize: (json['question_font_size'] as num).toDouble(),
       questionOpacity: (json['question_opacity'] as num).toDouble(),
     );
 
 Map<String, dynamic> _$$_StyleToJson(_$_Style instance) => <String, dynamic>{
       'background_screen': instance.backgroundScreen,
       'background_challenge': instance.backgroundChallenge,
-      'use_gradient': instance.useGradient,
-      'bottom_gradient_color': instance.bottomGradientColor,
-      'top_gradient_color': instance.topGradientColor,
-      'question_position': instance.questionPosition,
-      'image_position': instance.imagePosition,
-      'question_font_size': instance.questionFontSize,
       'question_opacity': instance.questionOpacity,
     };
