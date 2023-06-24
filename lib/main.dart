@@ -10,6 +10,7 @@ import 'package:eng_mobile_app/pages/layout/layout.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'utils/helpers.dart';
 
@@ -56,6 +57,16 @@ Future<void> onLoadApp() async {
 
   if (backend.shouldUpdateApp) {
     startPage = Routes.NEW_APP_VERSION;
+    return;
+  }
+
+  await backend.loadUuid();
+  await backend.loadFirstTime();
+
+  final hasConfiguredLang = await backend.loadLanguage();
+
+  if (!hasConfiguredLang) {
+    startPage = Routes.LANGUAGE;
     return;
   }
 

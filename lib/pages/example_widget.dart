@@ -42,20 +42,15 @@ class ExampleWidgetState extends ConsumerState<ExampleWidget> {
 
     player.positionStream.listen((position) {
       final exElements = widget.example.subtitles;
-      print('wordList 🍵🍵🍵🍵🍵');
-      print(widget.example.words);
-      final wordList = widget.example.words.where((w) => w.id == widget.word.id).toList();
-      print(wordList);
-      print('widget.word.id::: ${widget.word.id}');
-      print('-------------------');
+      final wordList = widget.example.words.where((w) => w.id == widget.word.id).toList();     
 
       List<String> words = wordList[0].forms;
 
       for (var i = 0; i < exElements.length; i++) {
         final start = exElements[i].start;
         final end = i + 1 < exElements.length ? exElements[i + 1].start : 99999;
-        if (start <= position.inSeconds &&
-            end > position.inSeconds &&
+        if (start <= position.inMilliseconds &&
+            end > position.inMilliseconds &&
             exampleState.playedIndex != i) {
           exampleState.exampleArry = _buildExample(exElements[i].value, words);
           ref.read(exampleProvider.notifier).onExampleProgress(i);          

@@ -100,12 +100,14 @@ Map<String, dynamic> _$$_SubtitleToJson(_$_Subtitle instance) =>
 _$_Explanation _$$_ExplanationFromJson(Map<String, dynamic> json) =>
     _$_Explanation(
       value: json['value'] as String,
+      translation: json['translation'] as String,
       image: json['image'] as String?,
     );
 
 Map<String, dynamic> _$$_ExplanationToJson(_$_Explanation instance) =>
     <String, dynamic>{
       'value': instance.value,
+      'translation': instance.translation,
       'image': instance.image,
     };
 

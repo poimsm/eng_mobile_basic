@@ -7,9 +7,11 @@ import 'package:eng_mobile_app/data/models/question.dart';
 import 'package:eng_mobile_app/data/repositories/question/question_repository.dart';
 import 'package:eng_mobile_app/data/repositories/question/question_repository_impl.dart';
 import 'package:eng_mobile_app/pages/home/enums.dart';
+import 'package:eng_mobile_app/services/global/global_service.dart';
 
 import 'package:eng_mobile_app/utils/helpers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:get_it/get_it.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:record/record.dart';
@@ -52,9 +54,9 @@ class HomeState {
     this.bubbleChallengeSentence,
     this.showNextBtn = true,
     this.questionCounter = 1,
-    this.showQuizScreen = true,
+    this.showRoundScreen = true,
     this.questionRoundCounter = 1,
-    this.readyForNextQuestion = true,
+    this.readyForNextQuestion = false,
     this.recordVoiceBusy = false,
     this.recordAudioPath = '',
     this.recordTemAudioPath = 'audio_0.mp3',
@@ -65,6 +67,7 @@ class HomeState {
     this.showMeaningBtn = true,
     this.showQuestionReplayBtn = true,
     this.runRoutineWhenTimeCompleted = true,
+    // this.showLangScreen = false,
   });
 
   List<Question> questions;
@@ -88,7 +91,7 @@ class HomeState {
   String? bubbleChallengeSentence;
   bool showNextBtn;
   int questionCounter;
-  bool showQuizScreen;
+  bool showRoundScreen;
   int questionRoundCounter;
   bool readyForNextQuestion;
   bool recordVoiceBusy;
@@ -130,7 +133,7 @@ class HomeState {
     bubbleChallengeSentence,
     showNextBtn,
     questionCounter,
-    showQuizScreen,
+    showRoundScreen,
     questionRoundCounter,
     readyForNextQuestion,
     showVideo,
@@ -173,7 +176,7 @@ class HomeState {
           bubbleChallengeSentence ?? this.bubbleChallengeSentence,
       showNextBtn: showNextBtn ?? this.showNextBtn,
       questionCounter: questionCounter ?? this.questionCounter,
-      showQuizScreen: showQuizScreen ?? this.showQuizScreen,
+      showRoundScreen: showRoundScreen ?? this.showRoundScreen,
       questionRoundCounter: questionRoundCounter ?? this.questionRoundCounter,
       readyForNextQuestion: readyForNextQuestion ?? this.readyForNextQuestion,
       recordVoiceBusy: recordVoiceBusy ?? this.recordVoiceBusy,
@@ -193,10 +196,11 @@ class HomeState {
 }
 
 class HomeNotifier extends StateNotifier<HomeState> {
-  HomeNotifier(this.questionRepository) : super(HomeState());
+  HomeNotifier(this.questionRepository, this.backend) : super(HomeState());
 
   bool micBlocked = false;
   QuestionRepository questionRepository;
+  GlobalService backend;
 
   void toggleNewSentence() {
     state = state.copyWith(newSentences: true);
@@ -209,12 +213,12 @@ class HomeNotifier extends StateNotifier<HomeState> {
   }
 
   Future<bool> fetchQuestions() async {
-    state = state.copyWith(isLoading: true, showQuizScreen: false);
+    state = state.copyWith(isLoading: true, showRoundScreen: false);
 
     final questions = await questionRepository.getQuestions();
 
     if (questions.isEmpty) {
-      state = state.copyWith(showQuizScreen: true, isLoading: false);
+      state = state.copyWith(showRoundScreen: true, isLoading: false);
       return false;
     }
 
@@ -228,7 +232,8 @@ class HomeNotifier extends StateNotifier<HomeState> {
         bubbleChallengeSentence: questions[0].words[0].word,
         isLoading: false);
 
-    await sleep(300);
+    await sleep(400);
+    delayedNextquestionTicket();
 
     playVoice(state.question!.voiceUrl, shouldStop: false);
 
@@ -249,56 +254,61 @@ class HomeNotifier extends StateNotifier<HomeState> {
     state = state.copyWith(readyForNextQuestion: true);
   }
 
-  Future<Question?> onNextQuestion() async {
-    delayedNextquestionTicket();
-    stopVoice();
-    stopRecordedAudio();
+  Future<Question?> onNextQuestion() async {    
+    try {
+      backend.sendScreenFlow('onNextQuestion');
+      delayedNextquestionTicket();
+      stopVoice();
+      stopRecordedAudio();
 
-    state = state.copyWith(loadingNextQuestion: true);
-    delayedShowNextBtn();
+      state = state.copyWith(loadingNextQuestion: true);
+      delayedShowNextBtn();
 
-    if (state.questionCounter == state.questions.length) {
+      if (state.questionCounter == state.questions.length) {
+        state = state.copyWith(
+          loadingNextQuestion: false,
+          showRoundScreen: true,
+          hasAudioSaved: false,
+          currentIndex: 0,
+          wordIndex: 0,
+          questionCounter: 1,
+        );
+        return null;
+      }
+
       state = state.copyWith(
-        loadingNextQuestion: false,
-        showQuizScreen: true,
-        hasAudioSaved: false,
-        currentIndex: 0,
-        wordIndex: 0,
-        questionCounter: 1,
+        showExample: false,
       );
+
+      await sleep(200);
+
+      final index = state.currentIndex;
+
+      state = state.copyWith(
+        showChallenge: false,
+        showQuestionExample: false,
+        questionCounter: state.questionCounter + 1,
+        hasAudioSaved: false,
+        bubbleChallengeSentence: state.questions[index + 1].words[0].word,
+        question: state.questions[index + 1],
+        word: state.questions[index + 1].words[0],
+        currentIndex: index + 1,
+        wordIndex: 0,
+        example: state.questions[index + 1].example,
+        showExample: true,
+      );
+
+      await sleep(1000);
+      state = state.copyWith(loadingNextQuestion: false);
+      playVoice(state.question!.voiceUrl, shouldStop: false);
+
+      await sleep(1000);
+      state = state.copyWith(showChallenge: true);
+
+      return state.question;
+    } catch (_) {
       return null;
     }
-
-    state = state.copyWith(
-      showExample: false,
-    );
-
-    await sleep(200);
-
-    final index = state.currentIndex;    
-
-    state = state.copyWith(
-      showChallenge: false,
-      showQuestionExample: false,
-      questionCounter: state.questionCounter + 1,
-      hasAudioSaved: false,
-      bubbleChallengeSentence: state.questions[index + 1].words[0].word,
-      question: state.questions[index + 1],
-      word: state.questions[index + 1].words[0],
-      currentIndex: index + 1,
-      wordIndex: 0,
-      example: state.questions[index + 1].example,
-      showExample: true,
-    );
-
-    await sleep(1000);
-    state = state.copyWith(loadingNextQuestion: false);
-    playVoice(state.question!.voiceUrl, shouldStop: false);
-
-    await sleep(1000);
-    state = state.copyWith(showChallenge: true);
-
-    return state.question;
   }
 
   void delayedShowNextBtn() async {
@@ -324,8 +334,8 @@ class HomeNotifier extends StateNotifier<HomeState> {
       hasAudioSaved: false,
     );
     _setAudioStoragePath();
-    stopMic();
-    await sleep(500);
+    await stopMic();
+    await sleep(300);
     state = state.copyWith(
       hasAudioSaved: true,
     );
@@ -346,6 +356,7 @@ class HomeNotifier extends StateNotifier<HomeState> {
     }
 
     if (state.isRecording && state.seconds > minSpeakingTime) {
+      toggleBlocker();
       return _stopAndSave();
     }
 
@@ -493,14 +504,15 @@ class HomeNotifier extends StateNotifier<HomeState> {
     }
   }
 
-  void stopMic() async {
-    if (await record.isRecording()) {
+  Future<void> stopMic() async {
+    try {
+      // if (await record.isRecording()) {
       if (_timerRecording != null) {
         _timerRecording!.cancel();
         state = state.copyWith(seconds: 0);
       }
       await record.stop();
-    }
+    } catch (_) {}
   }
 
   void recordMic() async {
@@ -535,7 +547,7 @@ class HomeNotifier extends StateNotifier<HomeState> {
         bool shouldHaveSavedAudio = state.isRecording ? true : false;
         state = state.copyWith(
             hasAudioSaved: false, isRecording: false, seconds: 0);
-        stopMic();
+        await stopMic();
         await sleep(500);
 
         if (shouldHaveSavedAudio) {
@@ -639,6 +651,7 @@ List<Map> _buildExample(exampleText, String targetSentence) {
 }
 
 final homeProvider = StateNotifierProvider<HomeNotifier, HomeState>((ref) {
+  final backend = GetIt.I.get<GlobalService>();
   final questionRepository = ref.watch(questionRepositoryProvider);
-  return HomeNotifier(questionRepository);
+  return HomeNotifier(questionRepository, backend);
 });

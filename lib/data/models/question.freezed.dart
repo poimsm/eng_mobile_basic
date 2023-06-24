@@ -1142,6 +1142,7 @@ Explanation _$ExplanationFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$Explanation {
   String get value => throw _privateConstructorUsedError;
+  String get translation => throw _privateConstructorUsedError;
   String? get image => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -1156,7 +1157,7 @@ abstract class $ExplanationCopyWith<$Res> {
           Explanation value, $Res Function(Explanation) then) =
       _$ExplanationCopyWithImpl<$Res, Explanation>;
   @useResult
-  $Res call({String value, String? image});
+  $Res call({String value, String translation, String? image});
 }
 
 /// @nodoc
@@ -1173,12 +1174,17 @@ class _$ExplanationCopyWithImpl<$Res, $Val extends Explanation>
   @override
   $Res call({
     Object? value = null,
+    Object? translation = null,
     Object? image = freezed,
   }) {
     return _then(_value.copyWith(
       value: null == value
           ? _value.value
           : value // ignore: cast_nullable_to_non_nullable
+              as String,
+      translation: null == translation
+          ? _value.translation
+          : translation // ignore: cast_nullable_to_non_nullable
               as String,
       image: freezed == image
           ? _value.image
@@ -1196,7 +1202,7 @@ abstract class _$$_ExplanationCopyWith<$Res>
       __$$_ExplanationCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String value, String? image});
+  $Res call({String value, String translation, String? image});
 }
 
 /// @nodoc
@@ -1211,12 +1217,17 @@ class __$$_ExplanationCopyWithImpl<$Res>
   @override
   $Res call({
     Object? value = null,
+    Object? translation = null,
     Object? image = freezed,
   }) {
     return _then(_$_Explanation(
       value: null == value
           ? _value.value
           : value // ignore: cast_nullable_to_non_nullable
+              as String,
+      translation: null == translation
+          ? _value.translation
+          : translation // ignore: cast_nullable_to_non_nullable
               as String,
       image: freezed == image
           ? _value.image
@@ -1229,7 +1240,8 @@ class __$$_ExplanationCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$_Explanation implements _Explanation {
-  const _$_Explanation({required this.value, this.image});
+  const _$_Explanation(
+      {required this.value, required this.translation, this.image});
 
   factory _$_Explanation.fromJson(Map<String, dynamic> json) =>
       _$$_ExplanationFromJson(json);
@@ -1237,11 +1249,13 @@ class _$_Explanation implements _Explanation {
   @override
   final String value;
   @override
+  final String translation;
+  @override
   final String? image;
 
   @override
   String toString() {
-    return 'Explanation(value: $value, image: $image)';
+    return 'Explanation(value: $value, translation: $translation, image: $image)';
   }
 
   @override
@@ -1250,12 +1264,14 @@ class _$_Explanation implements _Explanation {
         (other.runtimeType == runtimeType &&
             other is _$_Explanation &&
             (identical(other.value, value) || other.value == value) &&
+            (identical(other.translation, translation) ||
+                other.translation == translation) &&
             (identical(other.image, image) || other.image == image));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, value, image);
+  int get hashCode => Object.hash(runtimeType, value, translation, image);
 
   @JsonKey(ignore: true)
   @override
@@ -1273,13 +1289,17 @@ class _$_Explanation implements _Explanation {
 
 abstract class _Explanation implements Explanation {
   const factory _Explanation(
-      {required final String value, final String? image}) = _$_Explanation;
+      {required final String value,
+      required final String translation,
+      final String? image}) = _$_Explanation;
 
   factory _Explanation.fromJson(Map<String, dynamic> json) =
       _$_Explanation.fromJson;
 
   @override
   String get value;
+  @override
+  String get translation;
   @override
   String? get image;
   @override

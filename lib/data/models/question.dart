@@ -75,6 +75,7 @@ class Subtitle with _$Subtitle {
 class Explanation with _$Explanation {
   const factory Explanation({
     required String value,
+    required String translation,
     String? image,
   }) = _Explanation;
 

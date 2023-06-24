@@ -2,10 +2,12 @@ import 'dart:async';
 
 import 'package:eng_mobile_app/data/models/question.dart';
 import 'package:flutter/material.dart';
+import 'package:line_icons/line_icons.dart';
 
 class AITextWidget extends StatefulWidget {
-  const AITextWidget(this.explanations, {super.key});
+  const AITextWidget(this.explanations, {super.key, required this.onBack});
   final List<Explanation> explanations;
+  final VoidCallback onBack;
 
   @override
   State<AITextWidget> createState() => _AITextWidgetState();
@@ -13,92 +15,92 @@ class AITextWidget extends StatefulWidget {
 
 class _AITextWidgetState extends State<AITextWidget> {
   bool showText = false;
-  String myText = 'Hello word just proving the functinality';
+  bool showTranslationBtn = false;
+  bool showTranslation = false;
+  bool showStreaming = true;
+
+  String text1 = 'english text';
+  String text2 = 'texto en español';
 
   @override
   Widget build(BuildContext context) {
-    return !showText ? 
-    _btn() : StreamingText(text: widget.explanations[0].value, duration: Duration(milliseconds: 40));
-
-
-
-    // return Container(
-    //   width: 300,
-    //   height: 60,
-    //   decoration: BoxDecoration(
-    //     border: Border.all(width: 1, color: Colors.black54),
-    //     borderRadius: BorderRadius.circular(10)
-    //   ),
-    //   child: Center(
-    //     child: Text('Explain More...', style: TextStyle(
-    //       fontSize: 18.5,
-    //       color: Colors.black87
-    //     ),),
-    //   )
-    // );
-
-    // return StreamingText(text: 'Hello word just proving the functinality', duration: Duration(milliseconds: 50));
-  }
-
-  _btn() {
-    return ElevatedButton(
-      onPressed: () {
-        showText = true;
-        setState(() {});
-      },
-      style: ElevatedButton.styleFrom(
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
+    return Column(
+      // crossAxisAlignment: CrossAxisAlignment.start,
+      // mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            _backBtn(),
+            showTranslationBtn ? _translBtn() : SizedBox(),
+          ],
         ),
-        primary: Colors.blue,
-      ),
-      child: Text(
-        'Explain More...',
-        style: TextStyle(
-          fontSize: 16,
-          color: Colors.white,
+        SizedBox(
+          height: 10,
         ),
-      ),
-    );  
-  }
-}
-
-
-class MyButton extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: () {
-        // Handle button press
-        print('Button pressed!');
-      },
-      style: ElevatedButton.styleFrom(
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
-        primary: Colors.blue,
-      ),
-      child: Text(
-        'Explain More...',
-        style: TextStyle(
-          fontSize: 16,
-          color: Colors.white,
-        ),
-      ),
+        ConstrainedBox(
+            constraints: BoxConstraints(
+              minHeight: 300,
+            ),
+            child: _content()),
+      ],
     );
   }
-}
 
+  _content() {
+    if (showTranslation && !showStreaming) {
+      return Text(
+        widget.explanations[0].translation,
+        style: TextStyle(fontSize: 18, color: Colors.black87),
+      );
+    }
+    if (!showTranslation && !showStreaming) {
+      return Text(
+        widget.explanations[0].value,
+        style: TextStyle(fontSize: 18, color: Colors.black87),
+      );
+    }
+
+    return StreamingText(
+        text: widget.explanations[0].value,
+        duration: Duration(milliseconds: 5),
+        onEnd: () {
+          showTranslationBtn = true;
+          setState(() {});
+        });
+  }
+
+  _backBtn() {
+    return InkWell(
+        onTap: () => widget.onBack(),
+        child: Padding(
+            padding: EdgeInsets.only(top: 10, right: 10, bottom: 10),
+            child: Icon(Icons.arrow_back, size: 30)));
+  }
+
+  _translBtn() {
+    return InkWell(
+        onTap: () {
+          showTranslation = !showTranslation;
+          showStreaming = false;
+          setState(() {});
+        },
+        child: Padding(
+            padding: EdgeInsets.only(top: 10, left: 10, bottom: 10, right: 10),
+            child: Icon(Icons.translate, size: 30, color: showTranslation? Colors.blue : Colors.black,)));
+  }
+}
 
 class StreamingText extends StatefulWidget {
   final String text;
   final Duration duration;
+  final VoidCallback onEnd;
 
   const StreamingText({
+    super.key,
     required this.text,
     required this.duration,
+    required this.onEnd,
   });
 
   @override
@@ -107,6 +109,7 @@ class StreamingText extends StatefulWidget {
 
 class _StreamingTextState extends State<StreamingText> {
   String _displayedText = '';
+  late Timer timer;
 
   @override
   void initState() {
@@ -114,14 +117,21 @@ class _StreamingTextState extends State<StreamingText> {
     _startStreamingText();
   }
 
+  @override
+  void dispose() {
+    timer.cancel();
+    super.dispose();
+  }
+
   void _startStreamingText() {
-    Timer.periodic(widget.duration, (timer) {
+    timer = Timer.periodic(widget.duration, (time) {
       if (_displayedText.length < widget.text.length) {
         setState(() {
           _displayedText = widget.text.substring(0, _displayedText.length + 1);
         });
       } else {
-        timer.cancel();
+        time.cancel();
+        widget.onEnd();
       }
     });
   }
@@ -130,10 +140,7 @@ class _StreamingTextState extends State<StreamingText> {
   Widget build(BuildContext context) {
     return Text(
       _displayedText,
-      style: TextStyle(
-        fontSize: 18,
-        color: Colors.black87
-      ),
+      style: TextStyle(fontSize: 18, color: Colors.black87),
     );
   }
 }

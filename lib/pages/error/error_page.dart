@@ -6,27 +6,29 @@ class ErrorPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return SizedBox(
+    return Container(
+      color: Color(0xff64E5D9),
       height: size.height,
       width: size.width,
+      padding: EdgeInsets.all(30),
       child: Column(
         children: [
           SizedBox(
-            height: size.height * 0.3,
+            height: size.height * 0.2,
           ),
-          Image.asset('assets/alert_01.png', width: 120),
+          Icon(Icons.warning, color: Colors.white, size: 170),
+          // Image.asset('assets/alert_01.png', width: 120),
           SizedBox(
-            height: 30,
+            height: 20,
           ),
           Text(
-            'Something went wrong.',
+            'Apologies for the inconvenience! We apologize for the issue you encountered. Please try again at a later time, as we are actively working to resolve the problem.',
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 20, color: Colors.black54),
-          ),
-          Text(
-            'Please try again later',
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 20, color: Colors.black54),
+            style: TextStyle(
+                fontSize: 22,
+                color: Colors.white,
+                fontWeight: FontWeight.bold
+                ),
           ),
         ],
       ),

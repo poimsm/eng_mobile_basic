@@ -9,51 +9,67 @@ class NewAppVersionPage extends StatelessWidget {
     return Container(
       height: size.height,
       width: size.width,
-      padding: EdgeInsets.symmetric(horizontal: 30),
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            SizedBox(
-              height: size.height * 0.2,
-            ),
-            Image.asset('assets/update_01.png', width: 120),
-            SizedBox(
-              height: size.height * 0.1,
-            ),
-            Text('New update is available',
-                style: TextStyle(fontSize: 24, color: Color(0xff6E5AA0))),
-            SizedBox(
-              height: 15,
-            ),
-            Text(
-                'To keep using this app please upgrade to the latest version available on PlayStore',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 18, color: Colors.black54)),
-            SizedBox(
-              height: size.height * 0.25,
-            ),
-            InkWell(
-              onTap: () {},
-              child: Container(
-                height: 60,
-                width: size.width * 0.8,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    color: Color(0xff0F9D58)),
-                child: Center(
-                  child: Text(
-                    'UPDATE NOW',
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.white,
-                      // fontWeight: FontWeight.bold
-                    ),
-                  ),
+      color: Color(0xff64E5D9),
+      padding: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          SizedBox(
+            height: size.height - 150,
+            child: ListView(
+              children: [
+                SizedBox(
+                  height: size.height * 0.2,
                 ),
-              ),
-            )
-          ],
-        ),
+                Icon(Icons.rocket, color: Colors.white, size: 150),
+                SizedBox(
+                  height: size.height * 0.1,
+                ),
+                SizedBox(
+                  width: double.infinity,
+                  child: Text('New update available',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 24,
+                          color: Colors.white)),
+                ),
+                SizedBox(
+                  height: 15,
+                ),
+                Text(
+                    'To keep using this app please upgrade to the latest version available on PlayStore',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 20, color: Colors.white)),
+              ],
+            ),
+          ),
+          _button(),
+        ],
+      ),
+    );
+  }
+
+  _button() {
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 23, horizontal: 20),
+      margin: EdgeInsets.only(bottom: 20),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            'UPDATE',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Color(0xff64E5D9),
+            ),
+          ),
+        ],
       ),
     );
   }

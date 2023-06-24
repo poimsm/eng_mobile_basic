@@ -1,11 +1,13 @@
 import 'package:eng_mobile_app/config.dart';
 import 'package:eng_mobile_app/data/models/question.dart';
 import 'package:eng_mobile_app/pages/ai_text_widget.dart';
-import 'package:eng_mobile_app/pages/example_controller.dart';
+import 'package:eng_mobile_app/pages/cards_example.dart';
 import 'package:eng_mobile_app/pages/example_widget.dart';
+import 'package:eng_mobile_app/pages/language_screen.dart';
 import 'package:eng_mobile_app/pages/quiz_screen.dart';
 import 'package:eng_mobile_app/pages/audio_bar_white.dart';
 import 'package:eng_mobile_app/pages/home/home_controller.dart';
+import 'package:eng_mobile_app/pages/round_screen.dart';
 import 'package:eng_mobile_app/pages/story_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -45,7 +47,7 @@ class HomePageState extends ConsumerState<HomePage> {
     size = MediaQuery.of(context).size;
     homeState = ref.watch(homeProvider);
 
-    print('HOME BUILD 🔴🔴🔴');
+    print('HOME BUILD');
 
     if (homeState.isLoading) {
       return Container(
@@ -59,20 +61,29 @@ class HomePageState extends ConsumerState<HomePage> {
           )));
     }
 
-    if (homeState.showQuizScreen) {
+    if (homeState.showRoundScreen) {
       return SafeArea(
-        child: QuizScreen(
-          isWelcome: homeState.questionRoundCounter == 1,
+        child: RoundScreen(
+          isWelcomeAgain: homeState.questionRoundCounter == 1,
+          roundNumber: homeState.questionRoundCounter,
           onCreateUser: () {},
           onStartQuiz: () {
             ref.read(homeProvider.notifier).fetchQuestions();
           },
-          onAddSentences: () {
-            // Navigator.pushNamed(context, Routes.SENTENCE_LIST);
-          },
         ),
       );
     }
+
+    // if (homeState.showLangScreen) {
+    //   return SafeArea(
+    //     child: LanguageScreen(
+    //       showNextBtn: homeState.showNextBtnLang
+    //       onLangSelected: () {
+
+    //       },                   
+    //     ),
+    //   );
+    // }
 
     Widget contentPage = SafeArea(
       child: Stack(
@@ -93,7 +104,7 @@ class HomePageState extends ConsumerState<HomePage> {
           ),
           Positioned(
             left: 20,
-            top: 30,
+            top: size.height * 0.01,
             child: _challengeAccepted(),
           ),
           Positioned(
@@ -102,7 +113,7 @@ class HomePageState extends ConsumerState<HomePage> {
             child: _ctrlBtns(),
           ),
           Positioned(
-            bottom: size.height * 0.18,
+            bottom: size.height * 0.17,
             right: 15,
             child: _step(),
           ),
@@ -111,7 +122,13 @@ class HomePageState extends ConsumerState<HomePage> {
             bottom: 120,
             child: _challengeBubble(),
           ),
-          if (homeState.hasAudioSaved)
+          // if (homeState.hasAudioSaved)
+          //   Positioned(
+          //     right: 20,
+          //     top: size.height * 0.57,
+          //     child: _audioBtn(),
+          //   ),
+          // if (homeState.hasAudioSaved)
             Positioned(
               right: 20,
               top: size.height * 0.57,
@@ -249,18 +266,23 @@ class HomePageState extends ConsumerState<HomePage> {
   }
 
   _audioBtn() {
-    return InkWell(
-      onTap: () {
-        if (homeState.blocker) return;
-        ref.read(homeProvider.notifier).toggleBlocker();
-        ref.read(homeProvider.notifier).playRecordedAudio();
-      },
-      child: Container(
-        padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8),
-            color: Colors.black.withOpacity(0.3)),
-        child: AudioBarWhite(playAnimation: homeState.isPlayingRecordedAudio),
+    return Opacity(
+      opacity: homeState.hasAudioSaved? 1: 0,
+      child: InkWell(
+        onTap: () {
+          if (!homeState.hasAudioSaved) return;
+          if (homeState.blocker) return;
+          ref.read(homeProvider.notifier).toggleBlocker();
+          ref.read(homeProvider.notifier).playRecordedAudio();
+        },
+        // child: Container(height: 30, width: 30, color: Colors.red),
+        child: Container(
+          padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+              color: Colors.black.withOpacity(0.3)),
+          child: AudioBarWhite(playAnimation: homeState.isPlayingRecordedAudio),
+        ),
       ),
     );
   }
@@ -732,40 +754,48 @@ class HomePageState extends ConsumerState<HomePage> {
 
           Widget header(Word word) {
             return Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          padding: EdgeInsets.symmetric(vertical: 14),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(word.word.toUpperCase(),
-                                  style: TextStyle(
-                                    fontSize: 17,
-                                    color: Colors.black87,
-                                    fontWeight: FontWeight.bold,
-                                  )),
-                              if (word.translation != '')
-                                Text('${word.translation}',
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      color: Colors.black54,
-                                    )),
-                            ],
-                          ),
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              padding: EdgeInsets.symmetric(vertical: 14),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(word.word.toUpperCase(),
+                                      style: TextStyle(
+                                        fontSize: 17,
+                                        color: Colors.black87,
+                                        fontWeight: FontWeight.bold,
+                                      )),
+                                  if (word.translation != '')
+                                    Text('${word.translation}',
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          color: Colors.black54,
+                                        )),
+                                ],
+                              ),
+                            ),
+                            IconButton(
+                                onPressed: () {
+                                  ref
+                                      .read(homeProvider.notifier)
+                                      .speak(word.word, speed: speed);
+                                  speed = speed == 1.2 ? 0.5 : 1.2;
+                                  setState(() {});
+                                },
+                                icon: Icon(LineIcons.volumeUp, size: 30)),
+                          
+                          ],
                         ),
-                        IconButton(
-                            onPressed: () {
-                              ref
-                                  .read(homeProvider.notifier)
-                                  .speak(word.word, speed: speed);
-                              speed = speed == 1.2 ? 0.5 : 1.2;
-                              setState(() {});
-                            },
-                            icon: Icon(LineIcons.volumeUp, size: 30))
-                      ],
-                    );
+                        // AITextWidget(word.explanations),
+              ],
+            );
           }
 
           Widget minitaure(Miniature miniature) {
@@ -773,7 +803,11 @@ class HomePageState extends ConsumerState<HomePage> {
               padding: EdgeInsets.all(5),
               child: Image.network(
                 miniature.imageUrl,
-                height: miniature.height.toDouble(),
+                // height: size.width*0.004*100,
+                height: size.width*0.004*miniature.height,
+                fit: BoxFit.cover
+                // height: 150,
+                // height: miniature.height.toDouble(),
               ),
             );
           }
@@ -806,116 +840,13 @@ class HomePageState extends ConsumerState<HomePage> {
                     );
                   })
                 ]);
-          }
-
-          Widget examples(List<WordExample> examples) {
-            if(examples.isEmpty) return Container();
-            return Container(
-              height: 250,
-              margin: EdgeInsets.symmetric(vertical: 5),
-              child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  children: List.generate(examples.length, (i) {
-                    return Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 3),
-                      child: Card(
-                        elevation: 3,
-                        child: Container(
-                          padding:
-                              EdgeInsets.only(top: 15, bottom:10, left: 15, right: 15),
-                          width: size.width * 0.75,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Column(
-                                children: [
-                                  Text(
-                                    examples[i].value,
-                                    style: TextStyle(
-                                        fontSize: 17.2,
-                                        color: Colors.black54,
-                                        fontStyle: FontStyle.italic),
-                                  ),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  Text(
-                                    examples[i].translation,
-                                    style: TextStyle(
-                                        fontSize: 17.2,
-                                        color: Color(0xff51657F),
-                                        fontStyle: FontStyle.italic),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  InkWell(
-                                  borderRadius: BorderRadius.circular(50),
-                                  onTap: () {
-                                    // ref.read(homeProvider.notifier).playVoice(
-                                    //     examples[i].voiceUrl,
-                                    //     shouldStop: false);                                    
-                                  },
-                                  child: Container(
-                                    padding: EdgeInsets.all(5),
-                                    child: Icon(Icons.copy, size: 27, color: Colors.black54,)),
-                                ),
-                                SizedBox(width: 10,),
-                                  InkWell(
-                                  borderRadius: BorderRadius.circular(50),
-                                  onTap: () {
-                                    ref.read(homeProvider.notifier).playVoice(
-                                        examples[i].voiceUrl,
-                                        shouldStop: false);                                    
-                                  },
-                                  child: Container(
-                                    padding: EdgeInsets.all(5),
-                                    child: Icon(LineIcons.volumeUp, size: 32, color: Colors.black54)),
-                                ),
-                                ],
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                    );
-                  })),
-            );
           }          
 
-          Widget explanation(List<Explanation> explanations) {
-            // 'My input'.split('').forEach((ch) => print(ch));
-            if(explanations.isEmpty) return Container();
-            return Column(
-              children: List.generate(explanations.length, (i) {
-                return Column(
-                  children: [
-                    Container(
-                      padding: EdgeInsets.symmetric(vertical: 10),
-                      child: Text(
-                        explanations[i].value,
-                        style: TextStyle(fontSize: 18, color: Colors.black87),
-                      ),
-                    ),
-                    if(explanations[i].image != null) SizedBox(
-                      height: 15,
-                    ),
-                    if(explanations[i].image != null) Image.asset(
-                      explanations[i].image!,
-                      height: 80,
-                    ),
-                  ],
-                );
-              })
-            );
-          }
+          bool showMore = false;
 
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter setState) {
             return Container(
-                height: size.height*0.8,
                 width: size.width,
                 padding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
                 decoration: BoxDecoration(
@@ -924,22 +855,47 @@ class HomePageState extends ConsumerState<HomePage> {
                 ),
                 child: SingleChildScrollView(
                   child: Column(children: [
-                    minitaure(word.miniature),
-                    header(word),
-                    if(word.story != null) story(word.story!),
-                    definition(word.definition),
-                    SizedBox(height: 5,),
-                    examples(word.examples),
-                    SizedBox(height: 15,),
-                    AITextWidget(word.explanations),
-                    // explanation(word.explanations),                   
+                    // ReadTextAnimation('hello world, this is me'),
+                    if(!showMore)...[
+                      minitaure(word.miniature),
+                      header(word),
+                      if(word.story != null) story(word.story!),
+                      definition(word.definition),
+                      SizedBox(height: 5,),
+                      CardsExample(word.examples),
+                      SizedBox(height: 10),
+                      CustomBtn(
+                        title: 'SHOW MORE',
+                        onTap: () {
+                          showMore = true;
+                          setState(() => {});
+                        },
+                      ),
+                    ],
+                    if(showMore) ...[
+                      AITextWidget(
+                        word.explanations,
+                        onBack: () {
+                          showMore = false;
+                          setState(() => {});
+                        },
+                        
+                        ),
+                    ],                  
                     SizedBox(
-                      height: 20,
+                      height: 10,
                     ),
                   ]),
                 ));
           });
         });
+  }
+
+   Size _textSize(String text, TextStyle style) {
+    final TextPainter textPainter = TextPainter(
+        text: TextSpan(text: text, style: style), maxLines: 1, textDirection: TextDirection.ltr)
+      ..layout(minWidth: 0, maxWidth: double.infinity);
+    return textPainter.size;
   }
 }
 
@@ -1004,3 +960,32 @@ class DurationState {
   final Duration? buffered;
   final Duration? total;
 }
+
+class CustomBtn extends StatelessWidget {
+  const CustomBtn({super.key, required this.title, required this.onTap});
+  final String title;
+  final VoidCallback onTap;
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: () => onTap(),
+      style: ElevatedButton.styleFrom(
+        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+        primary: Colors.blue,
+      ),
+      child: Text(
+        title,
+        style: TextStyle(
+          fontSize: 16,
+          color: Colors.white,
+        ),
+      ),
+    );
+  }
+}
+
+
+

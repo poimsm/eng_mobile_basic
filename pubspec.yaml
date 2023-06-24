@@ -38,11 +38,11 @@ dependencies:
   json_annotation: ^4.6.0
   shared_preferences: ^2.0.15
   get_it: ^7.2.0
-  flutter_native_splash: ^2.2.9
+  flutter_native_splash: ^2.3.1
   flutter_spinkit: ^5.1.0
   flutter_tts: ^3.5.3
   text_to_speech: ^0.2.3
-  just_audio: ^0.9.29
+  just_audio: ^0.9.34
   record: ^4.4.0
   path_provider: ^2.0.11
   carousel_slider: ^4.1.1
@@ -51,10 +51,13 @@ dependencies:
   sqflite: ^2.2.0+3
   uuid: ^3.0.7
   collection: ^1.17.0
+  cached_network_image: ^3.2.3
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  change_app_package_name: ^1.1.0
+  flutter_launcher_icons: ^0.13.1
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -79,11 +82,11 @@ flutter:
 
   assets:
     - assets/
-    - assets/dev/all/
-    - assets/dev/dic_icons/
-    - assets/dev/meaning_ex/
-    - assets/dev/stories/
-    - assets/dev/minis/
+    # - assets/dev/all/
+    # - assets/dev/dic_icons/
+    # - assets/dev/meaning_ex/
+    # - assets/dev/stories/
+    # - assets/dev/minis/
 
   # To add assets to your application, add an assets section, like this:
   # assets:
@@ -119,8 +122,15 @@ flutter:
 
 flutter_native_splash:
   color: "#ffffff"
-  image: assets/fox.png
-  branding: assets/user.png
+  image: assets/launch_icon_01.png
+  # branding: assets/user.png
   fullscreen: false
   web: false
   ios: false
+
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: false
+  image_path: "assets/launch_icon_01.png"
+  min_sdk_android: 21 # android min sdk min:16, default 21 

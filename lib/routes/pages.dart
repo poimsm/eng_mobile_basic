@@ -1,5 +1,6 @@
 import 'package:eng_mobile_app/pages/challenge/challenge_page.dart';
 import 'package:eng_mobile_app/pages/error/error_page.dart';
+import 'package:eng_mobile_app/pages/languages/language_page.dart';
 import 'package:eng_mobile_app/pages/new_version/new_version_page.dart';
 import 'package:flutter/material.dart';
 import 'package:eng_mobile_app/routes/routes.dart';
@@ -15,5 +16,6 @@ abstract class Pages {
     Routes.CHALLENGE: (_) => ChallengePage(),
     Routes.ERROR: (_) => ErrorPage(),
     Routes.NEW_APP_VERSION: (_) => NewAppVersionPage(),
+    Routes.LANGUAGE: (_) => LanguagePage(),
   };
 }
