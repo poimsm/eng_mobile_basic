@@ -2,7 +2,6 @@ import 'package:eng_mobile_app/services/global/global_service.dart';
 import 'package:eng_mobile_app/utils/helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class LanguageScreen extends StatefulWidget {
   const LanguageScreen({
@@ -72,6 +71,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
         (i) => InkWell(
             onTap: () async {              
               langSelected = backend.languages[i]['lang'];
+              backend.sendScreenFlow('set new language: $langSelected');
               setState(() {});
               await sleep(150);
               widget.onLangSelect(langSelected);

@@ -1,17 +1,12 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:collection/collection.dart';
 import 'package:eng_mobile_app/config.dart';
 import 'package:eng_mobile_app/data/models/question.dart';
 import 'package:eng_mobile_app/data/repositories/question/question_repository.dart';
 import 'package:eng_mobile_app/data/repositories/question/question_repository_impl.dart';
-import 'package:eng_mobile_app/pages/home/enums.dart';
-import 'package:eng_mobile_app/services/global/global_service.dart';
-
 import 'package:eng_mobile_app/utils/helpers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:get_it/get_it.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:record/record.dart';
@@ -196,11 +191,10 @@ class HomeState {
 }
 
 class HomeNotifier extends StateNotifier<HomeState> {
-  HomeNotifier(this.questionRepository, this.backend) : super(HomeState());
+  HomeNotifier(this.questionRepository) : super(HomeState());
 
   bool micBlocked = false;
   QuestionRepository questionRepository;
-  GlobalService backend;
 
   void toggleNewSentence() {
     state = state.copyWith(newSentences: true);
@@ -254,9 +248,8 @@ class HomeNotifier extends StateNotifier<HomeState> {
     state = state.copyWith(readyForNextQuestion: true);
   }
 
-  Future<Question?> onNextQuestion() async {    
+  Future<Question?> onNextQuestion() async {
     try {
-      backend.sendScreenFlow('onNextQuestion');
       delayedNextquestionTicket();
       stopVoice();
       stopRecordedAudio();
@@ -651,7 +644,6 @@ List<Map> _buildExample(exampleText, String targetSentence) {
 }
 
 final homeProvider = StateNotifierProvider<HomeNotifier, HomeState>((ref) {
-  final backend = GetIt.I.get<GlobalService>();
   final questionRepository = ref.watch(questionRepositoryProvider);
-  return HomeNotifier(questionRepository, backend);
+  return HomeNotifier(questionRepository);
 });

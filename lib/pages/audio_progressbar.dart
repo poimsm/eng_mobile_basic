@@ -130,17 +130,17 @@ class _AudioProgressbarState extends State<AudioProgressbar> {
                 await delayed();
                 // setState(() {});
                 return;
-                if (isPlaying) {
-                  player.pause();
-                  setState(() {});
-                  return;
-                }
-                player.play();
-                if (!initPlay && widget.onPlayInit != null) {
-                  initPlay = true;
-                  widget.onPlayInit!();
-                }
-                setState(() {});
+                // if (isPlaying) {
+                //   player.pause();
+                //   setState(() {});
+                //   return;
+                // }
+                // player.play();
+                // if (!initPlay && widget.onPlayInit != null) {
+                //   initPlay = true;
+                //   widget.onPlayInit!();
+                // }
+                // setState(() {});
               },
               child: SizedBox(
                 height: 50,

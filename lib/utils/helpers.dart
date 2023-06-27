@@ -5,8 +5,6 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:eng_mobile_app/utils/constants.dart';
-import 'package:eng_mobile_app/utils/constants.dart';
-import 'package:flutter/animation.dart';
 
 extension StringCasingExtension on String {
   String toCapitalized() =>

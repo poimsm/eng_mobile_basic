@@ -1,8 +1,10 @@
 import 'package:eng_mobile_app/config.dart';
 import 'package:eng_mobile_app/data/models/question.dart';
 import 'package:eng_mobile_app/pages/example_controller.dart';
+import 'package:eng_mobile_app/services/global/global_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:get_it/get_it.dart';
 import 'package:just_audio/just_audio.dart';
 
 class ExampleWidget extends ConsumerStatefulWidget {
@@ -18,14 +20,15 @@ class ExampleWidget extends ConsumerStatefulWidget {
   final VoidCallback onPlayStart;
   final VoidCallback onPlayEnd;
 
-   @override
+  @override
   ExampleWidgetState createState() => ExampleWidgetState();
 }
 
 class ExampleWidgetState extends ConsumerState<ExampleWidget> {
   final player = AudioPlayer();
-    Size size = Size.zero;
-    late ExampleState exampleState;
+  Size size = Size.zero;
+  late ExampleState exampleState;
+  final backend = GetIt.I.get<GlobalService>();
 
   @override
   void initState() {
@@ -36,13 +39,14 @@ class ExampleWidgetState extends ConsumerState<ExampleWidget> {
     player.playerStateStream.listen((playerState) async {
       if (playerState.processingState == ProcessingState.completed) {
         await player.stop();
-        ref.read(exampleProvider.notifier).exampleEndHandler();       
+        ref.read(exampleProvider.notifier).exampleEndHandler();
       }
     });
 
     player.positionStream.listen((position) {
       final exElements = widget.example.subtitles;
-      final wordList = widget.example.words.where((w) => w.id == widget.word.id).toList();     
+      final wordList =
+          widget.example.words.where((w) => w.id == widget.word.id).toList();
 
       List<String> words = wordList[0].forms;
 
@@ -53,7 +57,7 @@ class ExampleWidgetState extends ConsumerState<ExampleWidget> {
             end > position.inMilliseconds &&
             exampleState.playedIndex != i) {
           exampleState.exampleArry = _buildExample(exElements[i].value, words);
-          ref.read(exampleProvider.notifier).onExampleProgress(i);          
+          ref.read(exampleProvider.notifier).onExampleProgress(i);
           break;
         }
       }
@@ -61,16 +65,16 @@ class ExampleWidgetState extends ConsumerState<ExampleWidget> {
   }
 
   String extractWord(String inputString) {
-  final regex = RegExp(r'([a-zA-Z]+)');
-  final match = regex.firstMatch(inputString);
+    final regex = RegExp(r'([a-zA-Z]+)');
+    final match = regex.firstMatch(inputString);
 
-  if (match != null) {
-    final word = match.group(1);
-    return word!.toLowerCase();
+    if (match != null) {
+      final word = match.group(1);
+      return word!.toLowerCase();
+    }
+
+    return '';
   }
-
-  return '';
-}
 
   List<Map> _buildExample(exampleText, List<String> targetWords) {
     final rr = exampleText.split(" ");
@@ -107,7 +111,7 @@ class ExampleWidgetState extends ConsumerState<ExampleWidget> {
         index++;
         result.add({'text': '', 'highlight': false});
 
-        result[index]['text'] += elem['text'] + (index == 0? '' : ' ');
+        result[index]['text'] += elem['text'] + (index == 0 ? '' : ' ');
         result[index]['highlight'] = highlight;
       }
     }
@@ -125,9 +129,9 @@ class ExampleWidgetState extends ConsumerState<ExampleWidget> {
   @override
   Widget build(BuildContext context) {
     size = MediaQuery.of(context).size;
-    exampleState = ref.watch(exampleProvider); 
+    exampleState = ref.watch(exampleProvider);
     return Container(
-      margin: EdgeInsets.only(top: exampleState.isPlaying ? 0: 40),
+      margin: EdgeInsets.only(top: exampleState.isPlaying ? 0 : 40),
       child: exampleState.isPlaying ? _exampleExpanded() : _seeExampleBtn(),
     );
   }
@@ -135,6 +139,7 @@ class ExampleWidgetState extends ConsumerState<ExampleWidget> {
   _seeExampleBtn() {
     return InkWell(
       onTap: () async {
+        backend.sendScreenFlow('play example');
         widget.onPlayStart();
         await player.seek(Duration(seconds: 0));
         player.play();
@@ -159,7 +164,7 @@ class ExampleWidgetState extends ConsumerState<ExampleWidget> {
           style: TextStyle(
               fontWeight: FontWeight.normal,
               color: Colors.black87,
-              fontSize: 18),
+              fontSize: 19),
           // fontSize: homeState.exampleAnimated ? 19 : 18),
         ),
       ),
@@ -170,7 +175,8 @@ class ExampleWidgetState extends ConsumerState<ExampleWidget> {
     return SizedBox(
       width: size.width - 40,
       child: InkWell(
-        onTap: () async {          
+        onTap: () async {
+          backend.sendScreenFlow('stop example');
           await player.stop();
           ref.read(exampleProvider.notifier).stopExample();
           widget.onPlayEnd();
@@ -185,11 +191,11 @@ class ExampleWidgetState extends ConsumerState<ExampleWidget> {
               textAlign: TextAlign.left,
               text: TextSpan(
                 children: <TextSpan>[
-                  ...List.generate(exampleState.exampleArry.length, (int index) {
+                  ...List.generate(exampleState.exampleArry.length,
+                      (int index) {
                     if (!exampleState.exampleArry[index]['highlight']) {
                       return TextSpan(
                           text: exampleState.exampleArry[index]['text'],
-                            
                           style: TextStyle(
                             color: Colors.black87,
                             fontWeight: FontWeight.normal,

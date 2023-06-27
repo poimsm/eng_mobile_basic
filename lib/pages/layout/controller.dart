@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:eng_mobile_app/main.dart';
-import 'package:eng_mobile_app/utils/helpers.dart';
 
 class Screen with ChangeNotifier {
   bool _loading = false;

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:eng_mobile_app/routes/routes.dart';
 import 'package:eng_mobile_app/services/global/global_service.dart';
 import 'package:flutter/material.dart';
@@ -87,9 +88,10 @@ class _LanguagePageState extends State<LanguagePage> {
             color: Color(0xff64E5D9), borderRadius: BorderRadius.circular(15)),
         child: Row(
           children: [
-            Image.network(
-              lang['flag'],
+            CachedNetworkImage(
+              imageUrl: lang['flag'],
               width: 40,
+              errorWidget: (context, url, error) => Icon(Icons.error),
             ),
             SizedBox(
               width: 30,
@@ -113,9 +115,10 @@ class _LanguagePageState extends State<LanguagePage> {
           color: Colors.white, borderRadius: BorderRadius.circular(15)),
       child: Row(
         children: [
-          Image.network(
-            lang['flag'],
+          CachedNetworkImage(
+            imageUrl: lang['flag'],
             width: 40,
+            errorWidget: (context, url, error) => Icon(Icons.error),
           ),
           SizedBox(
             width: 30,
@@ -135,9 +138,9 @@ class _LanguagePageState extends State<LanguagePage> {
   _btn() {
     return InkWell(
       onTap: () {
-        if (langSelected == '') return;        
+        if (langSelected == '') return;
         backend.setLanguage(langSelected);
-        backend.sendScreenFlow('langSelected: $langSelected');
+        backend.sendScreenFlow('selected lang: $langSelected');
         Navigator.pushNamedAndRemoveUntil(
             context, Routes.HOME, (route) => false);
       },

@@ -1,8 +1,9 @@
 import 'dart:async';
 
 import 'package:eng_mobile_app/data/models/question.dart';
+import 'package:eng_mobile_app/services/global/global_service.dart';
 import 'package:flutter/material.dart';
-import 'package:line_icons/line_icons.dart';
+import 'package:get_it/get_it.dart';
 
 class AITextWidget extends StatefulWidget {
   const AITextWidget(this.explanations, {super.key, required this.onBack});
@@ -18,15 +19,11 @@ class _AITextWidgetState extends State<AITextWidget> {
   bool showTranslationBtn = false;
   bool showTranslation = false;
   bool showStreaming = true;
-
-  String text1 = 'english text';
-  String text2 = 'texto en español';
+  final backend = GetIt.I.get<GlobalService>();
 
   @override
   Widget build(BuildContext context) {
     return Column(
-      // crossAxisAlignment: CrossAxisAlignment.start,
-      // mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -81,13 +78,18 @@ class _AITextWidgetState extends State<AITextWidget> {
   _translBtn() {
     return InkWell(
         onTap: () {
+          backend.sendScreenFlow('press translate explanation');
           showTranslation = !showTranslation;
           showStreaming = false;
           setState(() {});
         },
         child: Padding(
             padding: EdgeInsets.only(top: 10, left: 10, bottom: 10, right: 10),
-            child: Icon(Icons.translate, size: 30, color: showTranslation? Colors.blue : Colors.black,)));
+            child: Icon(
+              Icons.translate,
+              size: 30,
+              color: showTranslation ? Colors.blue : Colors.black,
+            )));
   }
 }
 
@@ -104,10 +106,10 @@ class StreamingText extends StatefulWidget {
   });
 
   @override
-  _StreamingTextState createState() => _StreamingTextState();
+  StreamingTextState createState() => StreamingTextState();
 }
 
-class _StreamingTextState extends State<StreamingText> {
+class StreamingTextState extends State<StreamingText> {
   String _displayedText = '';
   late Timer timer;
 

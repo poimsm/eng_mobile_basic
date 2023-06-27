@@ -86,7 +86,7 @@ class _RoundScreenState extends State<RoundScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           SizedBox(
-            height: size.height - (size.height < 700? 150 : 160),
+            height: size.height - (size.height < 700 ? 150 : 160),
             child: ListView(
               children: [
                 _lang(),
@@ -267,19 +267,22 @@ class _RoundScreenState extends State<RoundScreen> {
   }
 
   _button(String text) {
-    print('heeeeeeight::::${size.height}');
     return InkWell(
       onTap: () async {
         if (backend.isFirstTime) {
+          backend.sendScreenFlow(
+              'press start quiz - ${backend.language['lang']} - first time');
           await backend.setFirstTime(false);
           widget.onStartQuiz();
         }
 
+        backend
+            .sendScreenFlow('press start quiz - ${backend.language['lang']}');
         widget.onStartQuiz();
       },
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-        margin: EdgeInsets.only(bottom: size.height < 700? 0: 20),
+        margin: EdgeInsets.only(bottom: size.height < 700 ? 0 : 20),
         decoration: BoxDecoration(
           color: Color(0xff64E5D9),
           borderRadius: BorderRadius.circular(10),
@@ -304,6 +307,7 @@ class _RoundScreenState extends State<RoundScreen> {
   }
 
   presentLangActionSheet() {
+    backend.sendScreenFlow('press change language');
     showModalBottomSheet(
         context: context,
         backgroundColor: Colors.transparent,

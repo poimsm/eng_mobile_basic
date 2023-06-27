@@ -1,6 +1,4 @@
-import 'package:eng_mobile_app/routes/routes.dart';
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 import 'package:line_icons/line_icons.dart';
 
 import '../utils/helpers.dart';

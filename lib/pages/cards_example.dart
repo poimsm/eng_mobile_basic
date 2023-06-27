@@ -1,10 +1,11 @@
-import 'dart:async';
-
 import 'package:eng_mobile_app/data/models/question.dart';
 import 'package:eng_mobile_app/pages/read_text_animation.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:line_icons/line_icons.dart';
+
+import '../services/global/global_service.dart';
 
 class CardsExample extends StatefulWidget {
   const CardsExample(this.examples, {super.key});
@@ -20,6 +21,7 @@ class _CardsExampleState extends State<CardsExample> {
   Duration duration = Duration.zero;
   List<Map> examples = [];
   bool disposed = false;
+  final backend = GetIt.I.get<GlobalService>();
 
   @override
   void initState() {
@@ -98,6 +100,7 @@ class _CardsExampleState extends State<CardsExample> {
                           InkWell(
                             borderRadius: BorderRadius.circular(50),
                             onTap: () {
+                              backend.sendScreenFlow('press clipboard index: $i');
                               // ref.read(homeProvider.notifier).playVoice(
                               //     examples[i].voiceUrl,
                               //     shouldStop: false);
@@ -117,6 +120,7 @@ class _CardsExampleState extends State<CardsExample> {
                             borderRadius: BorderRadius.circular(50),
                             onTap: () async {
                               try {
+                                backend.sendScreenFlow('play example index: $i');
                                 await player
                                   .setUrl(examples[i]['example'].voiceUrl);
                                 player.play();

@@ -20,8 +20,8 @@ class Layout extends StatelessWidget {
         body: Stack(
           children: [
             child,
-            if (false)
-              Positioned(top: 0, left: 0, child: _exampleChallengeModal(size)),
+            // if (false)
+            //   Positioned(top: 0, left: 0, child: _exampleChallengeModal(size)),
             Positioned(
                 top: 0,
                 left: 0,

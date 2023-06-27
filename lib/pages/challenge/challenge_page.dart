@@ -99,17 +99,17 @@ class _ChallengePageState extends State<ChallengePage> {
                 SizedBox(
                   height: 40,
                 ),
-                if (false)
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _meaning(),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      _example(),
-                    ],
-                  ),
+                // if (false)
+                //   Column(
+                //     crossAxisAlignment: CrossAxisAlignment.start,
+                //     children: [
+                //       _meaning(),
+                //       SizedBox(
+                //         height: 20,
+                //       ),
+                //       _example(),
+                //     ],
+                //   ),
                 // SizedBox(height: 30,),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
