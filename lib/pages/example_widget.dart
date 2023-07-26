@@ -199,7 +199,7 @@ class ExampleWidgetState extends ConsumerState<ExampleWidget> {
                           style: TextStyle(
                             color: Colors.black87,
                             fontWeight: FontWeight.normal,
-                            fontSize: 18,
+                            fontSize: 19,
                           ));
                     }
 

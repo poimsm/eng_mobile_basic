@@ -48,13 +48,13 @@ class _AITextWidgetState extends State<AITextWidget> {
     if (showTranslation && !showStreaming) {
       return Text(
         widget.explanations[0].translation,
-        style: TextStyle(fontSize: 18, color: Colors.black87),
+        style: TextStyle(fontSize: 19, color: Colors.black87),
       );
     }
     if (!showTranslation && !showStreaming) {
       return Text(
         widget.explanations[0].value,
-        style: TextStyle(fontSize: 18, color: Colors.black87),
+        style: TextStyle(fontSize: 19, color: Colors.black87),
       );
     }
 
@@ -142,7 +142,7 @@ class StreamingTextState extends State<StreamingText> {
   Widget build(BuildContext context) {
     return Text(
       _displayedText,
-      style: TextStyle(fontSize: 18, color: Colors.black87),
+      style: TextStyle(fontSize: 19, color: Colors.black87),
     );
   }
 }

@@ -2,7 +2,7 @@
     package="com.sayoutloud.app001">
    <uses-permission android:name="android.permission.INTERNET" />
    <application
-        android:label="SayOutLoud"
+        android:label="Lingua Quiz"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon"
         android:usesCleartextTraffic="true"

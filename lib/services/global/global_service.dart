@@ -8,6 +8,9 @@ class GlobalService {
   bool _shouldUpdateApp = false;
   bool get shouldUpdateApp => _shouldUpdateApp;
 
+  List<Map<String, dynamic>> _intro = [];
+  List<Map<String, dynamic>> get intro => _intro;
+
   List<Map<String, dynamic>> _languages = [];
   List<Map<String, dynamic>> get languages => _languages;
 
@@ -21,11 +24,9 @@ class GlobalService {
       final prefs = await SharedPreferences.getInstance();
       final lang = prefs.getString('lang');
 
-      if (lang == null) {
-        return false;
-      }
-
+      if (lang == null || lang == '') return false;
       final foundLang = _languages.firstWhere((x) => x['lang'] == lang);
+      
       _language = foundLang;
       return true;
     } catch (e) {
@@ -141,6 +142,10 @@ class GlobalService {
       // _languages = response.data['languages'];
 
       _languages = (response.data['languages'] as List<dynamic>)
+          .map((item) => item as Map<String, dynamic>)
+          .toList();
+
+      _intro = (response.data['intro'] as List<dynamic>)
           .map((item) => item as Map<String, dynamic>)
           .toList();
 

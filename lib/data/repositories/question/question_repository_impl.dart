@@ -13,7 +13,11 @@ class QuestionRepositoryImpl implements QuestionRepository {
   Future<List<Question>> getQuestions() async {
     final prefs = await SharedPreferences.getInstance();
     final lang = prefs.getString('lang');
-    final resp = await _network.get('/questions?lang=$lang');
+    bool? firstTime = prefs.getBool('first_time');
+    // bool? firstTime = true;
+    int firstTimeFlag = firstTime == null ? 0 : (firstTime ? 1 : 0);
+    // int first_time = 
+    final resp = await _network.get('/questions?lang=$lang&first_time=$firstTimeFlag');
     if (!resp.ok) return [];
     return (resp.data as List).map((x) => Question.fromJson(x)).toList();
   }

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class NewAppVersionPage extends StatelessWidget {
   const NewAppVersionPage({Key? key}) : super(key: key);
@@ -51,25 +53,36 @@ class NewAppVersionPage extends StatelessWidget {
   }
 
   _button() {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 23, horizontal: 20),
-      margin: EdgeInsets.only(bottom: 20),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            'UPDATE',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Color(0xff64E5D9),
+    return InkWell(
+      onTap: () async {
+        try {
+          final url = Uri.parse('market://details?id=com.sayoutloud.app001');
+          launchUrl(
+            url,
+            mode: LaunchMode.externalApplication,
+          );          
+        } catch (_) {}
+      },
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: 23, horizontal: 20),
+        margin: EdgeInsets.only(bottom: 20),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'UPDATE',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Color(0xff64E5D9),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

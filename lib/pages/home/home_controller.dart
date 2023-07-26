@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:card_swiper/card_swiper.dart';
 import 'package:eng_mobile_app/config.dart';
 import 'package:eng_mobile_app/data/models/question.dart';
 import 'package:eng_mobile_app/data/repositories/question/question_repository.dart';
@@ -23,6 +24,7 @@ List<Timer?> audioTrackerList = [];
 Timer? _timerRecordedAudio;
 Timer? _timerVoice;
 int currentExamplePlay = 0;
+//  final _swipperController = SwiperController();
 
 class HomeState {
   HomeState({
@@ -50,7 +52,7 @@ class HomeState {
     this.showNextBtn = true,
     this.questionCounter = 1,
     this.showRoundScreen = true,
-    this.questionRoundCounter = 1,
+    this.questionRoundCounter = 0,
     this.readyForNextQuestion = false,
     this.recordVoiceBusy = false,
     this.recordAudioPath = '',
@@ -207,6 +209,7 @@ class HomeNotifier extends StateNotifier<HomeState> {
   }
 
   Future<bool> fetchQuestions() async {
+    print('>>>>>>> fetchQuestions!!!!!!!!!!! ////////////////');
     state = state.copyWith(isLoading: true, showRoundScreen: false);
 
     final questions = await questionRepository.getQuestions();
@@ -290,6 +293,8 @@ class HomeNotifier extends StateNotifier<HomeState> {
         example: state.questions[index + 1].example,
         showExample: true,
       );
+
+      // _swipperController.move(0);
 
       await sleep(1000);
       state = state.copyWith(loadingNextQuestion: false);
@@ -584,6 +589,13 @@ class HomeNotifier extends StateNotifier<HomeState> {
         bubbleChallengeSentence: state.question!.words[idx].word);
   }
 
+  void onNextWordIndex(int idx) async {
+    state = state.copyWith(
+        word: state.question!.words[idx],
+        wordIndex: idx,
+        bubbleChallengeSentence: state.question!.words[idx].word);
+  }
+
   void replayQuestion() async {
     state = state.copyWith(showQuestionReplayBtn: false);
     await sleep(200);
@@ -600,6 +612,8 @@ class HomeNotifier extends StateNotifier<HomeState> {
     playVoice(state.question!.voiceUrl, shouldStop: false);
   }
 }
+
+
 
 List<Map> _buildExample(exampleText, String targetSentence) {
   final rr = exampleText.split(" ");

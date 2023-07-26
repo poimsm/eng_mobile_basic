@@ -1,3 +1,4 @@
+import 'package:card_swiper/card_swiper.dart';
 import 'package:eng_mobile_app/config.dart';
 import 'package:eng_mobile_app/data/models/question.dart';
 import 'package:eng_mobile_app/pages/ai_text_widget.dart';
@@ -8,6 +9,7 @@ import 'package:eng_mobile_app/pages/home/home_controller.dart';
 import 'package:eng_mobile_app/pages/round_screen.dart';
 import 'package:eng_mobile_app/pages/story_widget.dart';
 import 'package:eng_mobile_app/services/global/global_service.dart';
+import 'package:eng_mobile_app/utils/helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -27,6 +29,7 @@ class HomePageState extends ConsumerState<HomePage> {
   List<Question> acts = [];
   late HomeState homeState;
   final backend = GetIt.I.get<GlobalService>();
+  final swiperController = SwiperController();
 
   @override
   void initState() {
@@ -42,6 +45,17 @@ class HomePageState extends ConsumerState<HomePage> {
       systemNavigationBarIconBrightness: Brightness.dark,
     ));
   }
+
+  Future initQuiz() async {
+      bool resOk = await ref.read(homeProvider.notifier).fetchQuestions();
+      if (!resOk) return;
+      await backend.setFirstTime(false);
+      backend.sendScreenFlow(
+          'start question - ID ${homeState.question!.id}');
+      swiperController.startAutoplay();
+      await sleep(3500);
+      swiperController.stopAutoplay();
+    }
 
   @override
   Widget build(BuildContext context) {
@@ -63,16 +77,24 @@ class HomePageState extends ConsumerState<HomePage> {
     }
 
     if (homeState.showRoundScreen) {
-      return SafeArea(
+      // final arguments = (ModalRoute.of(context)?.settings.arguments ?? <String, dynamic>{}) as Map;
+      // print('🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵');
+      // print(arguments['asd']);
+
+      // if(arguments['asd'] == null) {        
+        return SafeArea(
         child: RoundScreen(
-          isWelcomeAgain: homeState.questionRoundCounter == 1,
-          roundNumber: homeState.questionRoundCounter - 1,
+          isWelcomeAgain: homeState.questionRoundCounter == 0,
+          roundNumber: homeState.questionRoundCounter,
           onCreateUser: () {},
           onStartQuiz: () {
-            ref.read(homeProvider.notifier).fetchQuestions();
+            initQuiz();
           },
         ),
       );
+      // } else {
+      //   initQuiz();
+      // }
     }
 
     Widget contentPage = SafeArea(
@@ -88,7 +110,7 @@ class HomePageState extends ConsumerState<HomePage> {
             child: _image(),
           ),
           Positioned(
-            top: size.height * 0.3,
+            top: size.height * 0.2,
             left: 0,
             child: _question(),
           ),
@@ -274,6 +296,87 @@ class HomePageState extends ConsumerState<HomePage> {
 
   _challengeAccepted() {
     return Container(
+      width: size.width * 0.90,
+      height: 110,
+      child: Swiper(
+        controller: swiperController,
+        itemBuilder: (BuildContext context, int index) {
+          return Container(
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(3), color: Color(0xff2A262C)
+                // color: Color(0xfff3f3f3),
+                ),
+            padding: EdgeInsets.symmetric(horizontal: 25),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'HELP',
+                      style: TextStyle(
+                          fontSize: 15,
+                          // color: Colors.black54
+                          color: Colors.white),
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Text(
+                      homeState.question!.words[index].word,
+                      style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          // color: Colors.black.withOpacity(0.75)
+                          color: Colors.white),
+                    ),
+                  ],
+                ),
+                Container(
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.15),
+                      // color: Colors.grey.withOpacity(0.1),
+                      shape: BoxShape.circle),
+                  child: Image.asset(
+                    'assets/question_mark.png',
+                    width: 27,
+                    // color: Colors.black54,
+                  ),
+                )
+              ],
+            ),
+          );
+        },
+        itemCount: homeState.question!.words.length,
+
+        // pagination: SwiperPagination(),
+        // control: SwiperControl(),
+        // startIndex: 0,
+        customLayoutOption: CustomLayoutOption(
+          startIndex: 0,
+          // stateCount: 3
+        ),
+        autoplay: false,
+        itemWidth: size.width * 0.90,
+        itemHeight: 100,
+        layout: SwiperLayout.TINDER,
+        onIndexChanged: (idx) {
+          backend.sendScreenFlow('swipe word $idx');
+          ref.read(homeProvider.notifier).onNextWordIndex(idx);
+        },
+        onTap: (idx) {
+          print('taaaap');
+          _presentMeaningSheet(homeState.word!);
+        },
+      ),
+    );
+  }
+
+  _challengeAccepted2() {
+    return Container(
         width: size.width * 0.9,
         padding: EdgeInsets.symmetric(horizontal: 10, vertical: 30),
         decoration: BoxDecoration(
@@ -306,7 +409,6 @@ class HomePageState extends ConsumerState<HomePage> {
                 homeState.showMeaningBtn
                     ? InkWell(
                         onTap: () {
-                          backend.sendScreenFlow('press word actionsheet');
                           _presentMeaningSheet(homeState.word!);
                         },
                         child: Container(
@@ -501,7 +603,7 @@ class HomePageState extends ConsumerState<HomePage> {
                   shape: BoxShape.circle,
                   color: Colors.grey.withOpacity(0.1),
                 ),
-                child: Icon(Icons.add, size: 40, color: Colors.white),
+                child: Icon(LineIcons.plus, size: 40, color: Colors.white),
                 // child: Image.asset('assets/user_14.png', width: 45),
                 // child: Icon(LineIcons.stream, color: Colors.white, size: 40),
               ),
@@ -537,10 +639,14 @@ class HomePageState extends ConsumerState<HomePage> {
     }
     return InkWell(
       onTap: () async {
-        backend.sendScreenFlow(
-            'press next question - old ID ${homeState.question!.id}');
         if (!homeState.readyForNextQuestion) return;
-        await ref.read(homeProvider.notifier).onNextQuestion();
+        ref.read(homeProvider.notifier).onNextQuestion().then((question) {
+          if (question == null) return;
+          backend.sendScreenFlow(
+              'press next question - ID ${homeState.question!.id}');
+        });
+        await sleep(50);
+        swiperController.move(0);
       },
       child: Container(
         padding: EdgeInsets.all(8),
@@ -616,7 +722,8 @@ class HomePageState extends ConsumerState<HomePage> {
   }
 
   void _presentMeaningSheet(Word word) async {
-    showModalBottomSheet(
+    backend.sendScreenFlow('open word: ${word.word}');
+    await showModalBottomSheet(
         context: context,
         backgroundColor: Colors.transparent,
         isScrollControlled: true,
@@ -643,7 +750,7 @@ class HomePageState extends ConsumerState<HomePage> {
                         children: [
                           Text(word.word.toUpperCase(),
                               style: TextStyle(
-                                fontSize: 17,
+                                fontSize: 18,
                                 color: Colors.black87,
                                 fontWeight: FontWeight.bold,
                               )),
@@ -664,7 +771,7 @@ class HomePageState extends ConsumerState<HomePage> {
                           speed = speed == 1.2 ? 0.5 : 1.2;
                           setState(() {});
                         },
-                        icon: Icon(LineIcons.volumeUp, size: 30)),
+                        icon: Icon(LineIcons.volumeUp, size: 33)),
                   ],
                 ),
                 // AITextWidget(word.explanations),
@@ -739,6 +846,7 @@ class HomePageState extends ConsumerState<HomePage> {
                 ));
           });
         });
+    backend.sendScreenFlow('close word');
   }
 
   Size _textSize(String text, TextStyle style) {

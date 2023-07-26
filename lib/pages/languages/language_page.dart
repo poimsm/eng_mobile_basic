@@ -56,7 +56,7 @@ class _LanguagePageState extends State<LanguagePage> {
       child: Text(
         'Choose mother language',
         style: TextStyle(
-            fontSize: 24,
+            fontSize: 28,
             fontWeight: FontWeight.bold,
             color: Color(0xff333F50)),
       ),
@@ -136,13 +136,14 @@ class _LanguagePageState extends State<LanguagePage> {
   }
 
   _btn() {
+    if (langSelected == '') return Container();
     return InkWell(
       onTap: () {
-        if (langSelected == '') return;
         backend.setLanguage(langSelected);
         backend.sendScreenFlow('selected lang: $langSelected');
-        Navigator.pushNamedAndRemoveUntil(
-            context, Routes.HOME, (route) => false);
+        Navigator.pushNamed(context, Routes.INSTRUCTIONS);
+        // Navigator.pushNamedAndRemoveUntil(
+        //     context, Routes.HOME, (route) => false);
       },
       child: Container(
         decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
@@ -152,7 +153,7 @@ class _LanguagePageState extends State<LanguagePage> {
               'Next',
               style: TextStyle(
                 color: Colors.blue,
-                fontSize: 18,
+                fontSize: 20,
               ),
             ),
             Icon(Icons.chevron_right, size: 30, color: Colors.blue)

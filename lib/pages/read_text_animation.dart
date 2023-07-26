@@ -71,13 +71,13 @@ class _ReadTextAnimationState extends State<ReadTextAnimation> {
                 style: TextStyle(
                   color: Colors.blue,
                   fontWeight: FontWeight.normal,
-                  fontSize: 17.2,
+                  fontSize: 18,
                 )),
             TextSpan(
                 text: noReadText,
                 style: TextStyle(
                   color: Colors.black54,
-                  fontSize: 17.2,
+                  fontSize: 18,
                 )),
           ],
         ),

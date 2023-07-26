@@ -6,4 +6,5 @@ abstract class Routes {
   static const ERROR = '/error';
   static const NEW_APP_VERSION = '/new-app-version';
   static const LANGUAGE = '/language';
+  static const INSTRUCTIONS = '/instructions';
 }

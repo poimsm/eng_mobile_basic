@@ -3,6 +3,7 @@ import 'package:eng_mobile_app/pages/language_screen.dart';
 import 'package:eng_mobile_app/services/global/global_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class RoundScreen extends StatefulWidget {
   const RoundScreen(
@@ -60,8 +61,11 @@ class _RoundScreenState extends State<RoundScreen> {
     },
   ];
 
-  String firstTimeMsg =
-      "This app is all about asking you questions and letting you decide how to answer them! You can talk as much or as little as you want, it's totally up to you! It's like having a cool conversation right at home. Let's practice talking together and have a blast! Yay!";
+  // String firstTimeMsg =
+  //     "This app is all about asking you questions and letting you decide how to answer them! You can talk as much or as little as you want, it's totally up to you! It's like having a cool conversation right at home. Let's practice talking together and have a blast! Yay!";
+
+  String firstTimeMsg = "Yay, you're all set, let's have fun with some questions! Let's go, let's go, let's go! Wheee!"; 
+  
   String welcomeMsg =
       "Discover words, boost creativity, enjoy questions, and keep the conversation flowing. Let's begin!";
   Map roundMsg = {};
@@ -111,10 +115,10 @@ class _RoundScreenState extends State<RoundScreen> {
     }
 
     if (widget.isWelcomeAgain) {
-      return size.height * 0.1;
+      return size.height * 0.08;
     }
 
-    return size.height * 0.1;
+    return size.height * 0.08;
   }
 
   String getBtnTitle() {
@@ -135,6 +139,11 @@ class _RoundScreenState extends State<RoundScreen> {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           InkWell(
+            // onTap: () async {
+            //   final prefs = await SharedPreferences.getInstance();
+            //   await prefs.setBool('first_time', true);
+            //   await prefs.setString('lang', '');
+            // },
             onTap: () => presentLangActionSheet(),
             child: Row(
               mainAxisSize: MainAxisSize.min,
@@ -272,8 +281,8 @@ class _RoundScreenState extends State<RoundScreen> {
         if (backend.isFirstTime) {
           backend.sendScreenFlow(
               'press start quiz - ${backend.language['lang']} - first time');
-          await backend.setFirstTime(false);
           widget.onStartQuiz();
+          return;
         }
 
         backend
@@ -294,7 +303,7 @@ class _RoundScreenState extends State<RoundScreen> {
             Text(
               text,
               style: TextStyle(
-                fontSize: 20,
+                fontSize: 21,
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
               ),
