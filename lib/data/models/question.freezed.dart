@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'question.dart';
 
@@ -22,13 +22,15 @@ Question _$QuestionFromJson(Map<String, dynamic> json) {
 mixin _$Question {
   int get id => throw _privateConstructorUsedError;
   String get question => throw _privateConstructorUsedError;
+  int get type => throw _privateConstructorUsedError;
   @JsonKey(name: 'voice_url')
   String get voiceUrl => throw _privateConstructorUsedError;
   @JsonKey(name: 'image_url')
   String get imageUrl => throw _privateConstructorUsedError;
-  QuestionExample get example => throw _privateConstructorUsedError;
+  QuestionExample? get example => throw _privateConstructorUsedError;
   Style get style => throw _privateConstructorUsedError;
-  List<Word> get words => throw _privateConstructorUsedError;
+  List<Word>? get words => throw _privateConstructorUsedError;
+  Scenario? get scenario => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -44,14 +46,17 @@ abstract class $QuestionCopyWith<$Res> {
   $Res call(
       {int id,
       String question,
+      int type,
       @JsonKey(name: 'voice_url') String voiceUrl,
       @JsonKey(name: 'image_url') String imageUrl,
-      QuestionExample example,
+      QuestionExample? example,
       Style style,
-      List<Word> words});
+      List<Word>? words,
+      Scenario? scenario});
 
-  $QuestionExampleCopyWith<$Res> get example;
+  $QuestionExampleCopyWith<$Res>? get example;
   $StyleCopyWith<$Res> get style;
+  $ScenarioCopyWith<$Res>? get scenario;
 }
 
 /// @nodoc
@@ -69,11 +74,13 @@ class _$QuestionCopyWithImpl<$Res, $Val extends Question>
   $Res call({
     Object? id = null,
     Object? question = null,
+    Object? type = null,
     Object? voiceUrl = null,
     Object? imageUrl = null,
-    Object? example = null,
+    Object? example = freezed,
     Object? style = null,
-    Object? words = null,
+    Object? words = freezed,
+    Object? scenario = freezed,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -84,6 +91,10 @@ class _$QuestionCopyWithImpl<$Res, $Val extends Question>
           ? _value.question
           : question // ignore: cast_nullable_to_non_nullable
               as String,
+      type: null == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as int,
       voiceUrl: null == voiceUrl
           ? _value.voiceUrl
           : voiceUrl // ignore: cast_nullable_to_non_nullable
@@ -92,25 +103,33 @@ class _$QuestionCopyWithImpl<$Res, $Val extends Question>
           ? _value.imageUrl
           : imageUrl // ignore: cast_nullable_to_non_nullable
               as String,
-      example: null == example
+      example: freezed == example
           ? _value.example
           : example // ignore: cast_nullable_to_non_nullable
-              as QuestionExample,
+              as QuestionExample?,
       style: null == style
           ? _value.style
           : style // ignore: cast_nullable_to_non_nullable
               as Style,
-      words: null == words
+      words: freezed == words
           ? _value.words
           : words // ignore: cast_nullable_to_non_nullable
-              as List<Word>,
+              as List<Word>?,
+      scenario: freezed == scenario
+          ? _value.scenario
+          : scenario // ignore: cast_nullable_to_non_nullable
+              as Scenario?,
     ) as $Val);
   }
 
   @override
   @pragma('vm:prefer-inline')
-  $QuestionExampleCopyWith<$Res> get example {
-    return $QuestionExampleCopyWith<$Res>(_value.example, (value) {
+  $QuestionExampleCopyWith<$Res>? get example {
+    if (_value.example == null) {
+      return null;
+    }
+
+    return $QuestionExampleCopyWith<$Res>(_value.example!, (value) {
       return _then(_value.copyWith(example: value) as $Val);
     });
   }
@@ -120,6 +139,18 @@ class _$QuestionCopyWithImpl<$Res, $Val extends Question>
   $StyleCopyWith<$Res> get style {
     return $StyleCopyWith<$Res>(_value.style, (value) {
       return _then(_value.copyWith(style: value) as $Val);
+    });
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $ScenarioCopyWith<$Res>? get scenario {
+    if (_value.scenario == null) {
+      return null;
+    }
+
+    return $ScenarioCopyWith<$Res>(_value.scenario!, (value) {
+      return _then(_value.copyWith(scenario: value) as $Val);
     });
   }
 }
@@ -134,16 +165,20 @@ abstract class _$$_QuestionCopyWith<$Res> implements $QuestionCopyWith<$Res> {
   $Res call(
       {int id,
       String question,
+      int type,
       @JsonKey(name: 'voice_url') String voiceUrl,
       @JsonKey(name: 'image_url') String imageUrl,
-      QuestionExample example,
+      QuestionExample? example,
       Style style,
-      List<Word> words});
+      List<Word>? words,
+      Scenario? scenario});
 
   @override
-  $QuestionExampleCopyWith<$Res> get example;
+  $QuestionExampleCopyWith<$Res>? get example;
   @override
   $StyleCopyWith<$Res> get style;
+  @override
+  $ScenarioCopyWith<$Res>? get scenario;
 }
 
 /// @nodoc
@@ -159,11 +194,13 @@ class __$$_QuestionCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? question = null,
+    Object? type = null,
     Object? voiceUrl = null,
     Object? imageUrl = null,
-    Object? example = null,
+    Object? example = freezed,
     Object? style = null,
-    Object? words = null,
+    Object? words = freezed,
+    Object? scenario = freezed,
   }) {
     return _then(_$_Question(
       id: null == id
@@ -174,6 +211,10 @@ class __$$_QuestionCopyWithImpl<$Res>
           ? _value.question
           : question // ignore: cast_nullable_to_non_nullable
               as String,
+      type: null == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as int,
       voiceUrl: null == voiceUrl
           ? _value.voiceUrl
           : voiceUrl // ignore: cast_nullable_to_non_nullable
@@ -182,18 +223,22 @@ class __$$_QuestionCopyWithImpl<$Res>
           ? _value.imageUrl
           : imageUrl // ignore: cast_nullable_to_non_nullable
               as String,
-      example: null == example
+      example: freezed == example
           ? _value.example
           : example // ignore: cast_nullable_to_non_nullable
-              as QuestionExample,
+              as QuestionExample?,
       style: null == style
           ? _value.style
           : style // ignore: cast_nullable_to_non_nullable
               as Style,
-      words: null == words
+      words: freezed == words
           ? _value._words
           : words // ignore: cast_nullable_to_non_nullable
-              as List<Word>,
+              as List<Word>?,
+      scenario: freezed == scenario
+          ? _value.scenario
+          : scenario // ignore: cast_nullable_to_non_nullable
+              as Scenario?,
     ));
   }
 }
@@ -204,11 +249,13 @@ class _$_Question implements _Question {
   const _$_Question(
       {required this.id,
       required this.question,
-      @JsonKey(name: 'voice_url') required this.voiceUrl,
-      @JsonKey(name: 'image_url') required this.imageUrl,
-      required this.example,
+      required this.type,
+      @JsonKey(name: 'voice_url') this.voiceUrl = '-',
+      @JsonKey(name: 'image_url') this.imageUrl = '-',
+      this.example,
       required this.style,
-      required final List<Word> words})
+      final List<Word>? words,
+      this.scenario})
       : _words = words;
 
   factory _$_Question.fromJson(Map<String, dynamic> json) =>
@@ -219,25 +266,33 @@ class _$_Question implements _Question {
   @override
   final String question;
   @override
+  final int type;
+  @override
   @JsonKey(name: 'voice_url')
   final String voiceUrl;
   @override
   @JsonKey(name: 'image_url')
   final String imageUrl;
   @override
-  final QuestionExample example;
+  final QuestionExample? example;
   @override
   final Style style;
-  final List<Word> _words;
+  final List<Word>? _words;
   @override
-  List<Word> get words {
+  List<Word>? get words {
+    final value = _words;
+    if (value == null) return null;
+    if (_words is EqualUnmodifiableListView) return _words;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_words);
+    return EqualUnmodifiableListView(value);
   }
 
   @override
+  final Scenario? scenario;
+
+  @override
   String toString() {
-    return 'Question(id: $id, question: $question, voiceUrl: $voiceUrl, imageUrl: $imageUrl, example: $example, style: $style, words: $words)';
+    return 'Question(id: $id, question: $question, type: $type, voiceUrl: $voiceUrl, imageUrl: $imageUrl, example: $example, style: $style, words: $words, scenario: $scenario)';
   }
 
   @override
@@ -248,19 +303,31 @@ class _$_Question implements _Question {
             (identical(other.id, id) || other.id == id) &&
             (identical(other.question, question) ||
                 other.question == question) &&
+            (identical(other.type, type) || other.type == type) &&
             (identical(other.voiceUrl, voiceUrl) ||
                 other.voiceUrl == voiceUrl) &&
             (identical(other.imageUrl, imageUrl) ||
                 other.imageUrl == imageUrl) &&
             (identical(other.example, example) || other.example == example) &&
             (identical(other.style, style) || other.style == style) &&
-            const DeepCollectionEquality().equals(other._words, _words));
+            const DeepCollectionEquality().equals(other._words, _words) &&
+            (identical(other.scenario, scenario) ||
+                other.scenario == scenario));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, question, voiceUrl, imageUrl,
-      example, style, const DeepCollectionEquality().hash(_words));
+  int get hashCode => Object.hash(
+      runtimeType,
+      id,
+      question,
+      type,
+      voiceUrl,
+      imageUrl,
+      example,
+      style,
+      const DeepCollectionEquality().hash(_words),
+      scenario);
 
   @JsonKey(ignore: true)
   @override
@@ -280,11 +347,13 @@ abstract class _Question implements Question {
   const factory _Question(
       {required final int id,
       required final String question,
-      @JsonKey(name: 'voice_url') required final String voiceUrl,
-      @JsonKey(name: 'image_url') required final String imageUrl,
-      required final QuestionExample example,
+      required final int type,
+      @JsonKey(name: 'voice_url') final String voiceUrl,
+      @JsonKey(name: 'image_url') final String imageUrl,
+      final QuestionExample? example,
       required final Style style,
-      required final List<Word> words}) = _$_Question;
+      final List<Word>? words,
+      final Scenario? scenario}) = _$_Question;
 
   factory _Question.fromJson(Map<String, dynamic> json) = _$_Question.fromJson;
 
@@ -293,17 +362,21 @@ abstract class _Question implements Question {
   @override
   String get question;
   @override
+  int get type;
+  @override
   @JsonKey(name: 'voice_url')
   String get voiceUrl;
   @override
   @JsonKey(name: 'image_url')
   String get imageUrl;
   @override
-  QuestionExample get example;
+  QuestionExample? get example;
   @override
   Style get style;
   @override
-  List<Word> get words;
+  List<Word>? get words;
+  @override
+  Scenario? get scenario;
   @override
   @JsonKey(ignore: true)
   _$$_QuestionCopyWith<_$_Question> get copyWith =>
@@ -536,6 +609,7 @@ class _$_Word implements _Word {
   @override
   @JsonKey()
   List<WordExample> get examples {
+    if (_examples is EqualUnmodifiableListView) return _examples;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_examples);
   }
@@ -544,6 +618,7 @@ class _$_Word implements _Word {
   @override
   @JsonKey()
   List<Explanation> get explanations {
+    if (_explanations is EqualUnmodifiableListView) return _explanations;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_explanations);
   }
@@ -634,6 +709,539 @@ abstract class _Word implements Word {
   @override
   @JsonKey(ignore: true)
   _$$_WordCopyWith<_$_Word> get copyWith => throw _privateConstructorUsedError;
+}
+
+Scenario _$ScenarioFromJson(Map<String, dynamic> json) {
+  return _Scenario.fromJson(json);
+}
+
+/// @nodoc
+mixin _$Scenario {
+  String get title => throw _privateConstructorUsedError;
+  String get prompt => throw _privateConstructorUsedError;
+  List<ScenarioDetail> get details => throw _privateConstructorUsedError;
+  List<ScenarioOption> get options => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $ScenarioCopyWith<Scenario> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $ScenarioCopyWith<$Res> {
+  factory $ScenarioCopyWith(Scenario value, $Res Function(Scenario) then) =
+      _$ScenarioCopyWithImpl<$Res, Scenario>;
+  @useResult
+  $Res call(
+      {String title,
+      String prompt,
+      List<ScenarioDetail> details,
+      List<ScenarioOption> options});
+}
+
+/// @nodoc
+class _$ScenarioCopyWithImpl<$Res, $Val extends Scenario>
+    implements $ScenarioCopyWith<$Res> {
+  _$ScenarioCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? title = null,
+    Object? prompt = null,
+    Object? details = null,
+    Object? options = null,
+  }) {
+    return _then(_value.copyWith(
+      title: null == title
+          ? _value.title
+          : title // ignore: cast_nullable_to_non_nullable
+              as String,
+      prompt: null == prompt
+          ? _value.prompt
+          : prompt // ignore: cast_nullable_to_non_nullable
+              as String,
+      details: null == details
+          ? _value.details
+          : details // ignore: cast_nullable_to_non_nullable
+              as List<ScenarioDetail>,
+      options: null == options
+          ? _value.options
+          : options // ignore: cast_nullable_to_non_nullable
+              as List<ScenarioOption>,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$_ScenarioCopyWith<$Res> implements $ScenarioCopyWith<$Res> {
+  factory _$$_ScenarioCopyWith(
+          _$_Scenario value, $Res Function(_$_Scenario) then) =
+      __$$_ScenarioCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {String title,
+      String prompt,
+      List<ScenarioDetail> details,
+      List<ScenarioOption> options});
+}
+
+/// @nodoc
+class __$$_ScenarioCopyWithImpl<$Res>
+    extends _$ScenarioCopyWithImpl<$Res, _$_Scenario>
+    implements _$$_ScenarioCopyWith<$Res> {
+  __$$_ScenarioCopyWithImpl(
+      _$_Scenario _value, $Res Function(_$_Scenario) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? title = null,
+    Object? prompt = null,
+    Object? details = null,
+    Object? options = null,
+  }) {
+    return _then(_$_Scenario(
+      title: null == title
+          ? _value.title
+          : title // ignore: cast_nullable_to_non_nullable
+              as String,
+      prompt: null == prompt
+          ? _value.prompt
+          : prompt // ignore: cast_nullable_to_non_nullable
+              as String,
+      details: null == details
+          ? _value._details
+          : details // ignore: cast_nullable_to_non_nullable
+              as List<ScenarioDetail>,
+      options: null == options
+          ? _value._options
+          : options // ignore: cast_nullable_to_non_nullable
+              as List<ScenarioOption>,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$_Scenario implements _Scenario {
+  const _$_Scenario(
+      {required this.title,
+      required this.prompt,
+      required final List<ScenarioDetail> details,
+      required final List<ScenarioOption> options})
+      : _details = details,
+        _options = options;
+
+  factory _$_Scenario.fromJson(Map<String, dynamic> json) =>
+      _$$_ScenarioFromJson(json);
+
+  @override
+  final String title;
+  @override
+  final String prompt;
+  final List<ScenarioDetail> _details;
+  @override
+  List<ScenarioDetail> get details {
+    if (_details is EqualUnmodifiableListView) return _details;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_details);
+  }
+
+  final List<ScenarioOption> _options;
+  @override
+  List<ScenarioOption> get options {
+    if (_options is EqualUnmodifiableListView) return _options;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_options);
+  }
+
+  @override
+  String toString() {
+    return 'Scenario(title: $title, prompt: $prompt, details: $details, options: $options)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_Scenario &&
+            (identical(other.title, title) || other.title == title) &&
+            (identical(other.prompt, prompt) || other.prompt == prompt) &&
+            const DeepCollectionEquality().equals(other._details, _details) &&
+            const DeepCollectionEquality().equals(other._options, _options));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      title,
+      prompt,
+      const DeepCollectionEquality().hash(_details),
+      const DeepCollectionEquality().hash(_options));
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$_ScenarioCopyWith<_$_Scenario> get copyWith =>
+      __$$_ScenarioCopyWithImpl<_$_Scenario>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$_ScenarioToJson(
+      this,
+    );
+  }
+}
+
+abstract class _Scenario implements Scenario {
+  const factory _Scenario(
+      {required final String title,
+      required final String prompt,
+      required final List<ScenarioDetail> details,
+      required final List<ScenarioOption> options}) = _$_Scenario;
+
+  factory _Scenario.fromJson(Map<String, dynamic> json) = _$_Scenario.fromJson;
+
+  @override
+  String get title;
+  @override
+  String get prompt;
+  @override
+  List<ScenarioDetail> get details;
+  @override
+  List<ScenarioOption> get options;
+  @override
+  @JsonKey(ignore: true)
+  _$$_ScenarioCopyWith<_$_Scenario> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+ScenarioDetail _$ScenarioDetailFromJson(Map<String, dynamic> json) {
+  return _ScenarioDetail.fromJson(json);
+}
+
+/// @nodoc
+mixin _$ScenarioDetail {
+  @JsonKey(name: 'voice_url')
+  String get voiceUrl => throw _privateConstructorUsedError;
+  String get text => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $ScenarioDetailCopyWith<ScenarioDetail> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $ScenarioDetailCopyWith<$Res> {
+  factory $ScenarioDetailCopyWith(
+          ScenarioDetail value, $Res Function(ScenarioDetail) then) =
+      _$ScenarioDetailCopyWithImpl<$Res, ScenarioDetail>;
+  @useResult
+  $Res call({@JsonKey(name: 'voice_url') String voiceUrl, String text});
+}
+
+/// @nodoc
+class _$ScenarioDetailCopyWithImpl<$Res, $Val extends ScenarioDetail>
+    implements $ScenarioDetailCopyWith<$Res> {
+  _$ScenarioDetailCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? voiceUrl = null,
+    Object? text = null,
+  }) {
+    return _then(_value.copyWith(
+      voiceUrl: null == voiceUrl
+          ? _value.voiceUrl
+          : voiceUrl // ignore: cast_nullable_to_non_nullable
+              as String,
+      text: null == text
+          ? _value.text
+          : text // ignore: cast_nullable_to_non_nullable
+              as String,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$_ScenarioDetailCopyWith<$Res>
+    implements $ScenarioDetailCopyWith<$Res> {
+  factory _$$_ScenarioDetailCopyWith(
+          _$_ScenarioDetail value, $Res Function(_$_ScenarioDetail) then) =
+      __$$_ScenarioDetailCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({@JsonKey(name: 'voice_url') String voiceUrl, String text});
+}
+
+/// @nodoc
+class __$$_ScenarioDetailCopyWithImpl<$Res>
+    extends _$ScenarioDetailCopyWithImpl<$Res, _$_ScenarioDetail>
+    implements _$$_ScenarioDetailCopyWith<$Res> {
+  __$$_ScenarioDetailCopyWithImpl(
+      _$_ScenarioDetail _value, $Res Function(_$_ScenarioDetail) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? voiceUrl = null,
+    Object? text = null,
+  }) {
+    return _then(_$_ScenarioDetail(
+      voiceUrl: null == voiceUrl
+          ? _value.voiceUrl
+          : voiceUrl // ignore: cast_nullable_to_non_nullable
+              as String,
+      text: null == text
+          ? _value.text
+          : text // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$_ScenarioDetail implements _ScenarioDetail {
+  const _$_ScenarioDetail(
+      {@JsonKey(name: 'voice_url') required this.voiceUrl, required this.text});
+
+  factory _$_ScenarioDetail.fromJson(Map<String, dynamic> json) =>
+      _$$_ScenarioDetailFromJson(json);
+
+  @override
+  @JsonKey(name: 'voice_url')
+  final String voiceUrl;
+  @override
+  final String text;
+
+  @override
+  String toString() {
+    return 'ScenarioDetail(voiceUrl: $voiceUrl, text: $text)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_ScenarioDetail &&
+            (identical(other.voiceUrl, voiceUrl) ||
+                other.voiceUrl == voiceUrl) &&
+            (identical(other.text, text) || other.text == text));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(runtimeType, voiceUrl, text);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$_ScenarioDetailCopyWith<_$_ScenarioDetail> get copyWith =>
+      __$$_ScenarioDetailCopyWithImpl<_$_ScenarioDetail>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$_ScenarioDetailToJson(
+      this,
+    );
+  }
+}
+
+abstract class _ScenarioDetail implements ScenarioDetail {
+  const factory _ScenarioDetail(
+      {@JsonKey(name: 'voice_url') required final String voiceUrl,
+      required final String text}) = _$_ScenarioDetail;
+
+  factory _ScenarioDetail.fromJson(Map<String, dynamic> json) =
+      _$_ScenarioDetail.fromJson;
+
+  @override
+  @JsonKey(name: 'voice_url')
+  String get voiceUrl;
+  @override
+  String get text;
+  @override
+  @JsonKey(ignore: true)
+  _$$_ScenarioDetailCopyWith<_$_ScenarioDetail> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+ScenarioOption _$ScenarioOptionFromJson(Map<String, dynamic> json) {
+  return _ScenarioOption.fromJson(json);
+}
+
+/// @nodoc
+mixin _$ScenarioOption {
+  @JsonKey(name: 'image_url')
+  String get imageUrl => throw _privateConstructorUsedError;
+  String get text => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $ScenarioOptionCopyWith<ScenarioOption> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $ScenarioOptionCopyWith<$Res> {
+  factory $ScenarioOptionCopyWith(
+          ScenarioOption value, $Res Function(ScenarioOption) then) =
+      _$ScenarioOptionCopyWithImpl<$Res, ScenarioOption>;
+  @useResult
+  $Res call({@JsonKey(name: 'image_url') String imageUrl, String text});
+}
+
+/// @nodoc
+class _$ScenarioOptionCopyWithImpl<$Res, $Val extends ScenarioOption>
+    implements $ScenarioOptionCopyWith<$Res> {
+  _$ScenarioOptionCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? imageUrl = null,
+    Object? text = null,
+  }) {
+    return _then(_value.copyWith(
+      imageUrl: null == imageUrl
+          ? _value.imageUrl
+          : imageUrl // ignore: cast_nullable_to_non_nullable
+              as String,
+      text: null == text
+          ? _value.text
+          : text // ignore: cast_nullable_to_non_nullable
+              as String,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$_ScenarioOptionCopyWith<$Res>
+    implements $ScenarioOptionCopyWith<$Res> {
+  factory _$$_ScenarioOptionCopyWith(
+          _$_ScenarioOption value, $Res Function(_$_ScenarioOption) then) =
+      __$$_ScenarioOptionCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({@JsonKey(name: 'image_url') String imageUrl, String text});
+}
+
+/// @nodoc
+class __$$_ScenarioOptionCopyWithImpl<$Res>
+    extends _$ScenarioOptionCopyWithImpl<$Res, _$_ScenarioOption>
+    implements _$$_ScenarioOptionCopyWith<$Res> {
+  __$$_ScenarioOptionCopyWithImpl(
+      _$_ScenarioOption _value, $Res Function(_$_ScenarioOption) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? imageUrl = null,
+    Object? text = null,
+  }) {
+    return _then(_$_ScenarioOption(
+      imageUrl: null == imageUrl
+          ? _value.imageUrl
+          : imageUrl // ignore: cast_nullable_to_non_nullable
+              as String,
+      text: null == text
+          ? _value.text
+          : text // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$_ScenarioOption implements _ScenarioOption {
+  const _$_ScenarioOption(
+      {@JsonKey(name: 'image_url') required this.imageUrl, required this.text});
+
+  factory _$_ScenarioOption.fromJson(Map<String, dynamic> json) =>
+      _$$_ScenarioOptionFromJson(json);
+
+  @override
+  @JsonKey(name: 'image_url')
+  final String imageUrl;
+  @override
+  final String text;
+
+  @override
+  String toString() {
+    return 'ScenarioOption(imageUrl: $imageUrl, text: $text)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_ScenarioOption &&
+            (identical(other.imageUrl, imageUrl) ||
+                other.imageUrl == imageUrl) &&
+            (identical(other.text, text) || other.text == text));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(runtimeType, imageUrl, text);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$_ScenarioOptionCopyWith<_$_ScenarioOption> get copyWith =>
+      __$$_ScenarioOptionCopyWithImpl<_$_ScenarioOption>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$_ScenarioOptionToJson(
+      this,
+    );
+  }
+}
+
+abstract class _ScenarioOption implements ScenarioOption {
+  const factory _ScenarioOption(
+      {@JsonKey(name: 'image_url') required final String imageUrl,
+      required final String text}) = _$_ScenarioOption;
+
+  factory _ScenarioOption.fromJson(Map<String, dynamic> json) =
+      _$_ScenarioOption.fromJson;
+
+  @override
+  @JsonKey(name: 'image_url')
+  String get imageUrl;
+  @override
+  String get text;
+  @override
+  @JsonKey(ignore: true)
+  _$$_ScenarioOptionCopyWith<_$_ScenarioOption> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 StoryLine _$StoryLineFromJson(Map<String, dynamic> json) {
@@ -765,6 +1373,7 @@ class _$_StoryLine implements _StoryLine {
   List<Subtitle>? get subtitles {
     final value = _subtitles;
     if (value == null) return null;
+    if (_subtitles is EqualUnmodifiableListView) return _subtitles;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(value);
   }
@@ -1623,6 +2232,7 @@ class _$_QuestionExample implements _QuestionExample {
   @override
   @JsonKey()
   List<QuestionExampleWord> get words {
+    if (_words is EqualUnmodifiableListView) return _words;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_words);
   }
@@ -1631,6 +2241,7 @@ class _$_QuestionExample implements _QuestionExample {
   @override
   @JsonKey()
   List<Subtitle> get subtitles {
+    if (_subtitles is EqualUnmodifiableListView) return _subtitles;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_subtitles);
   }
@@ -1802,6 +2413,7 @@ class _$_QuestionExampleWord implements _QuestionExampleWord {
   final List<String> _forms;
   @override
   List<String> get forms {
+    if (_forms is EqualUnmodifiableListView) return _forms;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_forms);
   }

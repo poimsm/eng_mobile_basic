@@ -48,7 +48,6 @@ class HomeState {
     this.exampleArry = const [],
     this.seconds = 0,
     this.exampleAnimated = false,
-    this.bubbleChallengeSentence,
     this.showNextBtn = true,
     this.questionCounter = 1,
     this.showRoundScreen = true,
@@ -64,6 +63,7 @@ class HomeState {
     this.showMeaningBtn = true,
     this.showQuestionReplayBtn = true,
     this.runRoutineWhenTimeCompleted = true,
+    this.showScenarioCtrls = false,
     // this.showLangScreen = false,
   });
 
@@ -85,7 +85,6 @@ class HomeState {
   bool newSentences;
   bool exampleAnimated;
   int seconds;
-  String? bubbleChallengeSentence;
   bool showNextBtn;
   int questionCounter;
   bool showRoundScreen;
@@ -103,6 +102,7 @@ class HomeState {
   bool showMeaningBtn;
   bool showQuestionReplayBtn;
   bool runRoutineWhenTimeCompleted;
+  bool showScenarioCtrls;
 
   HomeState copyWith({
     questions,
@@ -127,7 +127,6 @@ class HomeState {
     challengeAnimated,
     seconds,
     exampleAnimated,
-    bubbleChallengeSentence,
     showNextBtn,
     questionCounter,
     showRoundScreen,
@@ -145,6 +144,7 @@ class HomeState {
     showMeaningBtn,
     showQuestionReplayBtn,
     runRoutineWhenTimeCompleted,
+    showScenarioCtrls,
   }) {
     return HomeState(
       questions: questions ?? this.questions,
@@ -168,9 +168,7 @@ class HomeState {
       exampleArry: exampleArry ?? this.exampleArry,
       newSentences: newSentences ?? this.newSentences,
       seconds: seconds ?? this.seconds,
-      exampleAnimated: exampleAnimated ?? this.exampleAnimated,
-      bubbleChallengeSentence:
-          bubbleChallengeSentence ?? this.bubbleChallengeSentence,
+      exampleAnimated: exampleAnimated ?? this.exampleAnimated,    
       showNextBtn: showNextBtn ?? this.showNextBtn,
       questionCounter: questionCounter ?? this.questionCounter,
       showRoundScreen: showRoundScreen ?? this.showRoundScreen,
@@ -188,6 +186,7 @@ class HomeState {
           showQuestionReplayBtn ?? this.showQuestionReplayBtn,
       runRoutineWhenTimeCompleted:
           runRoutineWhenTimeCompleted ?? this.runRoutineWhenTimeCompleted,
+      showScenarioCtrls: showScenarioCtrls ?? this.showScenarioCtrls,
     );
   }
 }
@@ -209,7 +208,6 @@ class HomeNotifier extends StateNotifier<HomeState> {
   }
 
   Future<bool> fetchQuestions() async {
-    print('>>>>>>> fetchQuestions!!!!!!!!!!! ////////////////');
     state = state.copyWith(isLoading: true, showRoundScreen: false);
 
     final questions = await questionRepository.getQuestions();
@@ -223,16 +221,24 @@ class HomeNotifier extends StateNotifier<HomeState> {
         questionRoundCounter: state.questionRoundCounter + 1,
         questions: questions,
         question: questions[0],
-        word: questions[0].words[0],
         example: questions[0].example,
         showExample: true,
-        bubbleChallengeSentence: questions[0].words[0].word,
         isLoading: false);
+
+    if(state.question!.type != 3) {
+      state = state.copyWith(word: questions[0].words![0]);
+    } else {
+      // state = state.copyWith(word: []);
+    }
 
     await sleep(400);
     delayedNextquestionTicket();
 
-    playVoice(state.question!.voiceUrl, shouldStop: false);
+    if(state.question!.type == 3) {
+      playVoice(state.question!.scenario!.details[0].voiceUrl, shouldStop: false);
+    } else {
+      playVoice(state.question!.voiceUrl, shouldStop: false);
+    }
 
     state = state.copyWith(isLoading: false);
 
@@ -268,6 +274,7 @@ class HomeNotifier extends StateNotifier<HomeState> {
           currentIndex: 0,
           wordIndex: 0,
           questionCounter: 1,
+          showScenarioCtrls: false,
         );
         return null;
       }
@@ -285,20 +292,30 @@ class HomeNotifier extends StateNotifier<HomeState> {
         showQuestionExample: false,
         questionCounter: state.questionCounter + 1,
         hasAudioSaved: false,
-        bubbleChallengeSentence: state.questions[index + 1].words[0].word,
         question: state.questions[index + 1],
-        word: state.questions[index + 1].words[0],
         currentIndex: index + 1,
-        wordIndex: 0,
         example: state.questions[index + 1].example,
         showExample: true,
+        showScenarioCtrls: false,
       );
+
+      if(state.questions[index + 1].type != 3) {
+        state = state.copyWith(
+          word: state.questions[index + 1].words![0],
+          wordIndex: 0,
+        );
+      }
 
       // _swipperController.move(0);
 
       await sleep(1000);
-      state = state.copyWith(loadingNextQuestion: false);
-      playVoice(state.question!.voiceUrl, shouldStop: false);
+      state = state.copyWith(loadingNextQuestion: false);      
+
+      if(state.questions[index + 1].type == 3) {
+        playVoice(state.question!.scenario!.details[0].voiceUrl, shouldStop: false);
+      } else {
+        playVoice(state.question!.voiceUrl, shouldStop: false);
+      }
 
       await sleep(1000);
       state = state.copyWith(showChallenge: true);
@@ -566,10 +583,6 @@ class HomeNotifier extends StateNotifier<HomeState> {
     });
   }
 
-  void bubbleChallengeSentenceTrigger() {
-    state = state.copyWith(bubbleChallengeSentence: state.word!.word);
-  }
-
   void toggleBlocker({int milliseconds = 800}) async {
     state = state.copyWith(blocker: true);
     await sleep(milliseconds);
@@ -584,23 +597,28 @@ class HomeNotifier extends StateNotifier<HomeState> {
 
     state = state.copyWith(
         showMeaningBtn: true,
-        word: state.question!.words[idx],
-        wordIndex: idx,
-        bubbleChallengeSentence: state.question!.words[idx].word);
+        word: state.question!.words![idx],
+        wordIndex: idx
+        );
   }
 
   void onNextWordIndex(int idx) async {
     state = state.copyWith(
-        word: state.question!.words[idx],
+        word: state.question!.words![idx],
         wordIndex: idx,
-        bubbleChallengeSentence: state.question!.words[idx].word);
+        );
   }
-
-  void replayQuestion() async {
+ 
+  void replayQuestion({String? url}) async {
     state = state.copyWith(showQuestionReplayBtn: false);
     await sleep(200);
     state = state.copyWith(showQuestionReplayBtn: true);
 
+    if(url != null) {
+      playVoice(url, shouldStop: false);
+      return;
+    }
+    
     playVoice(state.question!.voiceUrl, shouldStop: false);
   }
 
@@ -610,6 +628,10 @@ class HomeNotifier extends StateNotifier<HomeState> {
     state = state.copyWith(showQuestionReplayBtn: true);
 
     playVoice(state.question!.voiceUrl, shouldStop: false);
+  }
+
+  setScenarioCtrls(bool val) {
+    state = state.copyWith(showScenarioCtrls: val);
   }
 }
 

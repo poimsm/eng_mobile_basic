@@ -9,25 +9,32 @@ part of 'question.dart';
 _$_Question _$$_QuestionFromJson(Map<String, dynamic> json) => _$_Question(
       id: json['id'] as int,
       question: json['question'] as String,
-      voiceUrl: json['voice_url'] as String,
-      imageUrl: json['image_url'] as String,
-      example:
-          QuestionExample.fromJson(json['example'] as Map<String, dynamic>),
+      type: json['type'] as int,
+      voiceUrl: json['voice_url'] as String? ?? '-',
+      imageUrl: json['image_url'] as String? ?? '-',
+      example: json['example'] == null
+          ? null
+          : QuestionExample.fromJson(json['example'] as Map<String, dynamic>),
       style: Style.fromJson(json['style'] as Map<String, dynamic>),
-      words: (json['words'] as List<dynamic>)
-          .map((e) => Word.fromJson(e as Map<String, dynamic>))
+      words: (json['words'] as List<dynamic>?)
+          ?.map((e) => Word.fromJson(e as Map<String, dynamic>))
           .toList(),
+      scenario: json['scenario'] == null
+          ? null
+          : Scenario.fromJson(json['scenario'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$_QuestionToJson(_$_Question instance) =>
     <String, dynamic>{
       'id': instance.id,
       'question': instance.question,
+      'type': instance.type,
       'voice_url': instance.voiceUrl,
       'image_url': instance.imageUrl,
       'example': instance.example,
       'style': instance.style,
       'words': instance.words,
+      'scenario': instance.scenario,
     };
 
 _$_Word _$$_WordFromJson(Map<String, dynamic> json) => _$_Word(
@@ -58,6 +65,49 @@ Map<String, dynamic> _$$_WordToJson(_$_Word instance) => <String, dynamic>{
       'examples': instance.examples,
       'explanations': instance.explanations,
       'story': instance.story,
+    };
+
+_$_Scenario _$$_ScenarioFromJson(Map<String, dynamic> json) => _$_Scenario(
+      title: json['title'] as String,
+      prompt: json['prompt'] as String,
+      details: (json['details'] as List<dynamic>)
+          .map((e) => ScenarioDetail.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      options: (json['options'] as List<dynamic>)
+          .map((e) => ScenarioOption.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+
+Map<String, dynamic> _$$_ScenarioToJson(_$_Scenario instance) =>
+    <String, dynamic>{
+      'title': instance.title,
+      'prompt': instance.prompt,
+      'details': instance.details,
+      'options': instance.options,
+    };
+
+_$_ScenarioDetail _$$_ScenarioDetailFromJson(Map<String, dynamic> json) =>
+    _$_ScenarioDetail(
+      voiceUrl: json['voice_url'] as String,
+      text: json['text'] as String,
+    );
+
+Map<String, dynamic> _$$_ScenarioDetailToJson(_$_ScenarioDetail instance) =>
+    <String, dynamic>{
+      'voice_url': instance.voiceUrl,
+      'text': instance.text,
+    };
+
+_$_ScenarioOption _$$_ScenarioOptionFromJson(Map<String, dynamic> json) =>
+    _$_ScenarioOption(
+      imageUrl: json['image_url'] as String,
+      text: json['text'] as String,
+    );
+
+Map<String, dynamic> _$$_ScenarioOptionToJson(_$_ScenarioOption instance) =>
+    <String, dynamic>{
+      'image_url': instance.imageUrl,
+      'text': instance.text,
     };
 
 _$_StoryLine _$$_StoryLineFromJson(Map<String, dynamic> json) => _$_StoryLine(

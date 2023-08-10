@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:eng_mobile_app/config.dart';
 import 'package:eng_mobile_app/data/models/question.dart';
@@ -5,8 +6,11 @@ import 'package:eng_mobile_app/pages/ai_text_widget.dart';
 import 'package:eng_mobile_app/pages/cards_example.dart';
 import 'package:eng_mobile_app/pages/example_widget.dart';
 import 'package:eng_mobile_app/pages/audio_bar_white.dart';
+import 'package:eng_mobile_app/pages/home/enums.dart';
 import 'package:eng_mobile_app/pages/home/home_controller.dart';
+import 'package:eng_mobile_app/pages/question_image.dart';
 import 'package:eng_mobile_app/pages/round_screen.dart';
+import 'package:eng_mobile_app/pages/question_scenario.dart';
 import 'package:eng_mobile_app/pages/story_widget.dart';
 import 'package:eng_mobile_app/services/global/global_service.dart';
 import 'package:eng_mobile_app/utils/helpers.dart';
@@ -47,15 +51,14 @@ class HomePageState extends ConsumerState<HomePage> {
   }
 
   Future initQuiz() async {
-      bool resOk = await ref.read(homeProvider.notifier).fetchQuestions();
-      if (!resOk) return;
-      await backend.setFirstTime(false);
-      backend.sendScreenFlow(
-          'start question - ID ${homeState.question!.id}');
-      swiperController.startAutoplay();
-      await sleep(3500);
-      swiperController.stopAutoplay();
-    }
+    bool resOk = await ref.read(homeProvider.notifier).fetchQuestions();
+    if (!resOk) return;
+    await backend.setFirstTime(false);
+    backend.sendScreenFlow('start question - ID ${homeState.question!.id}');
+    swiperController.startAutoplay();
+    await sleep(3500);
+    swiperController.stopAutoplay();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -81,8 +84,8 @@ class HomePageState extends ConsumerState<HomePage> {
       // print('🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵');
       // print(arguments['asd']);
 
-      // if(arguments['asd'] == null) {        
-        return SafeArea(
+      // if(arguments['asd'] == null) {
+      return SafeArea(
         child: RoundScreen(
           isWelcomeAgain: homeState.questionRoundCounter == 0,
           roundNumber: homeState.questionRoundCounter,
@@ -97,6 +100,8 @@ class HomePageState extends ConsumerState<HomePage> {
       // }
     }
 
+    int type = homeState.question != null ? homeState.question!.type : -1;
+
     Widget contentPage = SafeArea(
       child: Stack(
         children: [
@@ -104,22 +109,40 @@ class HomePageState extends ConsumerState<HomePage> {
             height: size.height,
             width: size.width,
           ),
-          Positioned(
-            left: 0,
-            top: size.height * 0.1,
-            child: _image(),
-          ),
-          Positioned(
-            top: size.height * 0.2,
-            left: 0,
-            child: _question(),
-          ),
-          Positioned(
-            left: 20,
-            top: size.height * 0.01,
-            child: _challengeAccepted(),
-          ),
-          Positioned(
+          if (homeState.loadingNextQuestion)
+            Positioned(left: 0, top: 0.1, child: _loading()),
+          if (!homeState.loadingNextQuestion && type == QuestionTypes.scenario)
+            Positioned(
+                left: 0,
+                top: size.height * 0.02,
+                child: QuestionScenario(
+                  question: homeState.question!,
+                  onShowControls: (show) {
+                    ref.read(homeProvider.notifier).setScenarioCtrls(show);
+                  },
+                  onPlayVoice: (play, url) {
+                    backend.sendScreenFlow('press replay question');
+                    ref.read(homeProvider.notifier).replayQuestion(url: url);
+                  },
+                )),
+          if (!homeState.loadingNextQuestion && type != QuestionTypes.scenario)
+            Positioned(
+                left: 0,
+                top: size.height * 0.1,
+                child: QuestionImage(
+                  question: homeState.question!,
+                  onPlayVoice: (play) {
+                    backend.sendScreenFlow('press replay question');
+                    ref.read(homeProvider.notifier).replayQuestion();
+                  },
+                )),
+          if (homeState.question != null && type != QuestionTypes.scenario)
+            Positioned(
+              left: 20,
+              top: size.height * 0.01,
+              child: _words(),
+            ),
+          if(_showControls(type)) Positioned(
             left: 0,
             bottom: 5,
             child: _ctrlBtns(),
@@ -128,19 +151,13 @@ class HomePageState extends ConsumerState<HomePage> {
             bottom: size.height * 0.18,
             right: 15,
             child: _step(),
-          ),
-          if (homeState.isRecording)
-            Positioned(
-              left: size.width * 0.4,
-              bottom: 120,
-              child: _challengeBubble(),
-            ),
+          ),       
           Positioned(
             right: 20,
             top: size.height * 0.57,
             child: _audioBtn(),
           ),
-          if (homeState.showExample)
+          if (_showExample(type))
             Positioned(
               left: 10,
               top: size.height * 0.68,
@@ -166,6 +183,22 @@ class HomePageState extends ConsumerState<HomePage> {
           color: homeState.question!.style.backgroundScreen.toColor(),
           child: contentPage),
     );
+  }
+
+  bool _showControls(int type) {
+    if(type == QuestionTypes.scenario) {
+      return homeState.showScenarioCtrls;
+    }
+
+    return true;
+  }
+
+  bool _showExample(int type) {
+    if(homeState.example == null) return false;
+    if(type == QuestionTypes.scenario) {
+      return homeState.showScenarioCtrls;
+    }
+    return homeState.showExample;    
   }
 
   _step() {
@@ -262,39 +295,9 @@ class HomePageState extends ConsumerState<HomePage> {
         ),
       ),
     );
-  }
+  }  
 
-  _challengeBubble() {
-    return Stack(
-      children: [
-        Container(
-          margin: EdgeInsets.only(bottom: 22),
-          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-          decoration: BoxDecoration(
-              color: Color(0xff44546A).withOpacity(1),
-              borderRadius: BorderRadius.circular(15),
-              border: Border.all(color: Color(0xff8497B0).withOpacity(0.4))),
-          child: Text(
-            homeState.bubbleChallengeSentence!,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 18,
-            ),
-          ),
-        ),
-        Positioned(
-          left: 20,
-          bottom: 0,
-          child: RotatedBox(
-              quarterTurns: 1,
-              child:
-                  Icon(Icons.play_arrow, size: 35, color: Color(0xff44546A))),
-        )
-      ],
-    );
-  }
-
-  _challengeAccepted() {
+  _words() {
     return Container(
       width: size.width * 0.90,
       height: 110,
@@ -325,7 +328,7 @@ class HomePageState extends ConsumerState<HomePage> {
                       height: 5,
                     ),
                     Text(
-                      homeState.question!.words[index].word,
+                      homeState.question!.words![index].word,
                       style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
@@ -350,7 +353,7 @@ class HomePageState extends ConsumerState<HomePage> {
             ),
           );
         },
-        itemCount: homeState.question!.words.length,
+        itemCount: homeState.question!.words!.length,
 
         // pagination: SwiperPagination(),
         // control: SwiperControl(),
@@ -470,14 +473,14 @@ class HomePageState extends ConsumerState<HomePage> {
                   onTap: () {
                     backend.sendScreenFlow('press next word right');
                     if (homeState.wordIndex ==
-                        homeState.question!.words.length - 1) return;
+                        homeState.question!.words!.length - 1) return;
                     ref.read(homeProvider.notifier).onNextWord(true);
                   },
                   child: Container(
                     padding: EdgeInsets.all(3),
                     child: Opacity(
                       opacity: homeState.wordIndex ==
-                              homeState.question!.words.length - 1
+                              homeState.question!.words!.length - 1
                           ? 0.25
                           : 0.9,
                       child: Image.asset(
@@ -493,83 +496,14 @@ class HomePageState extends ConsumerState<HomePage> {
         ));
   }
 
-  _image() {
+  _loading() {
     return SizedBox(
-      height: size.height * 0.8,
-      child: Center(
-        child: Stack(
-          children: [
-            Config.MOCK
-                ? Image.asset(
-                    homeState.question!.imageUrl,
-                    width: size.width,
-                    fit: BoxFit.cover,
-                  )
-                : Image.network(
-                    homeState.question!.imageUrl,
-                    height: size.height * 0.8,
-                    width: size.width,
-                    fit: BoxFit.cover,
-                  )
-          ],
-        ),
-      ),
-    );
-  }
-
-  _question() {
-    TextStyle textStyle = TextStyle(
+      width: size.width,
+      height: size.height * 0.5,
+      child: SpinKitThreeBounce(
         color: Colors.white,
-        fontWeight: FontWeight.bold,
-        fontSize: 22,
-        overflow: TextOverflow.clip);
-
-    final Size sizeMe = (TextPainter(
-            text:
-                TextSpan(text: homeState.question!.question, style: textStyle),
-            maxLines: 1,
-            textScaleFactor: MediaQuery.of(context).textScaleFactor,
-            textDirection: TextDirection.ltr)
-          ..layout())
-        .size;
-
-    bool multipleLines = sizeMe.width > size.width * 0.8;
-
-    return Stack(
-      children: [
-        Container(
-            color: Colors.black
-                .withOpacity(homeState.question!.style.questionOpacity),
-            padding: EdgeInsets.symmetric(vertical: 8, horizontal: 15),
-            margin: EdgeInsets.only(bottom: multipleLines ? 20 : 40),
-            width: size.width,
-            child: Center(
-                child: homeState.loadingNextQuestion
-                    ? SpinKitThreeBounce(
-                        color: Colors.white,
-                        size: 35.0,
-                      )
-                    : Text(homeState.question!.question,
-                        textAlign: TextAlign.center, style: textStyle))),
-        if (homeState.showQuestionReplayBtn && !homeState.loadingNextQuestion)
-          Positioned(
-            right: 20,
-            bottom: 0,
-            child: InkWell(
-              onTap: () {
-                backend.sendScreenFlow('press replay question');
-                ref.read(homeProvider.notifier).replayQuestion();
-              },
-              child: Container(
-                padding: EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.9),
-                    shape: BoxShape.circle),
-                child: Icon(Icons.refresh, size: 30, color: Colors.black54),
-              ),
-            ),
-          )
-      ],
+        size: 35.0,
+      ),
     );
   }
 
@@ -664,7 +598,6 @@ class HomePageState extends ConsumerState<HomePage> {
       onTap: () {
         backend.sendScreenFlow('press mic');
         ref.read(homeProvider.notifier).toggleRecording();
-        ref.read(homeProvider.notifier).bubbleChallengeSentenceTrigger();
       },
       child: Container(
         padding: EdgeInsets.all(homeState.isRecording ? 27 : 12),
