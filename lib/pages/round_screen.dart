@@ -3,7 +3,6 @@ import 'package:eng_mobile_app/pages/language_screen.dart';
 import 'package:eng_mobile_app/services/global/global_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class RoundScreen extends StatefulWidget {
   const RoundScreen(
@@ -197,7 +196,7 @@ class _RoundScreenState extends State<RoundScreen> {
       child: Text(
         text,
         style: TextStyle(
-            fontSize: 22,
+            fontSize: 25,
             fontWeight: FontWeight.bold,
             color: Color(0xff333F50)),
       ),

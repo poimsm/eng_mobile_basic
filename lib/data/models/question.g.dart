@@ -69,42 +69,48 @@ Map<String, dynamic> _$$_WordToJson(_$_Word instance) => <String, dynamic>{
 
 _$_Scenario _$$_ScenarioFromJson(Map<String, dynamic> json) => _$_Scenario(
       title: json['title'] as String,
-      prompt: json['prompt'] as String,
-      details: (json['details'] as List<dynamic>)
-          .map((e) => ScenarioDetail.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      options: (json['options'] as List<dynamic>)
-          .map((e) => ScenarioOption.fromJson(e as Map<String, dynamic>))
+      parts: (json['parts'] as List<dynamic>)
+          .map((e) => ScenarioPart.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 
 Map<String, dynamic> _$$_ScenarioToJson(_$_Scenario instance) =>
     <String, dynamic>{
       'title': instance.title,
-      'prompt': instance.prompt,
-      'details': instance.details,
+      'parts': instance.parts,
+    };
+
+_$_ScenarioPart _$$_ScenarioPartFromJson(Map<String, dynamic> json) =>
+    _$_ScenarioPart(
+      text: json['text'] as String,
+      type: json['type'] as String,
+      voiceUrl: json['voice_url'] as String?,
+      imageUrl: json['image_url'] as String?,
+      showControls: json['show_controls'] as bool,
+      options: (json['options'] as List<dynamic>?)
+          ?.map((e) => ScenarioPartOption.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+
+Map<String, dynamic> _$$_ScenarioPartToJson(_$_ScenarioPart instance) =>
+    <String, dynamic>{
+      'text': instance.text,
+      'type': instance.type,
+      'voice_url': instance.voiceUrl,
+      'image_url': instance.imageUrl,
+      'show_controls': instance.showControls,
       'options': instance.options,
     };
 
-_$_ScenarioDetail _$$_ScenarioDetailFromJson(Map<String, dynamic> json) =>
-    _$_ScenarioDetail(
-      voiceUrl: json['voice_url'] as String,
-      text: json['text'] as String,
-    );
-
-Map<String, dynamic> _$$_ScenarioDetailToJson(_$_ScenarioDetail instance) =>
-    <String, dynamic>{
-      'voice_url': instance.voiceUrl,
-      'text': instance.text,
-    };
-
-_$_ScenarioOption _$$_ScenarioOptionFromJson(Map<String, dynamic> json) =>
-    _$_ScenarioOption(
+_$_ScenarioPartOption _$$_ScenarioPartOptionFromJson(
+        Map<String, dynamic> json) =>
+    _$_ScenarioPartOption(
       imageUrl: json['image_url'] as String,
       text: json['text'] as String,
     );
 
-Map<String, dynamic> _$$_ScenarioOptionToJson(_$_ScenarioOption instance) =>
+Map<String, dynamic> _$$_ScenarioPartOptionToJson(
+        _$_ScenarioPartOption instance) =>
     <String, dynamic>{
       'image_url': instance.imageUrl,
       'text': instance.text,

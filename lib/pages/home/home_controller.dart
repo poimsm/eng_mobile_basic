@@ -235,7 +235,7 @@ class HomeNotifier extends StateNotifier<HomeState> {
     delayedNextquestionTicket();
 
     if(state.question!.type == 3) {
-      playVoice(state.question!.scenario!.details[0].voiceUrl, shouldStop: false);
+      playVoice(state.question!.scenario!.parts[0].voiceUrl!, shouldStop: false);
     } else {
       playVoice(state.question!.voiceUrl, shouldStop: false);
     }
@@ -312,7 +312,7 @@ class HomeNotifier extends StateNotifier<HomeState> {
       state = state.copyWith(loadingNextQuestion: false);      
 
       if(state.questions[index + 1].type == 3) {
-        playVoice(state.question!.scenario!.details[0].voiceUrl, shouldStop: false);
+        playVoice(state.question!.scenario!.parts[0].voiceUrl!, shouldStop: false);
       } else {
         playVoice(state.question!.voiceUrl, shouldStop: false);
       }

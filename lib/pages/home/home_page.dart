@@ -123,6 +123,16 @@ class HomePageState extends ConsumerState<HomePage> {
                   onPlayVoice: (play, url) {
                     backend.sendScreenFlow('press replay question');
                     ref.read(homeProvider.notifier).replayQuestion(url: url);
+                  }, onNextQuestion: () async {
+                    print('onNextQuestion ----------->>>>>');
+                    if (!homeState.readyForNextQuestion) return;
+                    ref.read(homeProvider.notifier).onNextQuestion().then((question) {
+                      if (question == null) return;
+                      backend.sendScreenFlow(
+                          'press next question - ID ${homeState.question!.id}');
+                    });
+                    await sleep(50);
+                    swiperController.move(0);
                   },
                 )),
           if (!homeState.loadingNextQuestion && type != QuestionTypes.scenario)
@@ -147,7 +157,7 @@ class HomePageState extends ConsumerState<HomePage> {
             bottom: 5,
             child: _ctrlBtns(),
           ),
-          Positioned(
+          if(type != QuestionTypes.scenario) Positioned(
             bottom: size.height * 0.18,
             right: 15,
             child: _step(),

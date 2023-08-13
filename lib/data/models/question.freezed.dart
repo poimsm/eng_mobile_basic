@@ -718,9 +718,7 @@ Scenario _$ScenarioFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$Scenario {
   String get title => throw _privateConstructorUsedError;
-  String get prompt => throw _privateConstructorUsedError;
-  List<ScenarioDetail> get details => throw _privateConstructorUsedError;
-  List<ScenarioOption> get options => throw _privateConstructorUsedError;
+  List<ScenarioPart> get parts => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -733,11 +731,7 @@ abstract class $ScenarioCopyWith<$Res> {
   factory $ScenarioCopyWith(Scenario value, $Res Function(Scenario) then) =
       _$ScenarioCopyWithImpl<$Res, Scenario>;
   @useResult
-  $Res call(
-      {String title,
-      String prompt,
-      List<ScenarioDetail> details,
-      List<ScenarioOption> options});
+  $Res call({String title, List<ScenarioPart> parts});
 }
 
 /// @nodoc
@@ -754,27 +748,17 @@ class _$ScenarioCopyWithImpl<$Res, $Val extends Scenario>
   @override
   $Res call({
     Object? title = null,
-    Object? prompt = null,
-    Object? details = null,
-    Object? options = null,
+    Object? parts = null,
   }) {
     return _then(_value.copyWith(
       title: null == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
               as String,
-      prompt: null == prompt
-          ? _value.prompt
-          : prompt // ignore: cast_nullable_to_non_nullable
-              as String,
-      details: null == details
-          ? _value.details
-          : details // ignore: cast_nullable_to_non_nullable
-              as List<ScenarioDetail>,
-      options: null == options
-          ? _value.options
-          : options // ignore: cast_nullable_to_non_nullable
-              as List<ScenarioOption>,
+      parts: null == parts
+          ? _value.parts
+          : parts // ignore: cast_nullable_to_non_nullable
+              as List<ScenarioPart>,
     ) as $Val);
   }
 }
@@ -786,11 +770,7 @@ abstract class _$$_ScenarioCopyWith<$Res> implements $ScenarioCopyWith<$Res> {
       __$$_ScenarioCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {String title,
-      String prompt,
-      List<ScenarioDetail> details,
-      List<ScenarioOption> options});
+  $Res call({String title, List<ScenarioPart> parts});
 }
 
 /// @nodoc
@@ -805,27 +785,17 @@ class __$$_ScenarioCopyWithImpl<$Res>
   @override
   $Res call({
     Object? title = null,
-    Object? prompt = null,
-    Object? details = null,
-    Object? options = null,
+    Object? parts = null,
   }) {
     return _then(_$_Scenario(
       title: null == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
               as String,
-      prompt: null == prompt
-          ? _value.prompt
-          : prompt // ignore: cast_nullable_to_non_nullable
-              as String,
-      details: null == details
-          ? _value._details
-          : details // ignore: cast_nullable_to_non_nullable
-              as List<ScenarioDetail>,
-      options: null == options
-          ? _value._options
-          : options // ignore: cast_nullable_to_non_nullable
-              as List<ScenarioOption>,
+      parts: null == parts
+          ? _value._parts
+          : parts // ignore: cast_nullable_to_non_nullable
+              as List<ScenarioPart>,
     ));
   }
 }
@@ -834,39 +804,25 @@ class __$$_ScenarioCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_Scenario implements _Scenario {
   const _$_Scenario(
-      {required this.title,
-      required this.prompt,
-      required final List<ScenarioDetail> details,
-      required final List<ScenarioOption> options})
-      : _details = details,
-        _options = options;
+      {required this.title, required final List<ScenarioPart> parts})
+      : _parts = parts;
 
   factory _$_Scenario.fromJson(Map<String, dynamic> json) =>
       _$$_ScenarioFromJson(json);
 
   @override
   final String title;
+  final List<ScenarioPart> _parts;
   @override
-  final String prompt;
-  final List<ScenarioDetail> _details;
-  @override
-  List<ScenarioDetail> get details {
-    if (_details is EqualUnmodifiableListView) return _details;
+  List<ScenarioPart> get parts {
+    if (_parts is EqualUnmodifiableListView) return _parts;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_details);
-  }
-
-  final List<ScenarioOption> _options;
-  @override
-  List<ScenarioOption> get options {
-    if (_options is EqualUnmodifiableListView) return _options;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_options);
+    return EqualUnmodifiableListView(_parts);
   }
 
   @override
   String toString() {
-    return 'Scenario(title: $title, prompt: $prompt, details: $details, options: $options)';
+    return 'Scenario(title: $title, parts: $parts)';
   }
 
   @override
@@ -875,19 +831,13 @@ class _$_Scenario implements _Scenario {
         (other.runtimeType == runtimeType &&
             other is _$_Scenario &&
             (identical(other.title, title) || other.title == title) &&
-            (identical(other.prompt, prompt) || other.prompt == prompt) &&
-            const DeepCollectionEquality().equals(other._details, _details) &&
-            const DeepCollectionEquality().equals(other._options, _options));
+            const DeepCollectionEquality().equals(other._parts, _parts));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
-      runtimeType,
-      title,
-      prompt,
-      const DeepCollectionEquality().hash(_details),
-      const DeepCollectionEquality().hash(_options));
+      runtimeType, title, const DeepCollectionEquality().hash(_parts));
 
   @JsonKey(ignore: true)
   @override
@@ -906,55 +856,61 @@ class _$_Scenario implements _Scenario {
 abstract class _Scenario implements Scenario {
   const factory _Scenario(
       {required final String title,
-      required final String prompt,
-      required final List<ScenarioDetail> details,
-      required final List<ScenarioOption> options}) = _$_Scenario;
+      required final List<ScenarioPart> parts}) = _$_Scenario;
 
   factory _Scenario.fromJson(Map<String, dynamic> json) = _$_Scenario.fromJson;
 
   @override
   String get title;
   @override
-  String get prompt;
-  @override
-  List<ScenarioDetail> get details;
-  @override
-  List<ScenarioOption> get options;
+  List<ScenarioPart> get parts;
   @override
   @JsonKey(ignore: true)
   _$$_ScenarioCopyWith<_$_Scenario> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
-ScenarioDetail _$ScenarioDetailFromJson(Map<String, dynamic> json) {
-  return _ScenarioDetail.fromJson(json);
+ScenarioPart _$ScenarioPartFromJson(Map<String, dynamic> json) {
+  return _ScenarioPart.fromJson(json);
 }
 
 /// @nodoc
-mixin _$ScenarioDetail {
-  @JsonKey(name: 'voice_url')
-  String get voiceUrl => throw _privateConstructorUsedError;
+mixin _$ScenarioPart {
   String get text => throw _privateConstructorUsedError;
+  String get type => throw _privateConstructorUsedError;
+  @JsonKey(name: 'voice_url')
+  String? get voiceUrl => throw _privateConstructorUsedError;
+  @JsonKey(name: 'image_url')
+  String? get imageUrl => throw _privateConstructorUsedError;
+  @JsonKey(name: 'show_controls')
+  bool get showControls => throw _privateConstructorUsedError;
+  List<ScenarioPartOption>? get options => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $ScenarioDetailCopyWith<ScenarioDetail> get copyWith =>
+  $ScenarioPartCopyWith<ScenarioPart> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $ScenarioDetailCopyWith<$Res> {
-  factory $ScenarioDetailCopyWith(
-          ScenarioDetail value, $Res Function(ScenarioDetail) then) =
-      _$ScenarioDetailCopyWithImpl<$Res, ScenarioDetail>;
+abstract class $ScenarioPartCopyWith<$Res> {
+  factory $ScenarioPartCopyWith(
+          ScenarioPart value, $Res Function(ScenarioPart) then) =
+      _$ScenarioPartCopyWithImpl<$Res, ScenarioPart>;
   @useResult
-  $Res call({@JsonKey(name: 'voice_url') String voiceUrl, String text});
+  $Res call(
+      {String text,
+      String type,
+      @JsonKey(name: 'voice_url') String? voiceUrl,
+      @JsonKey(name: 'image_url') String? imageUrl,
+      @JsonKey(name: 'show_controls') bool showControls,
+      List<ScenarioPartOption>? options});
 }
 
 /// @nodoc
-class _$ScenarioDetailCopyWithImpl<$Res, $Val extends ScenarioDetail>
-    implements $ScenarioDetailCopyWith<$Res> {
-  _$ScenarioDetailCopyWithImpl(this._value, this._then);
+class _$ScenarioPartCopyWithImpl<$Res, $Val extends ScenarioPart>
+    implements $ScenarioPartCopyWith<$Res> {
+  _$ScenarioPartCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -964,156 +920,246 @@ class _$ScenarioDetailCopyWithImpl<$Res, $Val extends ScenarioDetail>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? voiceUrl = null,
     Object? text = null,
+    Object? type = null,
+    Object? voiceUrl = freezed,
+    Object? imageUrl = freezed,
+    Object? showControls = null,
+    Object? options = freezed,
   }) {
     return _then(_value.copyWith(
-      voiceUrl: null == voiceUrl
-          ? _value.voiceUrl
-          : voiceUrl // ignore: cast_nullable_to_non_nullable
-              as String,
       text: null == text
           ? _value.text
           : text // ignore: cast_nullable_to_non_nullable
               as String,
+      type: null == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as String,
+      voiceUrl: freezed == voiceUrl
+          ? _value.voiceUrl
+          : voiceUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
+      imageUrl: freezed == imageUrl
+          ? _value.imageUrl
+          : imageUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
+      showControls: null == showControls
+          ? _value.showControls
+          : showControls // ignore: cast_nullable_to_non_nullable
+              as bool,
+      options: freezed == options
+          ? _value.options
+          : options // ignore: cast_nullable_to_non_nullable
+              as List<ScenarioPartOption>?,
     ) as $Val);
   }
 }
 
 /// @nodoc
-abstract class _$$_ScenarioDetailCopyWith<$Res>
-    implements $ScenarioDetailCopyWith<$Res> {
-  factory _$$_ScenarioDetailCopyWith(
-          _$_ScenarioDetail value, $Res Function(_$_ScenarioDetail) then) =
-      __$$_ScenarioDetailCopyWithImpl<$Res>;
+abstract class _$$_ScenarioPartCopyWith<$Res>
+    implements $ScenarioPartCopyWith<$Res> {
+  factory _$$_ScenarioPartCopyWith(
+          _$_ScenarioPart value, $Res Function(_$_ScenarioPart) then) =
+      __$$_ScenarioPartCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({@JsonKey(name: 'voice_url') String voiceUrl, String text});
+  $Res call(
+      {String text,
+      String type,
+      @JsonKey(name: 'voice_url') String? voiceUrl,
+      @JsonKey(name: 'image_url') String? imageUrl,
+      @JsonKey(name: 'show_controls') bool showControls,
+      List<ScenarioPartOption>? options});
 }
 
 /// @nodoc
-class __$$_ScenarioDetailCopyWithImpl<$Res>
-    extends _$ScenarioDetailCopyWithImpl<$Res, _$_ScenarioDetail>
-    implements _$$_ScenarioDetailCopyWith<$Res> {
-  __$$_ScenarioDetailCopyWithImpl(
-      _$_ScenarioDetail _value, $Res Function(_$_ScenarioDetail) _then)
+class __$$_ScenarioPartCopyWithImpl<$Res>
+    extends _$ScenarioPartCopyWithImpl<$Res, _$_ScenarioPart>
+    implements _$$_ScenarioPartCopyWith<$Res> {
+  __$$_ScenarioPartCopyWithImpl(
+      _$_ScenarioPart _value, $Res Function(_$_ScenarioPart) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? voiceUrl = null,
     Object? text = null,
+    Object? type = null,
+    Object? voiceUrl = freezed,
+    Object? imageUrl = freezed,
+    Object? showControls = null,
+    Object? options = freezed,
   }) {
-    return _then(_$_ScenarioDetail(
-      voiceUrl: null == voiceUrl
-          ? _value.voiceUrl
-          : voiceUrl // ignore: cast_nullable_to_non_nullable
-              as String,
+    return _then(_$_ScenarioPart(
       text: null == text
           ? _value.text
           : text // ignore: cast_nullable_to_non_nullable
               as String,
+      type: null == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as String,
+      voiceUrl: freezed == voiceUrl
+          ? _value.voiceUrl
+          : voiceUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
+      imageUrl: freezed == imageUrl
+          ? _value.imageUrl
+          : imageUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
+      showControls: null == showControls
+          ? _value.showControls
+          : showControls // ignore: cast_nullable_to_non_nullable
+              as bool,
+      options: freezed == options
+          ? _value._options
+          : options // ignore: cast_nullable_to_non_nullable
+              as List<ScenarioPartOption>?,
     ));
   }
 }
 
 /// @nodoc
 @JsonSerializable()
-class _$_ScenarioDetail implements _ScenarioDetail {
-  const _$_ScenarioDetail(
-      {@JsonKey(name: 'voice_url') required this.voiceUrl, required this.text});
+class _$_ScenarioPart implements _ScenarioPart {
+  const _$_ScenarioPart(
+      {required this.text,
+      required this.type,
+      @JsonKey(name: 'voice_url') this.voiceUrl,
+      @JsonKey(name: 'image_url') this.imageUrl,
+      @JsonKey(name: 'show_controls') required this.showControls,
+      final List<ScenarioPartOption>? options})
+      : _options = options;
 
-  factory _$_ScenarioDetail.fromJson(Map<String, dynamic> json) =>
-      _$$_ScenarioDetailFromJson(json);
+  factory _$_ScenarioPart.fromJson(Map<String, dynamic> json) =>
+      _$$_ScenarioPartFromJson(json);
 
-  @override
-  @JsonKey(name: 'voice_url')
-  final String voiceUrl;
   @override
   final String text;
+  @override
+  final String type;
+  @override
+  @JsonKey(name: 'voice_url')
+  final String? voiceUrl;
+  @override
+  @JsonKey(name: 'image_url')
+  final String? imageUrl;
+  @override
+  @JsonKey(name: 'show_controls')
+  final bool showControls;
+  final List<ScenarioPartOption>? _options;
+  @override
+  List<ScenarioPartOption>? get options {
+    final value = _options;
+    if (value == null) return null;
+    if (_options is EqualUnmodifiableListView) return _options;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
 
   @override
   String toString() {
-    return 'ScenarioDetail(voiceUrl: $voiceUrl, text: $text)';
+    return 'ScenarioPart(text: $text, type: $type, voiceUrl: $voiceUrl, imageUrl: $imageUrl, showControls: $showControls, options: $options)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_ScenarioDetail &&
+            other is _$_ScenarioPart &&
+            (identical(other.text, text) || other.text == text) &&
+            (identical(other.type, type) || other.type == type) &&
             (identical(other.voiceUrl, voiceUrl) ||
                 other.voiceUrl == voiceUrl) &&
-            (identical(other.text, text) || other.text == text));
+            (identical(other.imageUrl, imageUrl) ||
+                other.imageUrl == imageUrl) &&
+            (identical(other.showControls, showControls) ||
+                other.showControls == showControls) &&
+            const DeepCollectionEquality().equals(other._options, _options));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, voiceUrl, text);
+  int get hashCode => Object.hash(runtimeType, text, type, voiceUrl, imageUrl,
+      showControls, const DeepCollectionEquality().hash(_options));
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_ScenarioDetailCopyWith<_$_ScenarioDetail> get copyWith =>
-      __$$_ScenarioDetailCopyWithImpl<_$_ScenarioDetail>(this, _$identity);
+  _$$_ScenarioPartCopyWith<_$_ScenarioPart> get copyWith =>
+      __$$_ScenarioPartCopyWithImpl<_$_ScenarioPart>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_ScenarioDetailToJson(
+    return _$$_ScenarioPartToJson(
       this,
     );
   }
 }
 
-abstract class _ScenarioDetail implements ScenarioDetail {
-  const factory _ScenarioDetail(
-      {@JsonKey(name: 'voice_url') required final String voiceUrl,
-      required final String text}) = _$_ScenarioDetail;
+abstract class _ScenarioPart implements ScenarioPart {
+  const factory _ScenarioPart(
+      {required final String text,
+      required final String type,
+      @JsonKey(name: 'voice_url') final String? voiceUrl,
+      @JsonKey(name: 'image_url') final String? imageUrl,
+      @JsonKey(name: 'show_controls') required final bool showControls,
+      final List<ScenarioPartOption>? options}) = _$_ScenarioPart;
 
-  factory _ScenarioDetail.fromJson(Map<String, dynamic> json) =
-      _$_ScenarioDetail.fromJson;
+  factory _ScenarioPart.fromJson(Map<String, dynamic> json) =
+      _$_ScenarioPart.fromJson;
 
-  @override
-  @JsonKey(name: 'voice_url')
-  String get voiceUrl;
   @override
   String get text;
   @override
+  String get type;
+  @override
+  @JsonKey(name: 'voice_url')
+  String? get voiceUrl;
+  @override
+  @JsonKey(name: 'image_url')
+  String? get imageUrl;
+  @override
+  @JsonKey(name: 'show_controls')
+  bool get showControls;
+  @override
+  List<ScenarioPartOption>? get options;
+  @override
   @JsonKey(ignore: true)
-  _$$_ScenarioDetailCopyWith<_$_ScenarioDetail> get copyWith =>
+  _$$_ScenarioPartCopyWith<_$_ScenarioPart> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
-ScenarioOption _$ScenarioOptionFromJson(Map<String, dynamic> json) {
-  return _ScenarioOption.fromJson(json);
+ScenarioPartOption _$ScenarioPartOptionFromJson(Map<String, dynamic> json) {
+  return _ScenarioPartOption.fromJson(json);
 }
 
 /// @nodoc
-mixin _$ScenarioOption {
+mixin _$ScenarioPartOption {
   @JsonKey(name: 'image_url')
   String get imageUrl => throw _privateConstructorUsedError;
   String get text => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $ScenarioOptionCopyWith<ScenarioOption> get copyWith =>
+  $ScenarioPartOptionCopyWith<ScenarioPartOption> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $ScenarioOptionCopyWith<$Res> {
-  factory $ScenarioOptionCopyWith(
-          ScenarioOption value, $Res Function(ScenarioOption) then) =
-      _$ScenarioOptionCopyWithImpl<$Res, ScenarioOption>;
+abstract class $ScenarioPartOptionCopyWith<$Res> {
+  factory $ScenarioPartOptionCopyWith(
+          ScenarioPartOption value, $Res Function(ScenarioPartOption) then) =
+      _$ScenarioPartOptionCopyWithImpl<$Res, ScenarioPartOption>;
   @useResult
   $Res call({@JsonKey(name: 'image_url') String imageUrl, String text});
 }
 
 /// @nodoc
-class _$ScenarioOptionCopyWithImpl<$Res, $Val extends ScenarioOption>
-    implements $ScenarioOptionCopyWith<$Res> {
-  _$ScenarioOptionCopyWithImpl(this._value, this._then);
+class _$ScenarioPartOptionCopyWithImpl<$Res, $Val extends ScenarioPartOption>
+    implements $ScenarioPartOptionCopyWith<$Res> {
+  _$ScenarioPartOptionCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -1140,22 +1186,22 @@ class _$ScenarioOptionCopyWithImpl<$Res, $Val extends ScenarioOption>
 }
 
 /// @nodoc
-abstract class _$$_ScenarioOptionCopyWith<$Res>
-    implements $ScenarioOptionCopyWith<$Res> {
-  factory _$$_ScenarioOptionCopyWith(
-          _$_ScenarioOption value, $Res Function(_$_ScenarioOption) then) =
-      __$$_ScenarioOptionCopyWithImpl<$Res>;
+abstract class _$$_ScenarioPartOptionCopyWith<$Res>
+    implements $ScenarioPartOptionCopyWith<$Res> {
+  factory _$$_ScenarioPartOptionCopyWith(_$_ScenarioPartOption value,
+          $Res Function(_$_ScenarioPartOption) then) =
+      __$$_ScenarioPartOptionCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({@JsonKey(name: 'image_url') String imageUrl, String text});
 }
 
 /// @nodoc
-class __$$_ScenarioOptionCopyWithImpl<$Res>
-    extends _$ScenarioOptionCopyWithImpl<$Res, _$_ScenarioOption>
-    implements _$$_ScenarioOptionCopyWith<$Res> {
-  __$$_ScenarioOptionCopyWithImpl(
-      _$_ScenarioOption _value, $Res Function(_$_ScenarioOption) _then)
+class __$$_ScenarioPartOptionCopyWithImpl<$Res>
+    extends _$ScenarioPartOptionCopyWithImpl<$Res, _$_ScenarioPartOption>
+    implements _$$_ScenarioPartOptionCopyWith<$Res> {
+  __$$_ScenarioPartOptionCopyWithImpl(
+      _$_ScenarioPartOption _value, $Res Function(_$_ScenarioPartOption) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -1164,7 +1210,7 @@ class __$$_ScenarioOptionCopyWithImpl<$Res>
     Object? imageUrl = null,
     Object? text = null,
   }) {
-    return _then(_$_ScenarioOption(
+    return _then(_$_ScenarioPartOption(
       imageUrl: null == imageUrl
           ? _value.imageUrl
           : imageUrl // ignore: cast_nullable_to_non_nullable
@@ -1179,12 +1225,12 @@ class __$$_ScenarioOptionCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_ScenarioOption implements _ScenarioOption {
-  const _$_ScenarioOption(
+class _$_ScenarioPartOption implements _ScenarioPartOption {
+  const _$_ScenarioPartOption(
       {@JsonKey(name: 'image_url') required this.imageUrl, required this.text});
 
-  factory _$_ScenarioOption.fromJson(Map<String, dynamic> json) =>
-      _$$_ScenarioOptionFromJson(json);
+  factory _$_ScenarioPartOption.fromJson(Map<String, dynamic> json) =>
+      _$$_ScenarioPartOptionFromJson(json);
 
   @override
   @JsonKey(name: 'image_url')
@@ -1194,14 +1240,14 @@ class _$_ScenarioOption implements _ScenarioOption {
 
   @override
   String toString() {
-    return 'ScenarioOption(imageUrl: $imageUrl, text: $text)';
+    return 'ScenarioPartOption(imageUrl: $imageUrl, text: $text)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_ScenarioOption &&
+            other is _$_ScenarioPartOption &&
             (identical(other.imageUrl, imageUrl) ||
                 other.imageUrl == imageUrl) &&
             (identical(other.text, text) || other.text == text));
@@ -1214,24 +1260,25 @@ class _$_ScenarioOption implements _ScenarioOption {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_ScenarioOptionCopyWith<_$_ScenarioOption> get copyWith =>
-      __$$_ScenarioOptionCopyWithImpl<_$_ScenarioOption>(this, _$identity);
+  _$$_ScenarioPartOptionCopyWith<_$_ScenarioPartOption> get copyWith =>
+      __$$_ScenarioPartOptionCopyWithImpl<_$_ScenarioPartOption>(
+          this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_ScenarioOptionToJson(
+    return _$$_ScenarioPartOptionToJson(
       this,
     );
   }
 }
 
-abstract class _ScenarioOption implements ScenarioOption {
-  const factory _ScenarioOption(
+abstract class _ScenarioPartOption implements ScenarioPartOption {
+  const factory _ScenarioPartOption(
       {@JsonKey(name: 'image_url') required final String imageUrl,
-      required final String text}) = _$_ScenarioOption;
+      required final String text}) = _$_ScenarioPartOption;
 
-  factory _ScenarioOption.fromJson(Map<String, dynamic> json) =
-      _$_ScenarioOption.fromJson;
+  factory _ScenarioPartOption.fromJson(Map<String, dynamic> json) =
+      _$_ScenarioPartOption.fromJson;
 
   @override
   @JsonKey(name: 'image_url')
@@ -1240,7 +1287,7 @@ abstract class _ScenarioOption implements ScenarioOption {
   String get text;
   @override
   @JsonKey(ignore: true)
-  _$$_ScenarioOptionCopyWith<_$_ScenarioOption> get copyWith =>
+  _$$_ScenarioPartOptionCopyWith<_$_ScenarioPartOption> get copyWith =>
       throw _privateConstructorUsedError;
 }
 

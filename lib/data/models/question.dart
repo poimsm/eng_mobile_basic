@@ -50,9 +50,7 @@ class Word with _$Word {
 class Scenario with _$Scenario {
   const factory Scenario({
     required String title,
-    required String prompt,
-    required List<ScenarioDetail> details,
-    required List<ScenarioOption> options,
+    required List<ScenarioPart> parts,
   }) = _Scenario;
 
   factory Scenario.fromJson(Map<String, Object?> json) =>
@@ -60,26 +58,29 @@ class Scenario with _$Scenario {
 }
 
 @freezed
-class ScenarioDetail with _$ScenarioDetail {
-  const factory ScenarioDetail({
-    @JsonKey(name: 'voice_url') required String voiceUrl,
+class ScenarioPart with _$ScenarioPart {
+  const factory ScenarioPart({
     required String text,
-  }) = _ScenarioDetail;
+    required String type,
+    @JsonKey(name: 'voice_url') String? voiceUrl,
+    @JsonKey(name: 'image_url') String? imageUrl,
+    @JsonKey(name: 'show_controls') required bool showControls,
+    List<ScenarioPartOption>? options,
+  }) = _ScenarioPart;
 
-  factory ScenarioDetail.fromJson(Map<String, Object?> json) =>
-      _$ScenarioDetailFromJson(json);
+  factory ScenarioPart.fromJson(Map<String, Object?> json) =>
+      _$ScenarioPartFromJson(json);
 }
 
 @freezed
-class ScenarioOption with _$ScenarioOption {
-  const factory ScenarioOption({
+class ScenarioPartOption with _$ScenarioPartOption {
+  const factory ScenarioPartOption({
     @JsonKey(name: 'image_url') required String imageUrl,
-
     required String text,
-  }) = _ScenarioOption;
+  }) = _ScenarioPartOption;
 
-  factory ScenarioOption.fromJson(Map<String, Object?> json) =>
-      _$ScenarioOptionFromJson(json);
+  factory ScenarioPartOption.fromJson(Map<String, Object?> json) =>
+      _$ScenarioPartOptionFromJson(json);
 }
 
 @freezed

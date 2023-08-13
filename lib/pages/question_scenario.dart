@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:eng_mobile_app/data/models/question.dart';
+import 'package:eng_mobile_app/pages/control_box.dart';
 import 'package:eng_mobile_app/utils/helpers.dart';
 import 'package:flutter/material.dart';
 
@@ -10,11 +11,13 @@ class QuestionScenario extends StatefulWidget {
     required this.onPlayVoice,
     required this.question,
     required this.onShowControls,
+    required this.onNextQuestion,
   });
 
   final Function(bool, String) onPlayVoice;
   final Function(bool) onShowControls;
   final Question question;
+  final VoidCallback onNextQuestion;
 
   @override
   State<QuestionScenario> createState() => _QuestionScenarioState();
@@ -24,13 +27,15 @@ class _QuestionScenarioState extends State<QuestionScenario> {
   Size size = Size.zero;
   final swiperControllerScenario = SwiperController();
   bool showQuestionReplayBtn = true;
-  int detailIndex = 0;
+  int index = 0;
+  late ScenarioPart part;
+  String promptImgUrl = '';
 
   @override
   void initState() {
     super.initState();
-    print('🚨🚨🚨🚨🚨🚨🚨🚨🚨');
-    // widget.onPlayVoice(true, widget.question.scenario!.details[0]);
+    part = widget.question.scenario!.parts[0];
+    promptImgUrl = part.imageUrl!;
   }
 
   @override
@@ -38,69 +43,51 @@ class _QuestionScenarioState extends State<QuestionScenario> {
     size = MediaQuery.of(context).size;
     double h = size.height * 0.9;
     return SizedBox(
-      width: size.width,
-      height: h,
-      child: Swiper(
-        controller: swiperControllerScenario,
-        itemBuilder: (BuildContext context, int index) {
-          return Container(
-              color: Color(0xff232629),
-              child: index == 0
-                  ? _scenarioQuestion(h, widget.question)
-                  : _scenarioOptions(h, widget.question.scenario!));
-        },
-        itemCount: 2,
-        loop: false,
-        customLayoutOption: CustomLayoutOption(
-          startIndex: 0,
-        ),
-        autoplay: false,
-        layout: SwiperLayout.DEFAULT,
-        onIndexChanged: (idx) {
-          widget.onShowControls(idx == 1);
-          setState(() {});
-        },
-        onTap: (idx) {
-          print('onTap');
-        },
-      ),
-    );
+        width: size.width,
+        height: size.height * 0.95,
+        child: Stack(
+          children: [
+            Container(
+                color: Color(0xff232629),
+                child: part.type == 'prompt'
+                    ? _scenarioPrompt(h, widget.question)
+                    : _scenarioChoose(
+                        h, widget.question.scenario!.parts[index])),
+            if (part.showControls)
+              Positioned(
+                  bottom: 0,
+                  left: 0,
+                  child: ControlBox(
+                    onMicPress: (val) => {},
+                    onNextQuestion: () => widget.onNextQuestion(),
+                    onBack: () {
+                      index = 0;
+                      part = widget.question.scenario!.parts[index];
+                      widget.onPlayVoice(true, part.voiceUrl!);
+                      promptImgUrl = part.imageUrl!;
+                      setState(() {});
+                    },
+                  ))
+          ],
+        ));
   }
 
-  _scenarioQuestion(double height, Question question) {
+  _scenarioPrompt(double height, Question question) {
     return SizedBox(
       height: height,
       child: Stack(
         children: [
           CachedNetworkImage(
-              imageUrl: question.imageUrl,
+              imageUrl: promptImgUrl,
               width: size.width,
               height: height,
               fit: BoxFit.cover),
           Positioned(
               top: size.height * 0.15,
               left: 0,
-              child: _questionText(question.scenario!.details)),
+              child: _questionText(question.scenario!.parts[index])),
           Positioned(
-              top: 0,
-              left: 0,
-              child: _titleScenario(question.scenario!.title)
-          ),
-          // Positioned(
-          //     top: size.height * 0.48,
-          //     right: 15,
-          //     child: _chevronBtn()
-          // ),
-          // Positioned(
-          //     top: size.height * 0.55,
-          //     left: 0,
-          //     child: SizedBox(
-          //       width: size.width,
-          //       child: Center(
-          //         child: _chevronBtn(),
-          //       ),
-          //     )
-          // ),
+              top: 0, left: 0, child: _titleScenario(question.scenario!.title)),
           Positioned(
               top: size.height * 0.78,
               left: 0,
@@ -119,11 +106,7 @@ class _QuestionScenarioState extends State<QuestionScenario> {
     return Container(
       width: size.width,
       padding: EdgeInsets.only(top: 35, bottom: 15, left: 20, right: 20),
-      // color: Color(0xff232629),
-      // color: Color(0xff22222),
-      // color: Colors.black.withOpacity(0.3),
       decoration: BoxDecoration(
-        // borderRadius: BorderRadius.circular(2),
         gradient: LinearGradient(
           begin: Alignment.bottomCenter,
           end: Alignment.topCenter,
@@ -131,26 +114,38 @@ class _QuestionScenarioState extends State<QuestionScenario> {
         ),
       ),
       child: Center(
-        child: Text(title, style: TextStyle(
-          fontSize: 22,
-          color: Colors.white,
-          fontWeight: FontWeight.bold
-        ),),
+        child: Text(
+          title,
+          style: TextStyle(
+              fontSize: 22, color: Colors.white, fontWeight: FontWeight.bold),
+        ),
       ),
     );
   }
 
   _continueBtn() {
+    if (widget.question.scenario!.parts[index].showControls) {
+      return Container();
+    }
     return InkWell(
       onTap: () {
         final scenario = widget.question.scenario!;
-        if(detailIndex == scenario.details.length - 1 ) {
+        if (index == scenario.parts.length - 1) {
           swiperControllerScenario.move(1);
         } else {
-          detailIndex++;
-          widget.onPlayVoice(true, scenario.details[detailIndex].voiceUrl);
+          index++;
+          part = scenario.parts[index];
+
+          if (part.voiceUrl != null) {
+            widget.onPlayVoice(true, part.voiceUrl!);
+          }
+
+          if (part.imageUrl != null) {
+            promptImgUrl = part.imageUrl!;
+          }
+
           setState(() {});
-        }        
+        }
       },
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
@@ -167,25 +162,7 @@ class _QuestionScenarioState extends State<QuestionScenario> {
     );
   }
 
-  _chevronBtn() {
-    return InkWell(
-      onTap: () {
-        swiperControllerScenario.move(1);
-      },
-      child: Container(
-        padding: EdgeInsets.all(10),
-        decoration: BoxDecoration(
-            shape: BoxShape.circle, color: Colors.white.withOpacity(0.8)),
-        child: Icon(
-          Icons.chevron_right,
-          color: Colors.black87,
-          size: 30,
-        ),
-      ),
-    );
-  }
-
-  _questionText(List<ScenarioDetail> details) {
+  _questionText(ScenarioPart part) {
     TextStyle textStyle = TextStyle(
         color: Colors.white,
         fontWeight: FontWeight.normal,
@@ -193,7 +170,7 @@ class _QuestionScenarioState extends State<QuestionScenario> {
         overflow: TextOverflow.clip);
 
     final Size sizeMe = (TextPainter(
-            text: TextSpan(text: details[detailIndex].text, style: textStyle),
+            text: TextSpan(text: part.text, style: textStyle),
             maxLines: 1,
             textScaleFactor: MediaQuery.of(context).textScaleFactor,
             textDirection: TextDirection.ltr)
@@ -210,7 +187,7 @@ class _QuestionScenarioState extends State<QuestionScenario> {
             margin: EdgeInsets.only(bottom: multipleLines ? 20 : 40),
             width: size.width,
             child: Center(
-                child: Text(details[detailIndex].text,
+                child: Text(part.text,
                     textAlign: TextAlign.center, style: textStyle))),
         if (showQuestionReplayBtn)
           Positioned(
@@ -218,7 +195,7 @@ class _QuestionScenarioState extends State<QuestionScenario> {
             bottom: 0,
             child: InkWell(
               onTap: () async {
-                widget.onPlayVoice(true, details[detailIndex].voiceUrl);
+                widget.onPlayVoice(true, part.voiceUrl!);
                 showQuestionReplayBtn = false;
                 setState(() {});
                 await sleep(300);
@@ -238,7 +215,7 @@ class _QuestionScenarioState extends State<QuestionScenario> {
     );
   }
 
-  _scenarioOptions(double height, Scenario scenario) {
+  _scenarioChoose(double height, ScenarioPart part) {
     return SizedBox(
       height: height,
       child: Stack(
@@ -253,46 +230,25 @@ class _QuestionScenarioState extends State<QuestionScenario> {
                 color: Colors.black,
                 alignment: Alignment.center,
                 child: Text(
-                  scenario.prompt,
+                  part.text,
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontSize: 24,
-                    color: Color(0xffBFBFBF),
-                    fontWeight: FontWeight.w500
-                  ),
+                      fontSize: 24,
+                      color: Color(0xffBFBFBF),
+                      fontWeight: FontWeight.w500),
                 ),
               ),
-              _itemScenario(scenario.options[0]),
-              _itemScenario(scenario.options[1]),
-              _itemScenario(scenario.options[2]),
+              _itemScenario(part.options![0]),
+              _itemScenario(part.options![1]),
+              _itemScenario(part.options![2]),
             ],
           ),
-          if (false)
-            Positioned(
-                top: size.height * 0.48,
-                left: 15,
-                child: InkWell(
-                  onTap: () {
-                    swiperControllerScenario.move(0);
-                  },
-                  child: Container(
-                    padding: EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.white.withOpacity(0.8)),
-                    child: Icon(
-                      Icons.chevron_left,
-                      color: Colors.black87,
-                      size: 30,
-                    ),
-                  ),
-                ))
         ],
       ),
     );
   }
 
-  _itemScenario(ScenarioOption option) {
+  _itemScenario(ScenarioPartOption option) {
     return SizedBox(
       height: size.height * 0.235,
       width: size.width,
@@ -300,11 +256,6 @@ class _QuestionScenarioState extends State<QuestionScenario> {
         children: [
           CachedNetworkImage(
               imageUrl: option.imageUrl,
-              // placeholder: (context, url) => Center(
-              //     child: SizedBox(
-              //       height: 40,
-              //       width: 40,
-              //       child: CircularProgressIndicator(color: Color(0xffBFBFBF)))),
               errorWidget: (context, url, error) => Icon(Icons.error),
               width: size.width,
               height: size.height * 0.235,
@@ -322,8 +273,6 @@ class _QuestionScenarioState extends State<QuestionScenario> {
                 style: TextStyle(
                   fontSize: 20,
                   color: Colors.white.withOpacity(0.7),
-                  // fontWeight: FontWeight.bold
-                  // color: Color(0xffBFBFBF)
                 ),
               ),
             ),
