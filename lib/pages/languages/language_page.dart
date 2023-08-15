@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:eng_mobile_app/config.dart';
 import 'package:eng_mobile_app/routes/routes.dart';
 import 'package:eng_mobile_app/services/global/global_service.dart';
 import 'package:flutter/material.dart';
@@ -35,14 +36,37 @@ class _LanguagePageState extends State<LanguagePage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _title(),
+                  Text(
+                    'I speak',
+                    style: TextStyle(
+                        color: Color(0xff333F50),
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold),
+                  ),
                   _btn(),
                 ],
               ),
               SizedBox(
-                height: size.height * 0.06,
+                height: 15,
               ),
-              _languges(),
+              _motherLanguage(),
+              SizedBox(
+                height: size.height*0.07,
+              ),
+              SizedBox(
+                width: double.infinity,
+                child: Text(
+                  'I wanto to learn',
+                  style: TextStyle(
+                      color: Color(0xff333F50),
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold),
+                ),
+              ),
+              SizedBox(
+                height: 5,
+              ),
+              _wantToLearn(),
             ],
           ),
         ),
@@ -50,31 +74,68 @@ class _LanguagePageState extends State<LanguagePage> {
     );
   }
 
-  _title() {
-    return SizedBox(
-      width: 200,
-      child: Text(
-        'Choose mother language',
-        style: TextStyle(
-            fontSize: 28,
-            fontWeight: FontWeight.bold,
-            color: Color(0xff333F50)),
+  _wantToLearn() {
+    return Container(
+      padding: EdgeInsets.only(top: 25, bottom: 25, left: 30, right: 30),
+      decoration: BoxDecoration(
+          color: Colors.white, borderRadius: BorderRadius.circular(15)),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            children: [
+              CachedNetworkImage(
+                imageUrl: '${Config.BASE_URL}/media/flags/english_flag.png',
+                width: 40,
+                errorWidget: (context, url, error) => Icon(Icons.error),
+              ),
+              SizedBox(
+                width: 20,
+              ),
+              Text(
+                'English',
+                style: TextStyle(
+                    color: Color(0xff333F50),
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
+          Icon(
+            Icons.check_box,
+            size: 35,
+            color: Color(0xff64E5D9),
+          )
+        ],
       ),
     );
   }
 
-  _languges() {
-    return Column(
-      children: List.generate(
-        backend.languages.length,
-        (i) => InkWell(
-            onTap: () async {
-              final prefs = await SharedPreferences.getInstance();
-              await prefs.setString('lang', backend.languages[i]['lang']);
-              langSelected = backend.languages[i]['lang'];
-              setState(() {});
-            },
-            child: _langItem(backend.languages[i], langSelected)),
+  _motherLanguage() {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(15),
+      child: Container(
+        color: Colors.white,
+        child: Column(
+          children: List.generate(
+            backend.languages.length,
+            (i) => InkWell(
+                onTap: () async {
+                  final prefs = await SharedPreferences.getInstance();
+                  await prefs.setString('lang', backend.languages[i]['lang']);
+                  langSelected = backend.languages[i]['lang'];
+                  setState(() {});
+                },
+                child: Column(
+                  children: [
+                    _langItem(backend.languages[i], langSelected),
+                    Divider(
+                      height: 0,
+                    )
+                  ],
+                )),
+          ),
+        ),
       ),
     );
   }
@@ -82,37 +143,46 @@ class _LanguagePageState extends State<LanguagePage> {
   _langItem(lang, String langSelected) {
     if (langSelected == lang['lang']) {
       return Container(
-        padding: EdgeInsets.symmetric(vertical: 30, horizontal: 30),
-        margin: EdgeInsets.symmetric(vertical: 6),
-        decoration: BoxDecoration(
-            color: Color(0xff64E5D9), borderRadius: BorderRadius.circular(15)),
+        height: 90,
+        padding: EdgeInsets.symmetric(horizontal: 30),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            CachedNetworkImage(
-              imageUrl: lang['flag'],
-              width: 40,
-              errorWidget: (context, url, error) => Icon(Icons.error),
+            Row(
+              children: [
+                CachedNetworkImage(
+                  imageUrl: lang['flag'],
+                  width: 40,
+                  errorWidget: (context, url, error) => Icon(Icons.error),
+                ),
+                SizedBox(
+                  width: 30,
+                ),
+                Text(
+                  lang['label'],
+                  style: TextStyle(
+                      fontSize: 19,
+                      color: Color(0xff333F50),
+                      fontWeight: FontWeight.bold),
+                ),
+              ],
             ),
-            SizedBox(
-              width: 30,
-            ),
-            Text(
-              lang['label'],
-              style: TextStyle(
-                  fontSize: 19,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold),
-            ),
+            Icon(
+              Icons.check_box,
+              size: 35,
+              color: Color(0xff64E5D9),
+            )
           ],
         ),
       );
     }
 
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 30, horizontal: 30),
-      margin: EdgeInsets.symmetric(vertical: 6),
+      height: 90,
+      padding: EdgeInsets.symmetric(horizontal: 30),
+      // margin: EdgeInsets.symmetric(vertical: 6),
       decoration: BoxDecoration(
-          color: Colors.white, borderRadius: BorderRadius.circular(15)),
+          color: Colors.white, borderRadius: BorderRadius.circular(0)),
       child: Row(
         children: [
           CachedNetworkImage(
@@ -141,7 +211,7 @@ class _LanguagePageState extends State<LanguagePage> {
       onTap: () {
         backend.setLanguage(langSelected);
         backend.sendScreenFlow('selected lang: $langSelected');
-        Navigator.pushNamed(context, Routes.INSTRUCTIONS);
+        Navigator.pushNamed(context, Routes.HOME);
         // Navigator.pushNamedAndRemoveUntil(
         //     context, Routes.HOME, (route) => false);
       },

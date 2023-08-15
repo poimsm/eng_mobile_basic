@@ -1,5 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:eng_mobile_app/pages/how_to_play_screen.dart';
 import 'package:eng_mobile_app/pages/language_screen.dart';
 import 'package:eng_mobile_app/services/global/global_service.dart';
 import 'package:flutter/material.dart';
@@ -64,12 +63,11 @@ class _RoundScreenState extends State<RoundScreen> {
   // String firstTimeMsg =
   //     "This app is all about asking you questions and letting you decide how to answer them! You can talk as much or as little as you want, it's totally up to you! It's like having a cool conversation right at home. Let's practice talking together and have a blast! Yay!";
 
-  // String firstTimeMsg = "Yay, you're all set, let's have fun with some questions! Let's go, let's go, let's go! Wheee!";
-  String firstTimeMsg =
-      "Greetings! Ready to chat and let your imagination run wild? Let's go!";
-
+  // String firstTimeMsg = "Yay, you're all set, let's have fun with some questions! Let's go, let's go, let's go! Wheee!"; 
+  String firstTimeMsg = "You're here in the coolest app ever, where you can talk and talk and use your imagination!"; 
+  
   String welcomeMsg =
-      "Greetings! Ready to chat and let your imagination run wild? Let's go!";
+      "You're here in the coolest app ever, where you can talk and talk and use your imagination!";
   Map roundMsg = {};
 
   @override
@@ -89,10 +87,10 @@ class _RoundScreenState extends State<RoundScreen> {
       padding:
           EdgeInsets.symmetric(horizontal: size.width * 0.09, vertical: 20),
       child: Column(
-        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           SizedBox(
-            height: size.height - (size.height < 700 ? 250 : 260),
+            height: size.height - (size.height < 700 ? 150 : 160),
             child: ListView(
               children: [
                 _lang(),
@@ -105,15 +103,7 @@ class _RoundScreenState extends State<RoundScreen> {
               ],
             ),
           ),
-          Column(
-            children: [
-              _button(getBtnTitle()),
-              SizedBox(
-                height: 5,
-              ),
-              _howToPlay(),
-            ],
-          ),
+          _button(getBtnTitle()),
         ],
       ),
     );
@@ -133,11 +123,11 @@ class _RoundScreenState extends State<RoundScreen> {
 
   String getBtnTitle() {
     if (backend.isFirstTime) {
-      return 'START';
+      return 'START QUIZ';
     }
 
     if (widget.isWelcomeAgain) {
-      return 'START';
+      return 'START QUIZ';
     }
 
     return 'PLAY AGAIN';
@@ -145,11 +135,15 @@ class _RoundScreenState extends State<RoundScreen> {
 
   _lang() {
     return SizedBox(
-      height: 30,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           InkWell(
+            // onTap: () async {
+            //   final prefs = await SharedPreferences.getInstance();
+            //   await prefs.setBool('first_time', true);
+            //   await prefs.setString('lang', '');
+            // },
             onTap: () => presentLangActionSheet(),
             child: Row(
               mainAxisSize: MainAxisSize.min,
@@ -203,8 +197,8 @@ class _RoundScreenState extends State<RoundScreen> {
       child: Text(
         text,
         style: TextStyle(
-            fontSize: 30,
-            fontWeight: FontWeight.normal,
+            fontSize: 25,
+            fontWeight: FontWeight.bold,
             color: Color(0xff333F50)),
       ),
     );
@@ -255,7 +249,7 @@ class _RoundScreenState extends State<RoundScreen> {
                   fontSize: 20,
                 )),
             TextSpan(
-                text: 'Round #$roundNumber!',
+                text: ' Round #$roundNumber!',
                 style: TextStyle(
                   color: Color(0xff333F50),
                   fontSize: 20,
@@ -275,49 +269,9 @@ class _RoundScreenState extends State<RoundScreen> {
   }
 
   _image() {
-    if (backend.isFirstTime) {
-      return Image.asset(
-        'assets/cheers.jpg',
-        height: size.height * 0.3,
-      );
-    }
-
-    if (widget.isWelcomeAgain) {
-      return Image.asset(
-        'assets/cheers.jpg',
-        height: size.height * 0.3,
-      );
-    }
-    return Container(
-      width: 200,
-      // color: Colors.blue,
-      alignment: Alignment.center,
-      child: Stack(
-        children: [
-          Image.asset(
-            'assets/sword.jpg',
-            height: size.height * 0.3,
-            // width: 200,
-          ),
-          Positioned(
-            right: 0,
-            bottom: 20,
-            child: Container(
-              padding: EdgeInsets.all(15),
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Color(0xff888692),
-                border: Border.all(width: 5, color: Colors.white)
-              ),
-              child: Text(widget.roundNumber.toString(), style: TextStyle(
-                fontSize: 45,
-                fontWeight: FontWeight.bold,
-                color: Colors.white
-              ),),
-            )
-          )
-        ],
-      ),
+    return Image.asset(
+      'assets/cheers.jpg',
+      height: size.height * 0.3,
     );
   }
 
@@ -335,44 +289,27 @@ class _RoundScreenState extends State<RoundScreen> {
             .sendScreenFlow('press start quiz - ${backend.language['lang']}');
         widget.onStartQuiz();
       },
-      child: Card(
-        elevation: 5,
-        shape: RoundedRectangleBorder(
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+        margin: EdgeInsets.only(bottom: size.height < 700 ? 0 : 20),
+        decoration: BoxDecoration(
+          color: Color(0xff64E5D9),
           borderRadius: BorderRadius.circular(10),
         ),
-        child: Container(
-          padding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-          width: 220,
-          // margin: EdgeInsets.only(bottom: size.height < 700 ? 0 : 20),
-          decoration: BoxDecoration(
-            color: Color(0xff64E5D9),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Center(
-            child: Text(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            SizedBox(),
+            Text(
               text,
               style: TextStyle(
-                fontSize: 30,
+                fontSize: 21,
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
               ),
             ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  _howToPlay() {
-    return InkWell(
-      onTap: () {
-        presentHowToPlayActionSheet();
-      },
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-        child: Text(
-          'HOW TO PLAY',
-          style: TextStyle(fontSize: 16, color: Colors.black54),
+            Icon(Icons.arrow_forward, size: 30, color: Colors.white)
+          ],
         ),
       ),
     );
@@ -385,20 +322,6 @@ class _RoundScreenState extends State<RoundScreen> {
         backgroundColor: Colors.transparent,
         isScrollControlled: true,
         builder: (context) => LanguageScreen(
-            language: backend.language['lang'],
-            onLangSelect: (String lang) async {
-              await backend.setLanguage(lang);
-              setState(() {});
-            }));
-  }
-
-  presentHowToPlayActionSheet() {
-    // backend.sendScreenFlow('press change language');
-    showModalBottomSheet(
-        context: context,
-        backgroundColor: Colors.transparent,
-        isScrollControlled: true,
-        builder: (context) => HowToPlayScreen(
             language: backend.language['lang'],
             onLangSelect: (String lang) async {
               await backend.setLanguage(lang);

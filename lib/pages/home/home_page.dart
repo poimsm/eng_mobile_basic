@@ -1,12 +1,9 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:card_swiper/card_swiper.dart';
-import 'package:eng_mobile_app/config.dart';
 import 'package:eng_mobile_app/data/models/question.dart';
 import 'package:eng_mobile_app/pages/ai_text_widget.dart';
 import 'package:eng_mobile_app/pages/cards_example.dart';
 import 'package:eng_mobile_app/pages/example_widget.dart';
 import 'package:eng_mobile_app/pages/audio_bar_white.dart';
-import 'package:eng_mobile_app/pages/home/enums.dart';
 import 'package:eng_mobile_app/pages/home/home_controller.dart';
 import 'package:eng_mobile_app/pages/question_image.dart';
 import 'package:eng_mobile_app/pages/round_screen.dart';

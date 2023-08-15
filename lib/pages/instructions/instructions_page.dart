@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:eng_mobile_app/routes/routes.dart';
 import 'package:eng_mobile_app/services/global/global_service.dart';
 import 'package:flutter/material.dart';
