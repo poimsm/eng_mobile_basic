@@ -167,7 +167,7 @@ class HomeState {
       exampleArry: exampleArry ?? this.exampleArry,
       newSentences: newSentences ?? this.newSentences,
       seconds: seconds ?? this.seconds,
-      exampleAnimated: exampleAnimated ?? this.exampleAnimated,    
+      exampleAnimated: exampleAnimated ?? this.exampleAnimated,
       showNextBtn: showNextBtn ?? this.showNextBtn,
       questionCounter: questionCounter ?? this.questionCounter,
       showRoundScreen: showRoundScreen ?? this.showRoundScreen,
@@ -224,7 +224,7 @@ class HomeNotifier extends StateNotifier<HomeState> {
         showExample: true,
         isLoading: false);
 
-    if(state.question!.type != 3) {
+    if (state.question!.type != 3) {
       state = state.copyWith(word: questions[0].words![0]);
     } else {
       // state = state.copyWith(word: []);
@@ -233,8 +233,9 @@ class HomeNotifier extends StateNotifier<HomeState> {
     await sleep(400);
     delayedNextquestionTicket();
 
-    if(state.question!.type == 3) {
-      playVoice(state.question!.scenario!.parts[0].voiceUrl!, shouldStop: false);
+    if (state.question!.type == 3) {
+      playVoice(state.question!.scenario!.parts[0].voiceUrl!,
+          shouldStop: false);
     } else {
       playVoice(state.question!.voiceUrl, shouldStop: false);
     }
@@ -298,7 +299,7 @@ class HomeNotifier extends StateNotifier<HomeState> {
         showScenarioCtrls: false,
       );
 
-      if(state.questions[index + 1].type != 3) {
+      if (state.questions[index + 1].type != 3) {
         state = state.copyWith(
           word: state.questions[index + 1].words![0],
           wordIndex: 0,
@@ -308,10 +309,11 @@ class HomeNotifier extends StateNotifier<HomeState> {
       // _swipperController.move(0);
 
       await sleep(1000);
-      state = state.copyWith(loadingNextQuestion: false);      
+      state = state.copyWith(loadingNextQuestion: false);
 
-      if(state.questions[index + 1].type == 3) {
-        playVoice(state.question!.scenario!.parts[0].voiceUrl!, shouldStop: false);
+      if (state.questions[index + 1].type == 3) {
+        playVoice(state.question!.scenario!.parts[0].voiceUrl!,
+            shouldStop: false);
       } else {
         playVoice(state.question!.voiceUrl, shouldStop: false);
       }
@@ -324,7 +326,6 @@ class HomeNotifier extends StateNotifier<HomeState> {
       return null;
     }
   }
-
 
   Future<Question?> onQuestionBack() async {
     try {
@@ -359,7 +360,7 @@ class HomeNotifier extends StateNotifier<HomeState> {
         showScenarioCtrls: false,
       );
 
-      if(state.questions[index - 1].type != 3) {
+      if (state.questions[index - 1].type != 3) {
         state = state.copyWith(
           word: state.questions[index - 1].words![0],
           wordIndex: 0,
@@ -369,10 +370,11 @@ class HomeNotifier extends StateNotifier<HomeState> {
       // _swipperController.move(0);
 
       await sleep(1000);
-      state = state.copyWith(loadingNextQuestion: false);      
+      state = state.copyWith(loadingNextQuestion: false);
 
-      if(state.questions[index - 1].type == 3) {
-        playVoice(state.question!.scenario!.parts[0].voiceUrl!, shouldStop: false);
+      if (state.questions[index - 1].type == 3) {
+        playVoice(state.question!.scenario!.parts[0].voiceUrl!,
+            shouldStop: false);
       } else {
         playVoice(state.question!.voiceUrl, shouldStop: false);
       }
@@ -386,10 +388,8 @@ class HomeNotifier extends StateNotifier<HomeState> {
     }
   }
 
-
   Future<Question?> onRefreshActivities() async {
     try {
-
       delayedNextquestionTicket();
       stopVoice();
       stopRecordedAudio();
@@ -403,8 +403,6 @@ class HomeNotifier extends StateNotifier<HomeState> {
 
       await sleep(200);
 
-      final index = state.currentIndex;
-
       state = state.copyWith(
         showChallenge: false,
         showQuestionExample: false,
@@ -415,28 +413,13 @@ class HomeNotifier extends StateNotifier<HomeState> {
         example: state.questions[0].example,
         showExample: true,
         showScenarioCtrls: false,
+        word: state.questions[0].words![0],
+        wordIndex: 0,
       );
 
-      if(state.questions[index - 1].type != 3) {
-        state = state.copyWith(
-          word: state.questions[0].words![0],
-          wordIndex: 0,
-        );
-      }
-
-      // _swipperController.move(0);
-
       await sleep(1000);
-      state = state.copyWith(loadingNextQuestion: false);      
-
-      if(state.questions[index - 1].type == 3) {
-        playVoice(state.question!.scenario!.parts[0].voiceUrl!, shouldStop: false);
-      } else {
-        playVoice(state.question!.voiceUrl, shouldStop: false);
-      }
-
-      await sleep(1000);
-      state = state.copyWith(showChallenge: true);
+      state = state.copyWith(loadingNextQuestion: false);
+      playVoice(state.question!.voiceUrl, shouldStop: false);
 
       return state.question;
     } catch (_) {
@@ -716,27 +699,26 @@ class HomeNotifier extends StateNotifier<HomeState> {
     state = state.copyWith(
         showMeaningBtn: true,
         word: state.question!.words![idx],
-        wordIndex: idx
-        );
+        wordIndex: idx);
   }
 
   void onNextWordIndex(int idx) async {
     state = state.copyWith(
-        word: state.question!.words![idx],
-        wordIndex: idx,
-        );
+      word: state.question!.words![idx],
+      wordIndex: idx,
+    );
   }
- 
+
   void replayQuestion({String? url}) async {
     state = state.copyWith(showQuestionReplayBtn: false);
     await sleep(200);
     state = state.copyWith(showQuestionReplayBtn: true);
 
-    if(url != null) {
+    if (url != null) {
       playVoice(url, shouldStop: false);
       return;
     }
-    
+
     playVoice(state.question!.voiceUrl, shouldStop: false);
   }
 
@@ -752,8 +734,6 @@ class HomeNotifier extends StateNotifier<HomeState> {
     state = state.copyWith(showScenarioCtrls: val);
   }
 }
-
-
 
 List<Map> _buildExample(exampleText, String targetSentence) {
   final rr = exampleText.split(" ");

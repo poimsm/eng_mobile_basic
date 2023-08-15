@@ -519,7 +519,7 @@ class HomePageState extends ConsumerState<HomePage> {
       width: size.width,
       height: size.height * 0.15,
       child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-        _menuBtn(),
+        _redoBtn(),
         // Container(width: 30,),
         homeState.isRecording ? _stopBtn() : _micBtn(),
         _onNextBtn(),
@@ -527,7 +527,7 @@ class HomePageState extends ConsumerState<HomePage> {
     );
   }
 
-  _menuBtn() {
+  _redoBtn() {
     return Stack(
       children: [
         SizedBox(
@@ -550,10 +550,11 @@ class HomePageState extends ConsumerState<HomePage> {
               child: Container(
                 padding: EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  shape: BoxShape.circle,
+                  // shape: BoxShape.circle,
+                  borderRadius: BorderRadius.circular(15),
                   color: Colors.grey.withOpacity(0.1),
                 ),
-                child: Icon(Icons.refresh, size: 40, color: Colors.white),
+                child: Icon(Icons.replay, size: 40, color: Colors.white),
                 // child: Image.asset('assets/user_14.png', width: 45),
                 // child: Icon(LineIcons.stream, color: Colors.white, size: 40),
               ),

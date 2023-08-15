@@ -32,14 +32,14 @@ class _ControlBoxState extends State<ControlBox> {
       width: size.width,
       height: size.height * 0.15,
       child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-        _backBtn(),
+        _redoBtn(),
         isRecording ? _stopBtn() : _micBtn(),
         _nextBtn(),
       ]),
     );
   }
 
-  _backBtn() {
+  _redoBtn() {
     return Stack(
       children: [
         SizedBox(
@@ -51,10 +51,11 @@ class _ControlBoxState extends State<ControlBox> {
               child: Container(
                 padding: EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  shape: BoxShape.circle,
+                  // shape: BoxShape.circle,
+                  borderRadius: BorderRadius.circular(15),
                   color: Colors.grey.withOpacity(0.1),
                 ),
-                child: Icon(Icons.restart_alt,
+                child: Icon(Icons.replay,
                     size: 40, color: Colors.white.withOpacity(0.7)),
               ),
             ),
