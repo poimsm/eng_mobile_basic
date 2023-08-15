@@ -520,6 +520,7 @@ class HomePageState extends ConsumerState<HomePage> {
       height: size.height * 0.15,
       child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
         _menuBtn(),
+        // Container(width: 30,),
         homeState.isRecording ? _stopBtn() : _micBtn(),
         _onNextBtn(),
       ]),
@@ -534,8 +535,16 @@ class HomePageState extends ConsumerState<HomePage> {
           width: 70,
           child: Center(
             child: InkWell(
-              onTap: () {
-                backend.sendScreenFlow('press menu button');
+              onTap: () async {
+                if (!homeState.readyForNextQuestion) return;
+                ref.read(homeProvider.notifier).onRefreshActivities().then((question) {
+                  if (question == null) return;
+                  backend.sendScreenFlow(
+                      'press next question - ID ${homeState.question!.id}');
+                });
+                await sleep(50);
+                swiperController.move(0);
+                // backend.sendScreenFlow('press menu button');
                 // Navigator.pushNamed(context, Routes.SENTENCE_LIST);
               },
               child: Container(
@@ -544,7 +553,7 @@ class HomePageState extends ConsumerState<HomePage> {
                   shape: BoxShape.circle,
                   color: Colors.grey.withOpacity(0.1),
                 ),
-                child: Icon(LineIcons.plus, size: 40, color: Colors.white),
+                child: Icon(Icons.refresh, size: 40, color: Colors.white),
                 // child: Image.asset('assets/user_14.png', width: 45),
                 // child: Icon(LineIcons.stream, color: Colors.white, size: 40),
               ),

@@ -325,6 +325,125 @@ class HomeNotifier extends StateNotifier<HomeState> {
     }
   }
 
+
+  Future<Question?> onQuestionBack() async {
+    try {
+      if (state.questionCounter == 1) {
+        return null;
+      }
+
+      delayedNextquestionTicket();
+      stopVoice();
+      stopRecordedAudio();
+
+      state = state.copyWith(loadingNextQuestion: true);
+      delayedShowNextBtn();
+
+      state = state.copyWith(
+        showExample: false,
+      );
+
+      await sleep(200);
+
+      final index = state.currentIndex;
+
+      state = state.copyWith(
+        showChallenge: false,
+        showQuestionExample: false,
+        questionCounter: state.questionCounter - 1,
+        hasAudioSaved: false,
+        question: state.questions[index - 1],
+        currentIndex: index - 1,
+        example: state.questions[index - 1].example,
+        showExample: true,
+        showScenarioCtrls: false,
+      );
+
+      if(state.questions[index - 1].type != 3) {
+        state = state.copyWith(
+          word: state.questions[index - 1].words![0],
+          wordIndex: 0,
+        );
+      }
+
+      // _swipperController.move(0);
+
+      await sleep(1000);
+      state = state.copyWith(loadingNextQuestion: false);      
+
+      if(state.questions[index - 1].type == 3) {
+        playVoice(state.question!.scenario!.parts[0].voiceUrl!, shouldStop: false);
+      } else {
+        playVoice(state.question!.voiceUrl, shouldStop: false);
+      }
+
+      await sleep(1000);
+      state = state.copyWith(showChallenge: true);
+
+      return state.question;
+    } catch (_) {
+      return null;
+    }
+  }
+
+
+  Future<Question?> onRefreshActivities() async {
+    try {
+
+      delayedNextquestionTicket();
+      stopVoice();
+      stopRecordedAudio();
+
+      state = state.copyWith(loadingNextQuestion: true);
+      delayedShowNextBtn();
+
+      state = state.copyWith(
+        showExample: false,
+      );
+
+      await sleep(200);
+
+      final index = state.currentIndex;
+
+      state = state.copyWith(
+        showChallenge: false,
+        showQuestionExample: false,
+        questionCounter: 1,
+        hasAudioSaved: false,
+        question: state.questions[0],
+        currentIndex: 0,
+        example: state.questions[0].example,
+        showExample: true,
+        showScenarioCtrls: false,
+      );
+
+      if(state.questions[index - 1].type != 3) {
+        state = state.copyWith(
+          word: state.questions[0].words![0],
+          wordIndex: 0,
+        );
+      }
+
+      // _swipperController.move(0);
+
+      await sleep(1000);
+      state = state.copyWith(loadingNextQuestion: false);      
+
+      if(state.questions[index - 1].type == 3) {
+        playVoice(state.question!.scenario!.parts[0].voiceUrl!, shouldStop: false);
+      } else {
+        playVoice(state.question!.voiceUrl, shouldStop: false);
+      }
+
+      await sleep(1000);
+      state = state.copyWith(showChallenge: true);
+
+      return state.question;
+    } catch (_) {
+      return null;
+    }
+  }
+
   void delayedShowNextBtn() async {
     state = state.copyWith(showNextBtn: false);
     await sleep(300);
