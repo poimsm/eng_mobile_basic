@@ -62,6 +62,7 @@ class HomePageState extends ConsumerState<HomePage> {
     size = MediaQuery.of(context).size;
     homeState = ref.watch(homeProvider);
 
+    // ignore: avoid_print
     print('HOME BUILD');
 
     if (homeState.isLoading) {
@@ -77,11 +78,6 @@ class HomePageState extends ConsumerState<HomePage> {
     }
 
     if (homeState.showRoundScreen) {
-      // final arguments = (ModalRoute.of(context)?.settings.arguments ?? <String, dynamic>{}) as Map;
-      // print('🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵');
-      // print(arguments['asd']);
-
-      // if(arguments['asd'] == null) {
       return SafeArea(
         child: RoundScreen(
           isWelcomeAgain: homeState.questionRoundCounter == 0,
@@ -92,9 +88,6 @@ class HomePageState extends ConsumerState<HomePage> {
           },
         ),
       );
-      // } else {
-      //   initQuiz();
-      // }
     }
 
     int type = homeState.question != null ? homeState.question!.type : -1;
@@ -113,17 +106,24 @@ class HomePageState extends ConsumerState<HomePage> {
                 left: 0,
                 top: size.height * 0.02,
                 child: QuestionScenario(
+                  redo: homeState.redoActivities,
+                  onToggleRedo: (val) {
+                    ref.read(homeProvider.notifier).setredoActivities(val);
+                  },
                   question: homeState.question!,
-                  onShowControls: (show) {
+                  onToggleControls: (show) {
                     ref.read(homeProvider.notifier).setScenarioCtrls(show);
                   },
                   onPlayVoice: (play, url) {
                     backend.sendScreenFlow('press replay question');
                     ref.read(homeProvider.notifier).replayQuestion(url: url);
-                  }, onNextQuestion: () async {
-                    print('onNextQuestion ----------->>>>>');
+                  },
+                  onActivityEnd: () async {
                     if (!homeState.readyForNextQuestion) return;
-                    ref.read(homeProvider.notifier).onNextQuestion().then((question) {
+                    ref
+                        .read(homeProvider.notifier)
+                        .onNextQuestion()
+                        .then((question) {
                       if (question == null) return;
                       backend.sendScreenFlow(
                           'press next question - ID ${homeState.question!.id}');
@@ -149,16 +149,18 @@ class HomePageState extends ConsumerState<HomePage> {
               top: size.height * 0.01,
               child: _words(),
             ),
-          if(_showControls(type)) Positioned(
-            left: 0,
-            bottom: 5,
-            child: _ctrlBtns(),
-          ),
-          if(type != QuestionTypes.scenario) Positioned(
-            bottom: size.height * 0.18,
-            right: 15,
-            child: _step(),
-          ),       
+          if (_showControls(type))
+            Positioned(
+              left: 0,
+              bottom: 5,
+              child: _ctrlBtns(),
+            ),
+          if (type != QuestionTypes.scenario)
+            Positioned(
+              bottom: size.height * 0.18,
+              right: 15,
+              child: _step(),
+            ),
           Positioned(
             right: 20,
             top: size.height * 0.57,
@@ -193,7 +195,7 @@ class HomePageState extends ConsumerState<HomePage> {
   }
 
   bool _showControls(int type) {
-    if(type == QuestionTypes.scenario) {
+    if (type == QuestionTypes.scenario) {
       return homeState.showScenarioCtrls;
     }
 
@@ -201,11 +203,12 @@ class HomePageState extends ConsumerState<HomePage> {
   }
 
   bool _showExample(int type) {
-    if(homeState.example == null) return false;
-    if(type == QuestionTypes.scenario) {
-      return homeState.showScenarioCtrls;
+    if (homeState.example == null) return false;
+    if (type == QuestionTypes.scenario) {
+      // return homeState.showScenarioCtrls;
+      return false;
     }
-    return homeState.showExample;    
+    return homeState.showExample;
   }
 
   _step() {
@@ -302,7 +305,7 @@ class HomePageState extends ConsumerState<HomePage> {
         ),
       ),
     );
-  }  
+  }
 
   _words() {
     return Container(
@@ -520,7 +523,6 @@ class HomePageState extends ConsumerState<HomePage> {
       height: size.height * 0.15,
       child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
         _redoBtn(),
-        // Container(width: 30,),
         homeState.isRecording ? _stopBtn() : _micBtn(),
         _onNextBtn(),
       ]),
@@ -537,26 +539,24 @@ class HomePageState extends ConsumerState<HomePage> {
             child: InkWell(
               onTap: () async {
                 if (!homeState.readyForNextQuestion) return;
-                ref.read(homeProvider.notifier).onRefreshActivities().then((question) {
+                ref
+                    .read(homeProvider.notifier)
+                    .handleRedoActivities()
+                    .then((question) {
                   if (question == null) return;
                   backend.sendScreenFlow(
-                      'press next question - ID ${homeState.question!.id}');
+                      'press redo activities - ID ${homeState.question!.id}');
                 });
                 await sleep(50);
                 swiperController.move(0);
-                // backend.sendScreenFlow('press menu button');
-                // Navigator.pushNamed(context, Routes.SENTENCE_LIST);
               },
               child: Container(
                 padding: EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  // shape: BoxShape.circle,
                   borderRadius: BorderRadius.circular(15),
                   color: Colors.grey.withOpacity(0.1),
                 ),
                 child: Icon(Icons.replay, size: 40, color: Colors.white),
-                // child: Image.asset('assets/user_14.png', width: 45),
-                // child: Icon(LineIcons.stream, color: Colors.white, size: 40),
               ),
             ),
           ),

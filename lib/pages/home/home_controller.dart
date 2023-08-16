@@ -63,6 +63,7 @@ class HomeState {
     this.showQuestionReplayBtn = true,
     this.runRoutineWhenTimeCompleted = true,
     this.showScenarioCtrls = false,
+    this.redoActivities = false,
     // this.showLangScreen = false,
   });
 
@@ -102,6 +103,7 @@ class HomeState {
   bool showQuestionReplayBtn;
   bool runRoutineWhenTimeCompleted;
   bool showScenarioCtrls;
+  bool redoActivities;
 
   HomeState copyWith({
     questions,
@@ -144,6 +146,7 @@ class HomeState {
     showQuestionReplayBtn,
     runRoutineWhenTimeCompleted,
     showScenarioCtrls,
+    redoActivities,
   }) {
     return HomeState(
       questions: questions ?? this.questions,
@@ -186,6 +189,7 @@ class HomeState {
       runRoutineWhenTimeCompleted:
           runRoutineWhenTimeCompleted ?? this.runRoutineWhenTimeCompleted,
       showScenarioCtrls: showScenarioCtrls ?? this.showScenarioCtrls,
+      redoActivities: redoActivities ?? this.redoActivities,
     );
   }
 }
@@ -261,7 +265,7 @@ class HomeNotifier extends StateNotifier<HomeState> {
     try {
       delayedNextquestionTicket();
       stopVoice();
-      stopRecordedAudio();
+      _stopRecordedAudio();
 
       state = state.copyWith(loadingNextQuestion: true);
       delayedShowNextBtn();
@@ -335,7 +339,7 @@ class HomeNotifier extends StateNotifier<HomeState> {
 
       delayedNextquestionTicket();
       stopVoice();
-      stopRecordedAudio();
+      _stopRecordedAudio();
 
       state = state.copyWith(loadingNextQuestion: true);
       delayedShowNextBtn();
@@ -388,11 +392,17 @@ class HomeNotifier extends StateNotifier<HomeState> {
     }
   }
 
-  Future<Question?> onRefreshActivities() async {
+  Future<Question?> handleRedoActivities() async {
     try {
-      delayedNextquestionTicket();
+      state = state.copyWith(redoActivities: true);
+      _stopRecordedAudio();
+      _stopRecordingAndDoNothing();
+
+      if (state.question!.type == 3) {
+        return null;
+      }
+
       stopVoice();
-      stopRecordedAudio();
 
       state = state.copyWith(loadingNextQuestion: true);
       delayedShowNextBtn();
@@ -434,7 +444,7 @@ class HomeNotifier extends StateNotifier<HomeState> {
     state = state.copyWith(showNextBtn: true);
   }
 
-  void _stopAndFail() {
+  void _stopRecordingAndFail() {
     toggleFail();
     stopMic();
     state = state.copyWith(
@@ -443,7 +453,7 @@ class HomeNotifier extends StateNotifier<HomeState> {
     );
   }
 
-  void _stopAndSave() async {
+  void _stopRecordingAndSave() async {
     state = state.copyWith(
       isRecording: false,
       runRoutineWhenTimeCompleted: false,
@@ -457,9 +467,18 @@ class HomeNotifier extends StateNotifier<HomeState> {
     );
   }
 
+  void _stopRecordingAndDoNothing() async {
+    state = state.copyWith(
+      isRecording: false,
+      runRoutineWhenTimeCompleted: false,
+      hasAudioSaved: false,
+    );
+    await stopMic();
+  }
+
   void _startRecording() async {
     await stopVoice();
-    await stopRecordedAudio();
+    await _stopRecordedAudio();
     recordMic();
   }
 
@@ -468,12 +487,12 @@ class HomeNotifier extends StateNotifier<HomeState> {
     recordVoiceBusyTracker();
 
     if (state.isRecording && state.seconds < minSpeakingTime) {
-      return _stopAndFail();
+      return _stopRecordingAndFail();
     }
 
     if (state.isRecording && state.seconds > minSpeakingTime) {
       toggleBlocker();
-      return _stopAndSave();
+      return _stopRecordingAndSave();
     }
 
     return _startRecording();
@@ -540,7 +559,7 @@ class HomeNotifier extends StateNotifier<HomeState> {
       delayedPlayRecordedAudioTicket();
 
       if (state.isPlayingRecordedAudio) {
-        await stopRecordedAudio();
+        await _stopRecordedAudio();
       } else {
         state = state.copyWith(isPlayingRecordedAudio: true);
 
@@ -558,7 +577,7 @@ class HomeNotifier extends StateNotifier<HomeState> {
     }
   }
 
-  Future stopRecordedAudio() async {
+  Future _stopRecordedAudio() async {
     if (!state.isPlayingRecordedAudio) return;
     await player.stop();
     state = state.copyWith(isPlayingRecordedAudio: false);
@@ -732,6 +751,10 @@ class HomeNotifier extends StateNotifier<HomeState> {
 
   setScenarioCtrls(bool val) {
     state = state.copyWith(showScenarioCtrls: val);
+  }
+
+  setredoActivities(bool val) {
+    state = state.copyWith(redoActivities: val);
   }
 }
 

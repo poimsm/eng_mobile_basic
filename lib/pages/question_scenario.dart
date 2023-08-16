@@ -1,7 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:card_swiper/card_swiper.dart';
 import 'package:eng_mobile_app/data/models/question.dart';
-import 'package:eng_mobile_app/pages/control_box.dart';
 import 'package:eng_mobile_app/utils/helpers.dart';
 import 'package:flutter/material.dart';
 
@@ -10,14 +8,18 @@ class QuestionScenario extends StatefulWidget {
     super.key,
     required this.onPlayVoice,
     required this.question,
-    required this.onShowControls,
-    required this.onNextQuestion,
+    required this.onActivityEnd,
+    required this.onToggleControls,
+    required this.redo,
+    required this.onToggleRedo,
   });
 
   final Function(bool, String) onPlayVoice;
-  final Function(bool) onShowControls;
+  final VoidCallback onActivityEnd;
+  final Function(bool) onToggleControls;
   final Question question;
-  final VoidCallback onNextQuestion;
+  final bool redo;
+  final Function(bool) onToggleRedo;
 
   @override
   State<QuestionScenario> createState() => _QuestionScenarioState();
@@ -25,7 +27,6 @@ class QuestionScenario extends StatefulWidget {
 
 class _QuestionScenarioState extends State<QuestionScenario> {
   Size size = Size.zero;
-  final swiperControllerScenario = SwiperController();
   bool showQuestionReplayBtn = true;
   int index = 0;
   late ScenarioPart part;
@@ -38,8 +39,23 @@ class _QuestionScenarioState extends State<QuestionScenario> {
     promptImgUrl = part.imageUrl!;
   }
 
+  resetActivity() async {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      index = 0;
+      part = widget.question.scenario!.parts[index];
+      widget.onPlayVoice(true, part.voiceUrl!);
+      promptImgUrl = part.imageUrl!;
+      widget.onToggleRedo(false);
+      widget.onToggleControls(false);
+      setState(() {});
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (widget.redo) {
+      resetActivity();
+    }
     size = MediaQuery.of(context).size;
     double h = size.height * 0.9;
     return SizedBox(
@@ -53,21 +69,6 @@ class _QuestionScenarioState extends State<QuestionScenario> {
                     ? _scenarioPrompt(h, widget.question)
                     : _scenarioChoose(
                         h, widget.question.scenario!.parts[index])),
-            if (part.showControls)
-              Positioned(
-                  bottom: 0,
-                  left: 0,
-                  child: ControlBox(
-                    onMicPress: (val) => {},
-                    onNextQuestion: () => widget.onNextQuestion(),
-                    onBack: () {
-                      index = 0;
-                      part = widget.question.scenario!.parts[index];
-                      widget.onPlayVoice(true, part.voiceUrl!);
-                      promptImgUrl = part.imageUrl!;
-                      setState(() {});
-                    },
-                  ))
           ],
         ));
   }
@@ -130,22 +131,23 @@ class _QuestionScenarioState extends State<QuestionScenario> {
     return InkWell(
       onTap: () {
         final scenario = widget.question.scenario!;
-        if (index == scenario.parts.length - 1) {
-          swiperControllerScenario.move(1);
-        } else {
-          index++;
-          part = scenario.parts[index];
 
-          if (part.voiceUrl != null) {
-            widget.onPlayVoice(true, part.voiceUrl!);
-          }
+        index++;
+        part = scenario.parts[index];
 
-          if (part.imageUrl != null) {
-            promptImgUrl = part.imageUrl!;
-          }
-
-          setState(() {});
+        if (part.voiceUrl != null) {
+          widget.onPlayVoice(true, part.voiceUrl!);
         }
+
+        if (part.imageUrl != null) {
+          promptImgUrl = part.imageUrl!;
+        }
+
+        if (part.showControls) {
+          widget.onToggleControls(true);
+        }
+
+        setState(() {});
       },
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
@@ -223,7 +225,6 @@ class _QuestionScenarioState extends State<QuestionScenario> {
           Column(
             children: [
               Container(
-                // height: size.height * 0.16,
                 padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
                 width: size.width,
                 // color: Color(0xff232629),
