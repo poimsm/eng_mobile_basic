@@ -300,22 +300,22 @@ class _RoundScreenState extends State<RoundScreen> {
             // width: 200,
           ),
           Positioned(
-            right: 0,
-            bottom: 20,
-            child: Container(
-              padding: EdgeInsets.all(15),
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Color(0xff888692),
-                border: Border.all(width: 5, color: Colors.white)
-              ),
-              child: Text(widget.roundNumber.toString(), style: TextStyle(
-                fontSize: 45,
-                fontWeight: FontWeight.bold,
-                color: Colors.white
-              ),),
-            )
-          )
+              right: 0,
+              bottom: 20,
+              child: Container(
+                padding: EdgeInsets.all(15),
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Color(0xff888692),
+                    border: Border.all(width: 5, color: Colors.white)),
+                child: Text(
+                  widget.roundNumber.toString(),
+                  style: TextStyle(
+                      fontSize: 45,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
+              ))
         ],
       ),
     );
@@ -366,6 +366,7 @@ class _RoundScreenState extends State<RoundScreen> {
   _howToPlay() {
     return InkWell(
       onTap: () {
+        backend.sendScreenFlow('press how to play');
         presentHowToPlayActionSheet();
       },
       child: Container(
@@ -393,7 +394,6 @@ class _RoundScreenState extends State<RoundScreen> {
   }
 
   presentHowToPlayActionSheet() {
-    // backend.sendScreenFlow('press change language');
     showModalBottomSheet(
         context: context,
         backgroundColor: Colors.transparent,
